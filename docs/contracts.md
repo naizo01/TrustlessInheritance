@@ -1,17 +1,15 @@
 
 
 ```mermaid
-graph LR;
+graph TB;
     InheritanceFactory-->|create|Proxy1;
     InheritanceFactory-->|create|Proxy2;
-    InheritanceFactory-->|create|Proxy3;
 
-    Dict[Dictionary] -->|get impl address| Proxy1[Proxy];
-    Dict[Dictionary] -->|get impl address| Proxy2[Proxy];
-    Dict[Dictionary] -->|get impl address| Proxy3[Proxy];
+    Proxy1[Proxy] -->|get impl address| Dict[Dictionary];
+    Proxy2[Proxy] -->|get impl address| Dict[Dictionary];
+
     Proxy1 -->|delegate| ERC7546:Implementation;
     Proxy2 -->|delegate| ERC7546:Implementation;
-    Proxy3 -->|delegate| ERC7546:Implementation;
 
 
       InheritanceFactory 
@@ -24,9 +22,6 @@ graph LR;
       end
       subgraph user2
         Proxy2
-      end
-      subgraph user3
-        Proxy3
       end
     end
 
