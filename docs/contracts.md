@@ -23,9 +23,7 @@ graph TB;
       subgraph user2
         Proxy2
       end
-    end
 
-    subgraph ERC7546
       Dict
       subgraph ERC7546:Implementation
         initialize 
