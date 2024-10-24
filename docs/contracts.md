@@ -72,6 +72,7 @@ function createProxy() external {
 - `uint256 lockTime`: トークンのロック期間（n ヶ月または n 年）
 - `uint256 nance`: 署名の再利用防止のための nonce
 - `address[] public approvedTokens`: `approve`したトークンを保存する配列
+- `mapping(bytes => bool) public usedProofs`: 利用済みの `proof` を記録し、再利用を防ぐためのマッピング
 
 ### 共通関数コントラクト（implementation にとして登録するコントラクト）
 
@@ -80,7 +81,7 @@ function createProxy() external {
 Alice がハッシュ値とロック期間を設定します。プロキシデプロイ時に一度だけ実行可能な関数です。
 
 ```solidity
-function initialize(bytes32 _hash, uint256 _lockTime, address[] calldata _approvedTokens) external {
+function initialize(bytes32 _hash, uint256 _lockTime) external {
     // 初期化処理
 }
 ```
