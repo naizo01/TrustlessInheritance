@@ -23,7 +23,7 @@ library InheritanceDeployer {
      * @param mc MCDevKit storage reference
      * @return inheritance Address of the deployed Inheritance proxy contract
      */
-    function deployInheritance(MCDevKit storage mc, bytes32 hash, uint256 lockTime) internal returns(address inheritance) {
+    function deployDictionaryInheritance(MCDevKit storage mc, bytes32 hash, uint256 lockTime) internal returns(address inheritance) {
         mc.init(BUNDLE_NAME);
         mc.use("Initialize", Initialize.initialize.selector, address(new Initialize()));
         mc.use("AddApprovedTokens", addApprovedTokens.addApprovedTokens.selector, address(new addApprovedTokens()));
@@ -31,6 +31,7 @@ library InheritanceDeployer {
         mc.use("WithdrawTokens", withdrawTokens.withdrawTokens.selector, address(new withdrawTokens()));
         mc.use("InitiateInheritance", initiateInheritance.initiateInheritance.selector, address(new initiateInheritance()));
         mc.useFacade(address(new InheritanceFacade()));
-        return mc.deploy(abi.encodeCall(Initialize.initialize, (hash, lockTime))).toProxyAddress();
+        // mc.deploy(abi.encodeCall(Initialize.initialize, (hash, lockTime))).toProxyAddress();
+        return mc.toDictionaryAddress();
     }
 }

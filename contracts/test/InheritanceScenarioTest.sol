@@ -14,7 +14,7 @@ contract InheritanceScenarioTest is MCTest {
         inheritanceContract = IInheritanceContract(InheritanceDeployer.deployInheritance(mc, "0x123456", 90 days));
     }
 
-    function test_initialize_success() public {
+    function test_success() public {
 
     }
 
