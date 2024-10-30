@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
+import {Proxy} from "@ucs.mc/proxy/Proxy.sol";
+import {IInheritanceContract} from "./Inheritance/interfaces/IInheritanceContract.sol";
+
 contract InheritanceFactory {
     // オーナーアドレス -> プロキシアドレスのマッピング
     mapping(address => address) public ownerToProxy;
@@ -10,6 +13,13 @@ contract InheritanceFactory {
 
     // 管理者アドレスを保持する変数
     address public admin;
+
+    // プロキシ作成を記録するイベント
+    event ProxyCreated(
+        address indexed owner,
+        address proxyAddress,
+        bytes32 keyHash
+    );
 
     // コンストラクタで初期管理者を設定
     constructor() {
@@ -28,12 +38,29 @@ contract InheritanceFactory {
     }
 
     // ディクショナリアドレスを設定する関数
-    function setDictionaryAddress(address newDictionaryAddress) external onlyAdmin {
+    function setDictionaryAddress(
+        address newDictionaryAddress
+    ) external onlyAdmin {
         dictionaryAddress = newDictionaryAddress;
     }
 
     // 各ユーザーのプロキシをデプロイし初期化を行う
-    function createProxy() external {
-        // プロキシデプロイと初期化のロジックをここに実装
+    function createProxy(
+        bytes32 _hash,
+        uint256 _lockTime
+    ) external returns (address) {
+        bytes memory initializerData = abi.encodeCall(
+            IInheritanceContract.initialize,
+            (_hash, _lockTime)
+        );
+
+        address proxyAddress = address(
+            new Proxy(dictionaryAddress, initializerData)
+        );
+
+        ownerToProxy[msg.sender] = proxyAddress;
+
+        emit ProxyCreated(msg.sender, proxyAddress, _hash);
+        return proxyAddress;
     }
 }
