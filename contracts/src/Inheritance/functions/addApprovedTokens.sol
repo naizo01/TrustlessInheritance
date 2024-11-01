@@ -13,9 +13,7 @@ contract addApprovedTokens {
         Schema.InheritanceState storage state = Storage.InheritanceState();
         
         for (uint256 i = 0; i < _tokens.length; i++) {
-            address token = _tokens[i];
-            IERC20(token).approve(address(this), type(uint256).max);
-            state.approvedTokens.push(token);
+            state.approvedTokens.push(_tokens[i]);
         }
     }
 }
