@@ -151,12 +151,12 @@ export default function Page() {
           </div>
           <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-              安全で簡単な
+              大切な暗号資産を、
               <br className="sm:hidden" />
-              暗号資産の相続
+              確実に未来へ
             </h2>
-            <p className="text-xl sm:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              ブロックチェーン技術とZK署名で、大切な資産を確実に次世代へ
+            <p className="text-xl sm:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto">
+              最新のブロックチェーン技術で実現する、次世代型資産継承ソリューション
             </p>
             <Button
               size="lg"
@@ -264,7 +264,7 @@ export default function Page() {
                     className="tracking-tight text-xl font-semibold text-center text-gray-900 "
                     data-id="41"
                   >
-                    高度な安全性
+                    強固なセキュリティ
                   </h3>
                 </div>
                 <div className="p-6 pt-0" data-id="42">
@@ -310,7 +310,7 @@ export default function Page() {
                 </div>
                 <div className="p-6 pt-0" data-id="42">
                   <p className="text-center text-gray-600 " data-id="43">
-                    ZK署名方式による匿名性の確保
+                    ZK証明方式による匿名性の確保
                   </p>
                 </div>
               </div>
@@ -357,10 +357,7 @@ export default function Page() {
                   </h3>
                 </div>
                 <div className="p-6 pt-0" data-id="42">
-                  <p
-                    className="text-center text-gray-600 dark:text-gray-300"
-                    data-id="43"
-                  >
+                  <p className="text-center text-gray-600" data-id="43">
                     カスタマイズ可能なロック期間
                   </p>
                 </div>
@@ -398,12 +395,12 @@ export default function Page() {
                     className="tracking-tight text-xl font-semibold text-center text-gray-900 "
                     data-id="41"
                   >
-                    多様な対応
+                    幅広い資産対応
                   </h3>
                 </div>
                 <div className="p-6 pt-0" data-id="42">
                   <p className="text-center text-gray-600 " data-id="43">
-                    複数の暗号資産に対応
+                    複数の暗号資産を一括管理
                   </p>
                 </div>
               </div>
@@ -519,7 +516,7 @@ export default function Page() {
                     </div>
                   </AccordionSummary>
                   <AccordionDetails className="text-gray-700 ">
-                    ZK署名方式で用いる秘密情報は、あなたと相続人の間で共有する特別な情報です。絶対に第三者に漏らさないようにご注意ください。
+                    ZK証明方式で用いる秘密情報は、あなたと相続人の間で共有する特別な情報です。絶対に第三者に漏らさないようにご注意ください。
                   </AccordionDetails>
                 </Accordion>
               </CardContent>
@@ -569,10 +566,10 @@ export default function Page() {
         <section className="py-20 bg-gray-100 ">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900  mb-6">
-              あなたの大切な資産を、確実に次世代へ
+              かけがえのない資産を、確実に未来へつなぐ
             </h2>
             <p className="text-xl text-gray-600  mb-8 max-w-3xl mx-auto">
-              安全で簡単な暗号資産相続アプリケーションで、今すぐ始めましょう
+              次世代の資産継承　あなたの大切な方へ、想いをつなぐ第一歩を
             </p>
             <Button
               size="lg"
