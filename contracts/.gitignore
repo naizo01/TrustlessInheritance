@@ -15,3 +15,6 @@ out/
 
 # node_modules
 node_modules
+
+setup/pot12_*.ptau    # 中間ファイルは除外
+build/                # ビルド成果物は必要に応じて除外
