@@ -23,6 +23,6 @@ contract cancelInheritance {
             }
         }
         state.isKilled = true;
-        emit InheritanceCancelled(state.owner, tokens);
+        emit InheritanceCancelled(state.owner, state.approvedTokens);
     }
 }
