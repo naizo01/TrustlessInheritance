@@ -12,7 +12,7 @@ export function Providers(props: {
 }) {
   const [config] = useState(() => getConfig())
   const [queryClient] = useState(() => new QueryClient())
-
+  console.log("test")
   return (
     <WagmiProvider config={config} initialState={props.initialState}>
       <QueryClientProvider client={queryClient}>
