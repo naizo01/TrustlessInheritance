@@ -6,7 +6,8 @@ import BobLandingPage from "@/components/bob-landing-page";
 import AddressInputPage from "@/components/bob-address-input";
 import ConfirmAddressesPage from "@/components/bob-confirm-addresses";
 import InheritanceAssetsPage from "@/components/bob-inheritance-assets";
+import ZKProofGenerationPage from "@/components/bob-zk-proof-generation";
 
 export default function Home() {
-  return <InheritanceAssetsPage />;
+  return <ZKProofGenerationPage />;
 }
