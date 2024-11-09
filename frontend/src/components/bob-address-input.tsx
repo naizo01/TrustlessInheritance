@@ -27,17 +27,17 @@ import { Header } from "@/components/common/Header";
 const dummySearchResults = [
   {
     id: 1,
-    name: "山田太郎",
+    secret: "3時のおやつはババロア",
     address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
   },
   {
     id: 2,
-    name: "佐藤花子",
+    secret: "3時のおやつカンパニー",
     address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44f",
   },
   {
     id: 3,
-    name: "鈴木一郎",
+    secret: "鈴木一郎が同級生",
     address: "0x742d35Cc6634C0532925a3b844Bc454e4438f50e",
   },
 ];
@@ -73,7 +73,7 @@ export default function AddressInputPage() {
     }
     const filteredResults = dummySearchResults.filter(
       (result) =>
-        result.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        result.secret.toLowerCase().includes(searchQuery.toLowerCase()) ||
         result.address.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setSearchResults(filteredResults);
@@ -140,7 +140,7 @@ export default function AddressInputPage() {
                         id="search"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="名前やアドレスの一部を入力..."
+                        placeholder="秘密情報やアドレスの一部を入力..."
                         className="flex-grow"
                       />
                       <Button
