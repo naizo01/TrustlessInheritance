@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import React, { useState, useRef } from 'react'
-import { Button } from "@/components/ui/button"
+import React, { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,39 +9,42 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card"
-import { ArrowRight, Upload } from "lucide-react"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+} from "@/components/ui/card";
+import { ArrowRight, Upload } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+import { Header } from "@/components/common/Header";
 
 export default function ZKProofGenerationPage() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [filePreview, setFilePreview] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [filePreview, setFilePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      setSelectedFile(file)
-      const reader = new FileReader()
+      setSelectedFile(file);
+      const reader = new FileReader();
       reader.onload = (e) => {
-        const content = e.target?.result as string
-        setFilePreview(content.slice(0, 200) + '...') // Display first 200 characters
-      }
-      reader.readAsText(file)
+        const content = e.target?.result as string;
+        setFilePreview(content.slice(0, 200) + "..."); // Display first 200 characters
+      };
+      reader.readAsText(file);
     }
-  }
+  };
 
   const handleFileButtonClick = () => {
-    fileInputRef.current?.click()
-  }
+    fileInputRef.current?.click();
+  };
 
   const handleGenerateZKProof = () => {
-    console.log('Generating ZK Proof...')
+    console.log("Generating ZK Proof...");
     // Implement ZK Proof generation logic here
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
+      <Header scrolled={false} scrollToSection={() => {}} />
       <main className="flex justify-center p-4 mt-20">
         <Card className="w-full max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">
           <CardHeader className="text-center">
@@ -53,7 +56,10 @@ export default function ZKProofGenerationPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <Alert variant="info" className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
+            <Alert
+              variant="info"
+              className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800"
+            >
               <AlertDescription className="text-blue-800 dark:text-blue-200">
                 これから、ZKプルーフの生成と認証を行います。秘密情報が書かれたファイルを選択してください。
               </AlertDescription>
@@ -78,8 +84,12 @@ export default function ZKProofGenerationPage() {
 
               {filePreview && (
                 <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-md">
-                  <h3 className="text-lg font-semibold mb-2">ファイルプレビュー:</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-300 break-all">{filePreview}</p>
+                  <h3 className="text-lg font-semibold mb-2">
+                    ファイルプレビュー:
+                  </h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 break-all">
+                    {filePreview}
+                  </p>
                 </div>
               )}
             </div>
@@ -97,5 +107,5 @@ export default function ZKProofGenerationPage() {
         </Card>
       </main>
     </div>
-  )
+  );
 }
