@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
 // pages/index.tsx
-   import { InheritanceUi } from '@/components/inheritance-ui'
+import { InheritanceUi } from "@/components/inheritance-ui";
 
-   export default function Home() {
-     return <InheritanceUi />
-   }
+export default function Home() {
+  return <InheritanceUi />;
+}
