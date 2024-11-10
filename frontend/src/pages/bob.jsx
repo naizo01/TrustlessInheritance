@@ -14,6 +14,7 @@ import ApplicationResultPage from "@/components/bob-application-result";
 import InheritanceAssetsLockedPage from "@/components/bob-inheritance-assets-locked";
 import InheritanceAssetsUnlockedPage from "@/components/bob-inheritance-assets-unlocked";
 import TransferConfirmationPage from "@/components/bob-transfer-confirmation";
+import TransferResultPage from "@/components/bob-transfer-result";
 
 export default function Home() {
   const [num, setNum] = useState(0);
@@ -37,9 +38,12 @@ export default function Home() {
       {isApproved && isMatured && num === 3 && (
         <InheritanceAssetsUnlockedPage onClick={setNum} />
       )}
-      {isApproved && isMatured && num === 4 && <TransferConfirmationPage onClick={setNum} />}
-      {isApproved && isMatured && num === 5 && ""}
-      {isApproved && isMatured && num === 6 && ""}
+      {isApproved && isMatured && num === 4 && (
+        <TransferConfirmationPage onClick={setNum} />
+      )}
+      {isApproved && isMatured && num === 5 && (
+        <TransferResultPage onClick={setNum} />
+      )}
     </>
   );
 }
