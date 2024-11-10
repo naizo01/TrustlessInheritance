@@ -11,23 +11,29 @@ import InheritanceAssetsPage from "@/components/bob-inheritance-assets";
 import ZKProofGenerationPage from "@/components/bob-zk-proof-generation";
 import ZKProofConfirmationPage from "@/components/bob-zk-proof-confirmation";
 import ApplicationResultPage from "@/components/bob-application-result";
+import InheritanceAssetsLockedPage from "@/components/bob-inheritance-assets-locked";
 
 export default function Home() {
   const [num, setNum] = useState(0);
-  const [isApproved, setIsApproved] = useState(false);
+  const [isApproved, setIsApproved] = useState(true);
   const [isMatured, setIsMatured] = useState(false);
 
   return (
     <>
-      {!isApproved && num === 0 && <BobLandingPage onClick={setNum} />}
-      {!isApproved && num === 1 && <AddressInputPage onClick={setNum} />}
-      {!isApproved && num === 2 && <ConfirmAddressesPage onClick={setNum} />}
+      {num === 0 && <BobLandingPage onClick={setNum} />}
+      {num === 1 && <AddressInputPage onClick={setNum} />}
+      {num === 2 && <ConfirmAddressesPage onClick={setNum} />}
       {!isApproved && num === 3 && <InheritanceAssetsPage onClick={setNum} />}
       {!isApproved && num === 4 && <ZKProofGenerationPage onClick={setNum} />}
       {!isApproved && num === 5 && <ZKProofConfirmationPage onClick={setNum} />}
       {!isApproved && num === 6 && <ApplicationResultPage onClick={setNum} />}
-      {isApproved && !isMatured && ""}
-      {isApproved && isMatured && ""}
+      {isApproved && !isMatured && num === 3 && (
+        <InheritanceAssetsLockedPage onClick={setNum} />
+      )}
+      {isApproved && isMatured && num === 3 && ""}
+      {isApproved && isMatured && num === 4 && ""}
+      {isApproved && isMatured && num === 5 && ""}
+      {isApproved && isMatured && num === 6 && ""}
     </>
   );
 }
