@@ -13,6 +13,7 @@ import ZKProofConfirmationPage from "@/components/bob-zk-proof-confirmation";
 import ApplicationResultPage from "@/components/bob-application-result";
 import InheritanceAssetsLockedPage from "@/components/bob-inheritance-assets-locked";
 import InheritanceAssetsUnlockedPage from "@/components/bob-inheritance-assets-unlocked";
+import TransferConfirmationPage from "@/components/bob-transfer-confirmation";
 
 export default function Home() {
   const [num, setNum] = useState(0);
@@ -28,13 +29,15 @@ export default function Home() {
       {!isApproved && num === 4 && <ZKProofGenerationPage onClick={setNum} />}
       {!isApproved && num === 5 && <ZKProofConfirmationPage onClick={setNum} />}
       {!isApproved && num === 6 && <ApplicationResultPage onClick={setNum} />}
+
       {isApproved && !isMatured && num === 3 && (
         <InheritanceAssetsLockedPage onClick={setNum} />
       )}
+
       {isApproved && isMatured && num === 3 && (
         <InheritanceAssetsUnlockedPage onClick={setNum} />
       )}
-      {isApproved && isMatured && num === 4 && ""}
+      {isApproved && isMatured && num === 4 && <TransferConfirmationPage onClick={setNum} />}
       {isApproved && isMatured && num === 5 && ""}
       {isApproved && isMatured && num === 6 && ""}
     </>

@@ -48,7 +48,7 @@ export default function InheritanceAssetsUnlockedPage({ onClick }) {
     },
   ]);
 
-  const [totalValue, setTotalValue] = useState(3500);
+  const [totalValue, setTotalValue] = useState(0);
 
   useEffect(() => {
     const newTotal = assets.reduce(
@@ -84,7 +84,7 @@ export default function InheritanceAssetsUnlockedPage({ onClick }) {
 
   const handleNextStep = () => {
     // Navigate to the next page for confirming transfer accounts
-    // router.push("/confirm-transfer-accounts");
+    // router.push('/confirm-transfer-accounts')
     onClick((prev) => prev + 1);
   };
 
@@ -187,8 +187,9 @@ export default function InheritanceAssetsUnlockedPage({ onClick }) {
           </CardContent>
           <CardFooter className="flex justify-center pt-6">
             <Button
-              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:scale-105"
+              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleNextStep}
+              disabled={totalValue === 0}
             >
               資産・金額・送金アカウントの確認
               <ArrowRight className="ml-2 h-5 w-5" />
