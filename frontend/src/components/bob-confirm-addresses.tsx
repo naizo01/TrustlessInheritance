@@ -15,7 +15,7 @@ import { isAddress } from "ethers";
 
 import { Header } from "@/components/common/Header";
 
-export default function ConfirmAddressesPage() {
+export default function ConfirmAddressesPage({ onClick }) {
   const [deceasedAddress, setDeceasedAddress] = useState("");
   const [inheritorAddress, setInheritorAddress] = useState("");
   const [isWalletConnected, setIsWalletConnected] = useState(false);
@@ -51,6 +51,7 @@ export default function ConfirmAddressesPage() {
   const handleNextStep = () => {
     console.log("Proceeding to next step");
     // Add logic for the next step here
+    onClick((prev) => prev + 1);
   };
 
   return (

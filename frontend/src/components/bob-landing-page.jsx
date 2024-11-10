@@ -14,13 +14,14 @@ import { ArrowRight, Lock, UserCheck, FileText, Wallet } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Header } from "@/components/common/Header";
 
-export default function BobLandingPage() {
+export default function BobLandingPage({ onClick }) {
   const [currentStep, setCurrentStep] = useState(0);
 
   const handleNextStep = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    }
+    // if (currentStep < steps.length - 1) {
+    //   setCurrentStep(currentStep + 1);
+    // }
+    onClick((prev) => prev + 1);
   };
 
   return (

@@ -15,7 +15,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import { Header } from "@/components/common/Header";
 
-export default function ZKProofGenerationPage() {
+export default function ZKProofGenerationPage({ onClick }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -40,6 +40,7 @@ export default function ZKProofGenerationPage() {
   const handleGenerateZKProof = () => {
     console.log("Generating ZK Proof...");
     // Implement ZK Proof generation logic here
+    onClick((prev) => prev + 1);
   };
 
   return (
@@ -71,7 +72,7 @@ export default function ZKProofGenerationPage() {
                 ref={fileInputRef}
                 onChange={handleFileSelect}
                 className="hidden"
-                accept=".txt,.json"
+                accept="*.*"
               />
               <Button
                 onClick={handleFileButtonClick}

@@ -30,7 +30,7 @@ interface Asset {
   value: number;
 }
 
-export default function InheritanceAssetsPage() {
+export default function InheritanceAssetsPage({ onClick }) {
   const deceasedAddress = "0x742...44e";
   const totalValue = 3500;
   const assets: Asset[] = [
@@ -47,6 +47,12 @@ export default function InheritanceAssetsPage() {
       value: 2500,
     },
   ];
+
+  const handleNextStep = () => {
+    console.log("Next step");
+    // Add logic for the next step here
+    onClick((prev) => prev + 1);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
@@ -117,7 +123,7 @@ export default function InheritanceAssetsPage() {
           <CardFooter className="flex justify-center pt-6">
             <Button
               className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:scale-105"
-              onClick={() => console.log("Next step")}
+              onClick={handleNextStep}
             >
               次へ進む
               <ArrowRight className="ml-2 h-5 w-5" />

@@ -11,7 +11,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Search, CheckCircle } from "lucide-react";
+import { ArrowRight, Search, CheckCircle, Info } from "lucide-react";
 import { isAddress } from "ethers";
 import {
   Dialog,
@@ -21,6 +21,8 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
 import { Header } from "@/components/common/Header";
 
 // ダミーの検索結果
@@ -33,16 +35,16 @@ const dummySearchResults = [
   {
     id: 2,
     secret: "3時のおやつカンパニー",
-    address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44f",
+    address: "0xB8A1726abC8b984c60DD400370AA846705175c4D",
   },
   {
     id: 3,
     secret: "鈴木一郎が同級生",
-    address: "0x742d35Cc6634C0532925a3b844Bc454e4438f50e",
+    address: "0x1e290652CaeDF92cf430DCa1c5B6faC90F4A13D9",
   },
 ];
 
-export default function AddressInputPage() {
+export default function AddressInputPage({ onClick }) {
   const [address, setAddress] = useState("");
   const [isValidAddress, setIsValidAddress] = useState(false);
   const [isInvalidAddress, setIsInvalidAddress] = useState(false);
@@ -64,6 +66,7 @@ export default function AddressInputPage() {
 
   const handleNextStep = () => {
     console.log("Proceeding with address:", address);
+    onClick((prev) => prev + 1);
   };
 
   const handleSearch = () => {
@@ -161,10 +164,21 @@ export default function AddressInputPage() {
                             }
                           >
                             <div>
-                              <div className="font-semibold">{result.name}</div>
+                              <div className="font-semibold">
+                                {result.secret}
+                              </div>
                               <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
                                 {result.address}
                               </div>
+                              <Alert
+                                variant="info"
+                                className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 mt-4"
+                              >
+                                <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                                <AlertDescription className="text-blue-800 dark:text-blue-200">
+                                  検索結果のアドレスを使用する場合は、アドレスをダブルクリックください。
+                                </AlertDescription>
+                              </Alert>
                             </div>
                           </li>
                         ))}
