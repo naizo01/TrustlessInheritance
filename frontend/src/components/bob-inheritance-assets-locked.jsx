@@ -24,7 +24,7 @@ import { useRouter } from "next/navigation";
 
 import { Header } from "@/components/common/Header";
 
-export default function InheritanceAssetsLockedPage({onClick}) {
+export default function InheritanceAssetsLockedPage({ onClick }) {
   const router = useRouter();
   const deceasedAddress = "0x742...44e";
   const totalValue = 3500;
@@ -52,8 +52,8 @@ export default function InheritanceAssetsLockedPage({onClick}) {
   }).format(lockEndDate);
 
   const handleReturnToMain = () => {
-    // router.push("/"); // Adjust this route as needed
-    onClick(prev => 0);
+    // router.push('/') // Adjust this route as needed
+    onClick((prev) => 0);
   };
 
   return (
