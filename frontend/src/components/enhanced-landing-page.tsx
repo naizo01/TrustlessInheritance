@@ -68,12 +68,12 @@ export function EnhancedLandingPage() {
           </div>
           <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-              安全で簡単な
+              大切な暗号資産を、
               <br className="sm:hidden" />
-              暗号資産の相続
+              確実に未来へ
             </h2>
             <p className="text-xl sm:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              ブロックチェーン技術とZK署名で、大切な資産を確実に次世代へ
+              最新のブロックチェーン技術で実現する、次世代型資産継承ソリューション
             </p>
             <Button
               size="lg"
@@ -92,13 +92,13 @@ export function EnhancedLandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
                 {
-                  title: "高度な安全性",
+                  title: "強固なセキュリティ",
                   description: "ブロックチェーン技術による堅牢なセキュリティ",
                   icon: Shield,
                 },
                 {
                   title: "プライバシー保護",
-                  description: "ZK署名方式による匿名性の確保",
+                  description: "ZK証明方式による匿名性の確保",
                   icon: Eye,
                 },
                 {
@@ -107,8 +107,8 @@ export function EnhancedLandingPage() {
                   icon: Sliders,
                 },
                 {
-                  title: "多様な対応",
-                  description: "複数の暗号資産に対応",
+                  title: "幅広い資産対応",
+                  description: "複数の暗号資産を一括管理",
                   icon: Layers,
                 },
               ].map((feature, index) => (
@@ -240,7 +240,7 @@ export function EnhancedLandingPage() {
                       </div>
                     </AccordionTrigger>
                     <AccordionContent className="text-gray-700 dark:text-gray-300">
-                      ZK署名方式で用いる秘密情報は、あなたと相続人の間で共有する特別な情報です。絶対に第三者に漏らさないようにご注意ください。
+                      ZK証明方式で用いる秘密情報は、あなたと相続人の間で共有する特別な情報です。絶対に第三者に漏らさないようにご注意ください。
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
@@ -252,10 +252,10 @@ export function EnhancedLandingPage() {
         <section className="py-20 bg-gray-100 dark:bg-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-              あなたの大切な資産を、確実に次世代へ
+              かけがえのない資産を、確実に未来につなぐ
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-              安全で簡単な暗号資産相続アプリケーションで、今すぐ始めましょう
+              次世代の資産継承　あなたの大切な方へ、想いをつなぐ第一歩を
             </p>
             <Button
               size="lg"
