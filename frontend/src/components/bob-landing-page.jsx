@@ -27,7 +27,7 @@ export default function BobLandingPage() {
       <Header
         scrolled={false}
         scrollToSection={() => {}}
-        appBadgeText="相続開始の申請"
+        appBadgeText=""
         appBadgeClassName=""
       />
       <main className=" flex  justify-center p-4 mt-20">

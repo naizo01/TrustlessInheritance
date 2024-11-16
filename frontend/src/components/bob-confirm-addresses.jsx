@@ -56,8 +56,8 @@ const ConfirmAddressesPage = () => {
         scrolled={false}
         scrollToSection={() => {}}
         showLandingPageButtons={true}
-        appBadgeText="相続開始の申請"
-        appBadgeClassName=""
+        appBadgeText="本人確認"
+        appBadgeClassName="border-green-500 text-green-500"
       />
       <main className="flex justify-center p-4 mt-20">
         <Card className="w-full max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">

@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/table";
 import { ArrowRight, Info, Check } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Header } from "@/components/common/Header";
+import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
 export default function Component() {
@@ -50,7 +50,12 @@ export default function Component() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
-      <Header scrolled={false} scrollToSection={() => {}} />
+      <Header
+        scrolled={false}
+        scrollToSection={() => {}}
+        appBadgeText="本人確認"
+        appBadgeClassName="border-green-500 text-green-500"
+      />
       <main className="flex justify-center p-4 mt-20">
         <Card className="w-full max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">
           <CardHeader className="text-center">
