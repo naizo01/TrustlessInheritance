@@ -24,8 +24,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 
 import { Header } from "@/components/common/Header";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-export default function TransferResultPage({ onClick }) {
+export default function TransferResultPage() {
+  const { state, dispatch } = useBobState();
+
   const router = useRouter();
   const [transferStatus, setTransferStatus] = useState("pending"); // 'pending', 'success', or 'failure'
   const [assets, setAssets] = useState([
@@ -63,8 +66,10 @@ export default function TransferResultPage({ onClick }) {
 
   const handleReturnToMain = () => {
     // router.push("/"); // Adjust this route as needed
-    transferStatus === "success" && onClick((prev) => 0);
-    transferStatus === "failure" && onClick((prev) => 3);
+    transferStatus === "success" &&
+      dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 0 });
+    transferStatus === "failure" &&
+      dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 3 });
   };
 
   return (

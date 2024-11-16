@@ -23,8 +23,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 
 import { Header } from "@/components/common/Header";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-export default function InheritanceAssetsLockedPage({ onClick }) {
+export default function InheritanceAssetsLockedPage() {
+  const { state, dispatch } = useBobState();
+
   const router = useRouter();
   const deceasedAddress = "0x742...44e";
   const totalValue = 3500;
@@ -53,7 +56,7 @@ export default function InheritanceAssetsLockedPage({ onClick }) {
 
   const handleReturnToMain = () => {
     // router.push('/') // Adjust this route as needed
-    onClick((prev) => 0);
+    dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 0 });
   };
 
   return (

@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import React, { useState, useRef } from "react"
-import { Button } from "@/components/ui/button"
+import React, { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,38 +9,41 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card"
-import { ArrowRight, Upload } from 'lucide-react'
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Header } from "@/components/common/Header"
+} from "@/components/ui/card";
+import { ArrowRight, Upload } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Header } from "@/components/common/Header";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-export default function Component({ onClick }) {
-  const [selectedFile, setSelectedFile] = useState(null)
-  const [filePreview, setFilePreview] = useState(null)
-  const fileInputRef = useRef(null)
+export default function Component() {
+  const { state, dispatch } = useBobState();
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [filePreview, setFilePreview] = useState(null);
+  const fileInputRef = useRef(null);
 
   const handleFileSelect = (event) => {
-    const file = event.target.files?.[0]
+    const file = event.target.files?.[0];
     if (file) {
-      setSelectedFile(file)
-      const reader = new FileReader()
+      setSelectedFile(file);
+      const reader = new FileReader();
       reader.onload = (e) => {
-        const content = e.target?.result
-        setFilePreview(content.slice(0, 200) + "...") // Display first 200 characters
-      }
-      reader.readAsText(file)
+        const content = e.target?.result;
+        setFilePreview(content.slice(0, 200) + "..."); // Display first 200 characters
+      };
+      reader.readAsText(file);
     }
-  }
+  };
 
   const handleFileButtonClick = () => {
-    fileInputRef.current?.click()
-  }
+    fileInputRef.current?.click();
+  };
 
   const handleGenerateZKProof = () => {
-    console.log("Generating ZK Proof...")
+    console.log("Generating ZK Proof...");
     // Implement ZK Proof generation logic here
-    onClick((prev) => prev + 1)
-  }
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
@@ -107,5 +110,5 @@ export default function Component({ onClick }) {
         </Card>
       </main>
     </div>
-  )
+  );
 }

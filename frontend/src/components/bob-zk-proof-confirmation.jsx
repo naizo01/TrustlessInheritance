@@ -1,7 +1,7 @@
-'use client'
+"use client";
 
-import React, { useState } from "react"
-import { Button } from "@/components/ui/button"
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,8 +9,8 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card"
-import { ArrowRight, CheckCircle } from 'lucide-react'
+} from "@/components/ui/card";
+import { ArrowRight, CheckCircle } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,18 +21,21 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Header } from "@/components/common/Header"
+} from "@/components/ui/alert-dialog";
+import { Header } from "@/components/common/Header";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-export default function Component({ onClick }) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+export default function Component() {
+  const { state, dispatch } = useBobState();
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleConfirmApplication = () => {
     // Here you would typically make an API call to submit the application
-    console.log("Application submitted")
-    setIsDialogOpen(false)
-    onClick((prev) => prev + 1)
-  }
+    console.log("Application submitted");
+    setIsDialogOpen(false);
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
@@ -82,5 +85,5 @@ export default function Component({ onClick }) {
         </Card>
       </main>
     </div>
-  )
+  );
 }

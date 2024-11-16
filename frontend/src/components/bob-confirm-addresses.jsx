@@ -15,8 +15,11 @@ import { isAddress } from "ethers";
 import { useAccount } from "wagmi";
 import { Header } from "@/components/common/variable-header";
 import dynamic from "next/dynamic";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-const ConfirmAddressesPage = ({ onClick }) => {
+const ConfirmAddressesPage = () => {
+  const { state, dispatch } = useBobState();
+
   const [deceasedAddress, setDeceasedAddress] = useState(
     "0xB8A1726abC8b984c60DD400370AA846705175c4D"
   );
@@ -31,11 +34,20 @@ const ConfirmAddressesPage = ({ onClick }) => {
 
   const handleNextStep = () => {
     console.log("Proceeding to next step");
-    onClick((prev) => prev + 1);
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <>
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+          <p className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+            Loading...
+          </p>
+        </div>
+      </>
+    );
   }
 
   return (

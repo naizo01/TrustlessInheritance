@@ -12,8 +12,11 @@ import {
 } from "@/components/ui/card";
 import { Home, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { Header } from "@/components/common/Header";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-export default function Component({ onClick }) {
+export default function Component() {
+  const { state, dispatch } = useBobState();
+
   const [status, setStatus] = useState("processing");
 
   useEffect(() => {
@@ -28,9 +31,9 @@ export default function Component({ onClick }) {
 
   const handleReturnToMain = () => {
     if (status === "approved") {
-      onClick((prev) => 0);
+      dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 0 });
     } else if (status === "rejected") {
-      onClick((prev) => 4);
+      dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 4 });
     }
   };
 

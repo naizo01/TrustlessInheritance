@@ -37,8 +37,11 @@ import { useRouter } from "next/navigation";
 import { isAddress } from "ethers";
 
 import { Header } from "@/components/common/Header";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
 export default function TransferConfirmationPage({ onClick }) {
+  const { state, dispatch } = useBobState();
+
   const router = useRouter();
   const [assets, setAssets] = useState([
     {
@@ -94,7 +97,7 @@ export default function TransferConfirmationPage({ onClick }) {
     // Implement transfer logic here
     console.log("Transfer executed");
     // router.push('/transfer-complete')
-    onClick((prev) => prev + 1);
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
 
   const stopTransaction = () => {

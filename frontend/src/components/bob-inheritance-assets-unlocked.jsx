@@ -25,8 +25,11 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 
 import { Header } from "@/components/common/Header";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-export default function InheritanceAssetsUnlockedPage({ onClick }) {
+export default function InheritanceAssetsUnlockedPage() {
+  const { state, dispatch } = useBobState();
+
   const router = useRouter();
   const deceasedAddress = "0x742...44e";
   const [assets, setAssets] = useState([
@@ -85,7 +88,7 @@ export default function InheritanceAssetsUnlockedPage({ onClick }) {
   const handleNextStep = () => {
     // Navigate to the next page for confirming transfer accounts
     // router.push('/confirm-transfer-accounts')
-    onClick((prev) => prev + 1);
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
 
   return (

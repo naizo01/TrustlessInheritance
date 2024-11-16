@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Header } from "@/components/common/variable-header";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
 // Dummy search results
 const dummySearchResults = [
@@ -43,7 +44,9 @@ const dummySearchResults = [
   },
 ];
 
-export default function AddressInputPage({ onClick }) {
+export default function AddressInputPage() {
+  const { state, dispatch } = useBobState();
+
   const [address, setAddress] = useState("");
   const [isValidAddress, setIsValidAddress] = useState(false);
   const [isInvalidAddress, setIsInvalidAddress] = useState(false);
@@ -63,7 +66,7 @@ export default function AddressInputPage({ onClick }) {
 
   const handleNextStep = () => {
     console.log("Proceeding with address:", address);
-    onClick((prev) => prev + 1);
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
 
   const handleSearch = () => {
