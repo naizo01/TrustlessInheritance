@@ -11,30 +11,27 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Home, CheckCircle, XCircle, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-
 import { Header } from "@/components/common/Header";
 
-type ApplicationStatus = "processing" | "approved" | "rejected";
-
-export default function ApplicationResultPage({ onClick }) {
-  const [status, setStatus] = useState<ApplicationStatus>("processing");
-  const router = useRouter();
+export default function Component({ onClick }) {
+  const [status, setStatus] = useState("processing");
 
   useEffect(() => {
     // Simulating ABI call
     const fetchResult = async () => {
       await new Promise((resolve) => setTimeout(resolve, 3000)); // 3 second delay
-      setStatus(Math.random() > 0.5 ? "approved" : "rejected");
+      setStatus(Math.random() > 0.4 ? "approved" : "rejected");
     };
 
     fetchResult();
   }, []);
 
   const handleReturnToMain = () => {
-    // router.push('/') // Adjust this route as needed
-    status === "approved" && onClick((prev) => 0);
-    status === "rejected" && onClick((prev) => 4);
+    if (status === "approved") {
+      onClick((prev) => 0);
+    } else if (status === "rejected") {
+      onClick((prev) => 4);
+    }
   };
 
   return (

@@ -22,10 +22,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Header } from "@/components/common/variable-header";
 
-import { Header } from "@/components/common/Header";
-
-// ダミーの検索結果
+// Dummy search results
 const dummySearchResults = [
   {
     id: 1,
@@ -50,9 +49,7 @@ export default function AddressInputPage({ onClick }) {
   const [isInvalidAddress, setIsInvalidAddress] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<typeof dummySearchResults>(
-    []
-  );
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     const valid = isAddress(address);
@@ -60,7 +57,7 @@ export default function AddressInputPage({ onClick }) {
     setIsInvalidAddress(address !== "" && !valid);
   }, [address]);
 
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAddressChange = (e) => {
     setAddress(e.target.value);
   };
 
@@ -82,14 +79,20 @@ export default function AddressInputPage({ onClick }) {
     setSearchResults(filteredResults);
   };
 
-  const handleSelectAddress = (selectedAddress: string) => {
+  const handleSelectAddress = (selectedAddress) => {
     setAddress(selectedAddress);
     setIsSearchOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
-      <Header scrolled={false} scrollToSection={() => {}} />
+      <Header
+        scrolled={false}
+        scrollToSection={() => {}}
+        showLandingPageButtons={true}
+        appBadgeText="相続開始の申請"
+        appBadgeClassName=""
+      />
       <main className="flex justify-center p-4 mt-20">
         <Card className="w-full max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">
           <CardHeader className="text-center">

@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import React, { useState } from "react"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,8 +9,8 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card";
-import { ArrowRight, CheckCircle } from "lucide-react";
+} from "@/components/ui/card"
+import { ArrowRight, CheckCircle } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,23 +21,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { useRouter } from "next/navigation";
+} from "@/components/ui/alert-dialog"
+import { Header } from "@/components/common/Header"
 
-import { Header } from "@/components/common/Header";
-
-export default function ZKProofConfirmationPage({ onClick }) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  // const router = useRouter();
+export default function Component({ onClick }) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
   const handleConfirmApplication = () => {
     // Here you would typically make an API call to submit the application
-    console.log("Application submitted");
-    setIsDialogOpen(false);
-    // Navigate to the result page
-    // router.push("/application-result");
-    onClick((prev) => prev + 1);
-  };
+    console.log("Application submitted")
+    setIsDialogOpen(false)
+    onClick((prev) => prev + 1)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
@@ -87,5 +82,5 @@ export default function ZKProofConfirmationPage({ onClick }) {
         </Card>
       </main>
     </div>
-  );
+  )
 }

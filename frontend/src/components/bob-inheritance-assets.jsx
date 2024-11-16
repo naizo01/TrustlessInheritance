@@ -1,7 +1,7 @@
-"use client";
+'use client'
 
-import React from "react";
-import { Button } from "@/components/ui/button";
+import React from "react"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card";
+} from "@/components/ui/card"
 import {
   Table,
   TableBody,
@@ -17,23 +17,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { ArrowRight, Info, Check } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+} from "@/components/ui/table"
+import { ArrowRight, Info, Check } from 'lucide-react'
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Header } from "@/components/common/Header"
 
-import { Header } from "@/components/common/Header";
-
-interface Asset {
-  name: string;
-  type: string;
-  balance: number;
-  value: number;
-}
-
-export default function InheritanceAssetsPage({ onClick }) {
-  const deceasedAddress = "0x742...44e";
-  const totalValue = 3500;
-  const assets: Asset[] = [
+export default function Component({ onClick }) {
+  const deceasedAddress = "0x742...44e"
+  const totalValue = 3500
+  const assets = [
     {
       name: "USDT",
       type: "トークン",
@@ -46,13 +38,12 @@ export default function InheritanceAssetsPage({ onClick }) {
       balance: 2500,
       value: 2500,
     },
-  ];
+  ]
 
   const handleNextStep = () => {
-    console.log("Next step");
-    // Add logic for the next step here
-    onClick((prev) => prev + 1);
-  };
+    console.log("Next step")
+    onClick((prev) => prev + 1)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
@@ -132,5 +123,5 @@ export default function InheritanceAssetsPage({ onClick }) {
         </Card>
       </main>
     </div>
-  );
+  )
 }
