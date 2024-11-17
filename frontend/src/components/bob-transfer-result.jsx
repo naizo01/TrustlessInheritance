@@ -29,26 +29,8 @@ import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 export default function TransferResultPage() {
   const { state, dispatch } = useBobState();
 
-  const router = useRouter();
   const [transferStatus, setTransferStatus] = useState("pending"); // 'pending', 'success', or 'failure'
-  const [assets, setAssets] = useState([
-    {
-      id: 1,
-      name: "USDT",
-      type: "トークン",
-      balance: 1000,
-      value: 1000,
-      selected: true,
-    },
-    {
-      id: 2,
-      name: "USDC",
-      type: "トークン",
-      balance: 2500,
-      value: 2500,
-      selected: true,
-    },
-  ]);
+  const [assets, setAssets] = useState(state.withdrawals);
 
   useEffect(() => {
     // Simulate transfer process
@@ -60,12 +42,11 @@ export default function TransferResultPage() {
   }, []);
 
   const totalValue = assets.reduce(
-    (sum, asset) => sum + (asset.selected ? asset.value : 0),
+    (sum, asset) => sum + (asset.selected ? asset.transfer : 0),
     0
   );
 
   const handleReturnToMain = () => {
-    // router.push("/"); // Adjust this route as needed
     transferStatus === "success" &&
       dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 0 });
     transferStatus === "failure" &&
@@ -86,6 +67,21 @@ export default function TransferResultPage() {
             <CardTitle className="text-3xl font-bold text-gray-900 dark:text-white">
               送金結果
             </CardTitle>
+            <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
+              `
+              {state.deceasedAddress &&
+                state.deceasedAddress.replace(
+                  state.deceasedAddress.slice(6, -4),
+                  "...."
+                )}
+              {`  >>>  `}
+              {state.recipientAddress &&
+                state.recipientAddress.replace(
+                  state.recipientAddress.slice(6, -4),
+                  "...."
+                )}
+              `
+            </CardDescription>
             <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
               送金処理の状況と結果を確認してください
             </CardDescription>
@@ -125,7 +121,7 @@ export default function TransferResultPage() {
                         {asset.balance.toLocaleString()}
                       </TableCell>
                       <TableCell className="text-right">
-                        {asset.value.toLocaleString()}
+                        {asset.transfer.toLocaleString()}
                       </TableCell>
                     </TableRow>
                   ))}

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Info, Check, Home } from "lucide-react";
+import { Info, Check, Home, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 
@@ -27,27 +27,62 @@ import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
 export default function InheritanceAssetsLockedPage() {
   const { state, dispatch } = useBobState();
+  const [totalValue, setTotalValue] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
-  const router = useRouter();
-  const deceasedAddress = "0x742...44e";
-  const totalValue = 3500;
-  const assets = [
-    {
-      name: "USDT",
-      type: "トークン",
-      balance: 1000,
-      value: 1000,
-    },
-    {
-      name: "USDC",
-      type: "トークン",
-      balance: 2500,
-      value: 2500,
-    },
-  ];
+  // fake data
+  const fakeData = {
+    assets: [
+      {
+        id: 1,
+        name: "USDT",
+        type: "トークン",
+        balance: 1000,
+        value: 1000,
+        selected: false,
+        transfer:0
+      },
+      {
+        id: 2,
+        name: "USDC",
+        type: "トークン",
+        balance: 2000,
+        value: 2000,
+        selected: false,
+        transfer: 0
+      },
+    ],
+    lockEndDate: null,
+    lockPeriod: 3,
+  };
 
-  // Lock period end date (3 months from now for demo)
-  const lockEndDate = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
+  useEffect(() => {
+    // simulating ABI call
+    const fetchAssetsData = async () => {
+      await new Promise((res) => setTimeout(res, 3000));
+      // if no data in state, i.e. not through step 6
+      dispatch({ type: BOB_ACTIONS.SET_ASSETS, payload: fakeData.assets });
+      dispatch({
+        type: BOB_ACTIONS.SET_LOCK_PERIOD,
+        payload: fakeData.lockPeriod,
+      });
+      dispatch({ type: BOB_ACTIONS.SET_LOCK_END_DATE }); // assuming approved today
+    };
+    !state.lockEndDate && fetchAssetsData();
+  }, []);
+
+  useEffect(() => {
+    if (state.assets.length > 0) {
+      const sumTotalValue = state.assets
+        .reduce((acc, asset) => acc + asset.value, 0)
+        .toLocaleString();
+      setTotalValue(sumTotalValue);
+      setIsLoading(false);
+    }
+  }, [, state.assets]);
+
+  // lockEndDate formatted in Japanese
+  const lockEndDate = state.lockEndDate;
   const formattedEndDate = new Intl.DateTimeFormat("ja-JP", {
     year: "numeric",
     month: "long",
@@ -55,7 +90,6 @@ export default function InheritanceAssetsLockedPage() {
   }).format(lockEndDate);
 
   const handleReturnToMain = () => {
-    // router.push('/') // Adjust this route as needed
     dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 0 });
   };
 
@@ -74,70 +108,79 @@ export default function InheritanceAssetsLockedPage() {
               相続財産の確認
             </CardTitle>
             <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
-              {deceasedAddress}
+              {state.deceasedAddress.replace(
+                state.deceasedAddress.slice(6, -4),
+                "...."
+              )}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <Card className="bg-blue-600 text-white">
-              <CardContent className="pt-6">
-                <div className="text-sm">相続可能総額</div>
-                <div className="text-4xl font-bold">
-                  ${totalValue.toLocaleString()}
-                </div>
-              </CardContent>
-            </Card>
+          {isLoading && (
+            <div className="flex flex-col items-center justify-center space-y-4">
+              <Loader2 className="w-16 h-16 animate-spin text-blue-500" />
+            </div>
+          )}
+          {!isLoading && (
+            <CardContent className="space-y-6">
+              <Card className="bg-blue-600 text-white">
+                <CardContent className="pt-6">
+                  <div className="text-sm">相続可能総額</div>
+                  <div className="text-4xl font-bold">${totalValue}</div>
+                </CardContent>
+              </Card>
 
-            <div className="rounded-lg border bg-card">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[50px]"></TableHead>
-                    <TableHead>資産</TableHead>
-                    <TableHead>種別</TableHead>
-                    <TableHead className="text-right">残高</TableHead>
-                    <TableHead className="text-right">価値</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {assets.map((asset, index) => (
-                    <TableRow key={index}>
-                      <TableCell>
-                        <Check className="h-4 w-4 text-green-500" />
-                      </TableCell>
-                      <TableCell className="font-medium">
-                        {asset.name}
-                      </TableCell>
-                      <TableCell>{asset.type}</TableCell>
-                      <TableCell className="text-right">
-                        {asset.balance.toLocaleString()}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        ${asset.value.toLocaleString()}
-                      </TableCell>
+              <div className="rounded-lg border bg-card">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-[50px]"></TableHead>
+                      <TableHead>資産</TableHead>
+                      <TableHead>種別</TableHead>
+                      <TableHead className="text-right">残高</TableHead>
+                      <TableHead className="text-right">価値</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-
-            <div className="space-y-4">
-              <Alert
-                variant="info"
-                className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800"
-              >
-                <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                <AlertDescription className="text-blue-800 dark:text-blue-200">
-                  選択した資産は相続プロセス開始後、3ヶ月間ロックされます。この期間中、被相続人は相続をキャンセルすることができます。
-                </AlertDescription>
-              </Alert>
-
-              <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                <p className="text-yellow-800 dark:text-yellow-200 font-medium">
-                  ロック期間満了日: {formattedEndDate}
-                </p>
+                  </TableHeader>
+                  <TableBody>
+                    {state.assets.map((asset, index) => (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <Check className="h-4 w-4 text-green-500" />
+                        </TableCell>
+                        <TableCell className="font-medium">
+                          {asset.name}
+                        </TableCell>
+                        <TableCell>{asset.type}</TableCell>
+                        <TableCell className="text-right">
+                          {asset.balance.toLocaleString()}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          ${asset.value.toLocaleString()}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
-            </div>
-          </CardContent>
+
+              <div className="space-y-4">
+                <Alert
+                  variant="info"
+                  className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800"
+                >
+                  <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                  <AlertDescription className="text-blue-800 dark:text-blue-200">
+                    選択した資産は相続プロセス開始後、{state.lockPeriod}
+                    ヶ月間ロックされます。この期間中、被相続人は相続をキャンセルすることができます。
+                  </AlertDescription>
+                </Alert>
+
+                <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                  <p className="text-yellow-800 dark:text-yellow-200 font-medium">
+                    ロック期間満了日: {formattedEndDate} （同日を含む）
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          )}
           <CardFooter className="flex justify-center pt-6">
             <Button
               className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:scale-105"

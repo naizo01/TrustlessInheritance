@@ -31,10 +31,12 @@ const initialState = {
   step: 0,
   status: "waiting", // waiting, approved, matured
   deceasedAddress: "",
-  inheritorAddress: "",
-  lockPeriod: null,
-  assets: [],
-  withdrawal: [],
+  inheritorAddress: "", // use useAddress; it's more reliable
+  recipientAddress: "",
+  lockEndDate: null, // including this date
+  lockPeriod: null, // num of months
+  assets: [], // asset granted
+  withdrawals: [], // assets to transfer
 };
 
 // Action Types
@@ -44,9 +46,10 @@ export const BOB_ACTIONS = {
   SET_DECEASED_ADDRESS: "SET_DECEASED_ADDRESS",
   SET_INHERITOR_ADDRESS: "SET_INHERITOR_ADDRESS",
   SET_RECIPIENT_ADDRESS: "SET_RECIPIENT_ADDRESS",
+  SET_LOCK_END_DATE: "SET_LOCK_END_DATE",
   SET_LOCK_PERIOD: "SET_LOCK_PERIOD",
   SET_ASSETS: "SET_ASSETS",
-  SET_WITHDRAWAL: "SET_WITHDRAWAL",
+  SET_WITHDRAWAL: "SET_WITHDRAWALS",
   SET_APPROVAL: "SET_APPROVAL",
   SET_MATURED: "SET_MATURED",
 };
@@ -58,6 +61,30 @@ function bobReducer(state, action) {
       return { ...state, step: state.step + 1 };
     case BOB_ACTIONS.MOVE_SPECIFIC:
       return { ...state, step: action.payload };
+    case BOB_ACTIONS.SET_DECEASED_ADDRESS:
+      return { ...state, deceasedAddress: action.payload };
+    case BOB_ACTIONS.SET_INHERITOR_ADDRESS:
+      return { ...state, inheritorAddress: action.payload };
+    case BOB_ACTIONS.SET_ASSETS:
+      return { ...state, assets: action.payload };
+    case BOB_ACTIONS.SET_LOCK_PERIOD:
+      return { ...state, lockPeriod: action.payload };
+    case BOB_ACTIONS.SET_APPROVAL:
+      return { ...state, status: "approved" };
+    case BOB_ACTIONS.SET_MATURED:
+      return { ...state, status: "matured" };
+    case BOB_ACTIONS.SET_LOCK_END_DATE:
+      return {
+        ...state,
+        lockEndDate: !action.payload
+          ? new Date(Date.now() + state.lockPeriod * 30 * 24 * 60 * 60 * 1000)
+          : action.payload,
+        // 30/360 basis need to check
+      };
+    case BOB_ACTIONS.SET_WITHDRAWAL:
+      return { ...state, withdrawals: action.payload };
+    case BOB_ACTIONS.SET_RECIPIENT_ADDRESS:
+      return { ...state, recipientAddress: action.payload };
     default:
       throw new Error("unknown action required");
   }

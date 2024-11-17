@@ -10,13 +10,12 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-import { Home, CheckCircle, XCircle, Loader2 } from "lucide-react";
+import { ArrowRight, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
 export default function Component() {
   const { state, dispatch } = useBobState();
-
   const [status, setStatus] = useState("processing");
 
   useEffect(() => {
@@ -25,13 +24,18 @@ export default function Component() {
       await new Promise((resolve) => setTimeout(resolve, 3000)); // 3 second delay
       setStatus(Math.random() > 0.4 ? "approved" : "rejected");
     };
-
     fetchResult();
   }, []);
 
+  useEffect(() => {
+    if (status === "approved")
+      dispatch({ type: BOB_ACTIONS.SET_LOCK_END_DATE });
+  }, [status]);
+
   const handleReturnToMain = () => {
     if (status === "approved") {
-      dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 0 });
+      dispatch({ type: BOB_ACTIONS.SET_APPROVAL });
+      dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 3 });
     } else if (status === "rejected") {
       dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 4 });
     }
@@ -82,13 +86,16 @@ export default function Component() {
             )}
           </CardContent>
           <CardFooter className="flex justify-center pt-6">
-            <Button
-              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:scale-105"
-              onClick={handleReturnToMain}
-            >
-              メインに戻る
-              <Home className="ml-2 h-5 w-5" />
-            </Button>
+            {status !== "processing" && (
+              <Button
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:scale-105"
+                onClick={handleReturnToMain}
+              >
+                {status === "approved" && "相続財産の確認"}
+                {status === "rejected" && "ZKプルーフを作成する"}
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            )}
           </CardFooter>
         </Card>
       </main>

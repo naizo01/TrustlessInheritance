@@ -47,7 +47,6 @@ const dummySearchResults = [
 export default function AddressInputPage() {
   const { state, dispatch } = useBobState();
 
-  const [address, setAddress] = useState("");
   const [isValidAddress, setIsValidAddress] = useState(false);
   const [isInvalidAddress, setIsInvalidAddress] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -55,17 +54,20 @@ export default function AddressInputPage() {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    const valid = isAddress(address);
+    const valid = isAddress(state.deceasedAddress);
     setIsValidAddress(valid);
-    setIsInvalidAddress(address !== "" && !valid);
-  }, [address]);
+    setIsInvalidAddress(state.deceasedAddress !== "" && !valid);
+  }, [state.deceasedAddress]);
 
   const handleAddressChange = (e) => {
-    setAddress(e.target.value);
+    dispatch({
+      type: BOB_ACTIONS.SET_DECEASED_ADDRESS,
+      payload: e.target.value,
+    });
   };
 
   const handleNextStep = () => {
-    console.log("Proceeding with address:", address);
+    console.log("Proceeding with address:", state.deceasedAddress);
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
 
@@ -83,7 +85,10 @@ export default function AddressInputPage() {
   };
 
   const handleSelectAddress = (selectedAddress) => {
-    setAddress(selectedAddress);
+    dispatch({
+      type: BOB_ACTIONS.SET_DECEASED_ADDRESS,
+      payload: selectedAddress,
+    });
     setIsSearchOpen(false);
   };
 
@@ -111,7 +116,7 @@ export default function AddressInputPage() {
               <Input
                 type="text"
                 placeholder="0x..."
-                value={address}
+                value={state.deceasedAddress}
                 onChange={handleAddressChange}
                 className="w-full p-3 border rounded-md text-lg"
               />
@@ -182,7 +187,7 @@ export default function AddressInputPage() {
                               >
                                 <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                                 <AlertDescription className="text-blue-800 dark:text-blue-200">
-                                  検索結果のアドレスを使用する場合は、アドレスをダブルクリックください。
+                                  検索結果のアドレスを使用する場合は、該当アドレスをダブルクリックしてください。
                                 </AlertDescription>
                               </Alert>
                             </div>

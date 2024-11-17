@@ -20,21 +20,20 @@ import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 const ConfirmAddressesPage = () => {
   const { state, dispatch } = useBobState();
 
-  const [deceasedAddress, setDeceasedAddress] = useState(
-    "0xB8A1726abC8b984c60DD400370AA846705175c4D"
-  );
   const { address, isConnected } = useAccount();
   const [isNextEnabled, setIsNextEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsNextEnabled(isAddress(deceasedAddress) && isAddress(address));
+    setIsNextEnabled(isAddress(state.deceasedAddress) && isAddress(address));
+    dispatch({ type: BOB_ACTIONS.SET_INHERITOR_ADDRESS, payload: address });
     setIsLoading(false);
-  }, [deceasedAddress, address]);
+  }, [state.deceasedAddress, address, isConnected]);
 
   const handleNextStep = () => {
-    console.log("Proceeding to next step");
+    dispatch({ type: BOB_ACTIONS.SET_INHERITOR_ADDRESS, payload: address });
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
+    console.log(`Proceeding to next step with inheritor address: ${address}`);
   };
 
   if (isLoading) {
@@ -76,7 +75,7 @@ const ConfirmAddressesPage = () => {
                   被相続人のアドレス
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 break-all">
-                  {deceasedAddress}
+                  {state.deceasedAddress}
                 </p>
               </div>
               <div>
