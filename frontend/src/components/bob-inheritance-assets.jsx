@@ -72,7 +72,7 @@ export default function Component() {
       dispatch({ type: BOB_ACTIONS.SET_ASSETS, payload: assetsInfo.assets });
 
       ///// to simulate approved & matured ///// otherwise, comment out
-      dispatch({ type: BOB_ACTIONS.SET_MATURED });
+      // dispatch({ type: BOB_ACTIONS.SET_MATURED });
     }
   }, [assetsInfo]);
 
