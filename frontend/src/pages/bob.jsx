@@ -37,6 +37,7 @@ const initialState = {
   lockPeriod: null, // num of months
   assets: [], // asset granted
   withdrawals: [], // assets to transfer
+  proof: "", // proof
 };
 
 // Action Types
@@ -52,6 +53,7 @@ export const BOB_ACTIONS = {
   SET_WITHDRAWAL: "SET_WITHDRAWALS",
   SET_APPROVAL: "SET_APPROVAL",
   SET_MATURED: "SET_MATURED",
+  SET_PROOF: "SET_PROOF",
 };
 
 // Reducer
@@ -85,6 +87,8 @@ function bobReducer(state, action) {
       return { ...state, withdrawals: action.payload };
     case BOB_ACTIONS.SET_RECIPIENT_ADDRESS:
       return { ...state, recipientAddress: action.payload };
+    case BOB_ACTIONS.SET_PROOF:
+      return {...state, proof: action.payload};
     default:
       throw new Error("unknown action required");
   }
