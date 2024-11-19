@@ -165,35 +165,40 @@ export default function AddressInputPage() {
                       </Button>
                     </div>
                     {searchResults.length > 0 ? (
-                      <ul className="space-y-2 max-h-[50vh] overflow-y-auto">
-                        {searchResults.map((result) => (
-                          <li
-                            key={result.id}
-                            className="flex justify-between items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer"
-                            onDoubleClick={() =>
-                              handleSelectAddress(result.address)
-                            }
-                          >
-                            <div>
-                              <div className="font-semibold">
+                      <div className="mt-4">
+                        <p>検索結果</p>
+                        <ul className="space-y-2 max-h-[50vh] overflow-y-auto">
+                          {searchResults.map((result) => (
+                            <li
+                              key={result.id}
+                              className="flex justify-between items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer"
+                              onDoubleClick={() =>
+                                handleSelectAddress(result.address)
+                              }
+                            >
+                              <div>
+                                {/* <div className="font-semibold">
                                 {result.secret}
+                              </div> */}
+                                <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                                  {result.address}
+                                </div>
                               </div>
-                              <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                                {result.address}
-                              </div>
-                              <Alert
-                                variant="info"
-                                className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 mt-4"
-                              >
-                                <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                                <AlertDescription className="text-blue-800 dark:text-blue-200">
-                                  検索結果のアドレスを使用する場合は、該当アドレスをダブルクリックしてください。
-                                </AlertDescription>
-                              </Alert>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
+                            </li>
+                          ))}
+                        </ul>
+                        <div>
+                          <Alert
+                            variant="info"
+                            className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 mt-4"
+                          >
+                            <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                            <AlertDescription className="text-blue-800 dark:text-blue-200">
+                              検索結果のアドレスを使用する場合は、該当アドレスをダブルクリックしてください。
+                            </AlertDescription>
+                          </Alert>
+                        </div>
+                      </div>
                     ) : (
                       searchQuery.trim() !== "" && <p>結果が見つかりません。</p>
                     )}
