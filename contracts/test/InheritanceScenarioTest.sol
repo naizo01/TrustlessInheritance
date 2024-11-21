@@ -45,8 +45,8 @@ contract InheritanceScenarioTest is MCTest {
         amounts[1] = 1e20;
 
         vm.startPrank(bob);
-        vm.warp(vm.getBlockTimestamp() + 90 days);
         inheritanceContract.initiateInheritance(tokens, bytes32(0));
+        vm.warp(vm.getBlockTimestamp() + 90 days);
         inheritanceContract.withdrawTokens(tokens, amounts, bytes32(0));
         vm.stopPrank();
     }
