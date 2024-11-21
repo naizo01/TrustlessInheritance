@@ -12,19 +12,19 @@ interface Asset {
 
 const assets: Asset[] = [
   {
-    name: "Convertible JPY Token",
+    name: "Tether USD",
     symbol: "USDT",
-    decimals: 18,
-    logoURL: "/tokens/CJPY.png",
+    decimals: 6,
+    logoURL: "/logo/usdt.png",
     type: "ERC20",
     address : "0x0",
     price: 1,
   },
   {
-    name: "Convertible JPY Token",
+    name: "USDC",
     symbol: "USDC",
-    decimals: 18,
-    logoURL: "/tokens/CJPY.png",
+    decimals: 6,
+    logoURL: "/logo/usdc.png",
     type: "ERC20",
     address : "0x0",
     price: 1,
