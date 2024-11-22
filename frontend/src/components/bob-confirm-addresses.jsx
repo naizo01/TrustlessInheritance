@@ -12,51 +12,52 @@ import {
 } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import { isAddress } from "ethers";
+import { useAccount } from "wagmi";
+import { Header } from "@/components/common/variable-header";
+import dynamic from "next/dynamic";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-import { Header } from "@/components/common/Header";
+const ConfirmAddressesPage = () => {
+  const { state, dispatch } = useBobState();
 
-export default function ConfirmAddressesPage({ onClick }) {
-  const [deceasedAddress, setDeceasedAddress] = useState("");
-  const [inheritorAddress, setInheritorAddress] = useState("");
-  const [isWalletConnected, setIsWalletConnected] = useState(false);
+  const { address, isConnected } = useAccount();
   const [isNextEnabled, setIsNextEnabled] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulating getting the deceased address from the previous page
-    setDeceasedAddress("0x742d35Cc6634C0532925a3b844Bc454e4438f44e");
-
-    // Simulating wallet connection check
-    const checkWalletConnection = async () => {
-      // Replace this with actual wallet connection logic
-      const connected = Math.random() < 0.5; // 50% chance of being connected for demo
-      setIsWalletConnected(connected);
-      if (connected) {
-        setInheritorAddress("0x742d35Cc6634C0532925a3b844Bc454e4438f50e");
-      }
-    };
-
-    checkWalletConnection();
-  }, []);
-
-  useEffect(() => {
-    setIsNextEnabled(isAddress(deceasedAddress) && isAddress(inheritorAddress));
-  }, [deceasedAddress, inheritorAddress]);
-
-  const handleConnectWallet = async () => {
-    // Replace this with actual wallet connection logic
-    setIsWalletConnected(true);
-    setInheritorAddress("0x1D1479C185d32EB90533a08b36B3CFa5F84A0E6B");
-  };
+    setIsNextEnabled(isAddress(state.deceasedAddress) && isAddress(address));
+    dispatch({ type: BOB_ACTIONS.SET_INHERITOR_ADDRESS, payload: address });
+    setIsLoading(false);
+  }, [state.deceasedAddress, address, isConnected]);
 
   const handleNextStep = () => {
-    console.log("Proceeding to next step");
-    // Add logic for the next step here
-    onClick((prev) => prev + 1);
+    dispatch({ type: BOB_ACTIONS.SET_INHERITOR_ADDRESS, payload: address });
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
+    console.log(`Proceeding to next step with inheritor address: ${address}`);
   };
+
+  if (isLoading) {
+    return (
+      <>
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-16 h-16 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+          <p className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+            Loading...
+          </p>
+        </div>
+      </>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
-      <Header scrolled={false} scrollToSection={() => {}} />
+      <Header
+        scrolled={false}
+        scrollToSection={() => {}}
+        showLandingPageButtons={true}
+        appBadgeText="本人確認"
+        appBadgeClassName="border-green-500 text-green-500"
+      />
       <main className="flex justify-center p-4 mt-20">
         <Card className="w-full max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">
           <CardHeader className="text-center">
@@ -74,29 +75,26 @@ export default function ConfirmAddressesPage({ onClick }) {
                   被相続人のアドレス
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 break-all">
-                  {deceasedAddress}
+                  {state.deceasedAddress}
                 </p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
                   相続人のアドレス
                 </h3>
-                {isWalletConnected ? (
+                {isConnected ? (
                   <p className="text-sm text-gray-600 dark:text-gray-400 break-all">
-                    {inheritorAddress}
+                    {address}
                   </p>
                 ) : (
                   <div className="space-y-2">
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       ウォレットが接続されていません
                     </p>
-                    <Button
-                      onClick={handleConnectWallet}
-                      variant="outline"
-                      className="w-full"
-                    >
-                      ウォレットを接続
-                    </Button>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      画面上部の「Connect
+                      Wallet」ボタンをクリックしてウォレットを接続してください。
+                    </p>
                   </div>
                 )}
               </div>
@@ -116,4 +114,8 @@ export default function ConfirmAddressesPage({ onClick }) {
       </main>
     </div>
   );
-}
+};
+
+export default dynamic(() => Promise.resolve(ConfirmAddressesPage), {
+  ssr: false,
+});

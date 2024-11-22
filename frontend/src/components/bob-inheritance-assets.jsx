@@ -18,15 +18,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Info, Check, Home, Loader2 } from "lucide-react";
+import { ArrowRight, Info, Check, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useRouter } from "next/navigation";
-
 import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-export default function InheritanceAssetsLockedPage() {
+export default function Component() {
   const { state, dispatch } = useBobState();
+  const [assetsInfo, setAssetsInfo] = useState({ assets: [], lockPeriod: 0 });
   const [totalValue, setTotalValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -40,7 +39,6 @@ export default function InheritanceAssetsLockedPage() {
         balance: 1000,
         value: 1000,
         selected: false,
-        transfer:0
       },
       {
         id: 2,
@@ -49,7 +47,6 @@ export default function InheritanceAssetsLockedPage() {
         balance: 2000,
         value: 2000,
         selected: false,
-        transfer: 0
       },
     ],
     lockEndDate: null,
@@ -60,37 +57,33 @@ export default function InheritanceAssetsLockedPage() {
     // simulating ABI call
     const fetchAssetsData = async () => {
       await new Promise((res) => setTimeout(res, 3000));
-      // if no data in state, i.e. not through step 6
-      dispatch({ type: BOB_ACTIONS.SET_ASSETS, payload: fakeData.assets });
-      dispatch({
-        type: BOB_ACTIONS.SET_LOCK_PERIOD,
-        payload: fakeData.lockPeriod,
-      });
-      dispatch({ type: BOB_ACTIONS.SET_LOCK_END_DATE }); // assuming approved today
+      setAssetsInfo(fakeData);
     };
-    !state.lockEndDate && fetchAssetsData();
+    fetchAssetsData();
   }, []);
 
   useEffect(() => {
-    if (state.assets.length > 0) {
-      const sumTotalValue = state.assets
+    if (assetsInfo.assets.length > 0) {
+      const sumTotalValue = assetsInfo.assets
         .reduce((acc, asset) => acc + asset.value, 0)
         .toLocaleString();
       setTotalValue(sumTotalValue);
       setIsLoading(false);
+      dispatch({ type: BOB_ACTIONS.SET_ASSETS, payload: assetsInfo.assets });
+
+      ///// to simulate approved & matured ///// otherwise, comment out
+      // dispatch({ type: BOB_ACTIONS.SET_MATURED });
     }
-  }, [, state.assets]);
+  }, [assetsInfo]);
 
-  // lockEndDate formatted in Japanese
-  const lockEndDate = state.lockEndDate;
-  const formattedEndDate = new Intl.DateTimeFormat("ja-JP", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(lockEndDate);
-
-  const handleReturnToMain = () => {
-    dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 0 });
+  const handleNextStep = () => {
+    console.log("Next step");
+    dispatch({ type: BOB_ACTIONS.SET_ASSETS, payload: assetsInfo.assets });
+    dispatch({
+      type: BOB_ACTIONS.SET_LOCK_PERIOD,
+      payload: assetsInfo.lockPeriod,
+    });
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
 
   return (
@@ -98,8 +91,8 @@ export default function InheritanceAssetsLockedPage() {
       <Header
         scrolled={false}
         scrollToSection={() => {}}
-        appBadgeText="ロック期間中"
-        appBadgeClassName="border-pink-500 text-pink-500"
+        appBadgeText="本人確認"
+        appBadgeClassName="border-green-500 text-green-500"
       />
       <main className="flex justify-center p-4 mt-20">
         <Card className="w-full max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">
@@ -139,8 +132,9 @@ export default function InheritanceAssetsLockedPage() {
                       <TableHead className="text-right">価値</TableHead>
                     </TableRow>
                   </TableHeader>
+
                   <TableBody>
-                    {state.assets.map((asset, index) => (
+                    {assetsInfo.assets.map((asset, index) => (
                       <TableRow key={index}>
                         <TableCell>
                           <Check className="h-4 w-4 text-green-500" />
@@ -161,33 +155,25 @@ export default function InheritanceAssetsLockedPage() {
                 </Table>
               </div>
 
-              <div className="space-y-4">
-                <Alert
-                  variant="info"
-                  className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800"
-                >
-                  <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                  <AlertDescription className="text-blue-800 dark:text-blue-200">
-                    選択した資産は相続プロセス開始後、{state.lockPeriod}
-                    ヶ月間ロックされます。この期間中、被相続人は相続をキャンセルすることができます。
-                  </AlertDescription>
-                </Alert>
-
-                <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
-                  <p className="text-yellow-800 dark:text-yellow-200 font-medium">
-                    ロック期間満了日: {formattedEndDate} （同日を含む）
-                  </p>
-                </div>
-              </div>
+              <Alert
+                variant="info"
+                className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800"
+              >
+                <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <AlertDescription className="text-blue-800 dark:text-blue-200">
+                  選択した資産は相続プロセス開始後、{assetsInfo.lockPeriod}
+                  ヶ月間ロックされます。この期間中、被相続人は相続をキャンセルすることができます。
+                </AlertDescription>
+              </Alert>
             </CardContent>
           )}
           <CardFooter className="flex justify-center pt-6">
             <Button
               className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:scale-105"
-              onClick={handleReturnToMain}
+              onClick={handleNextStep}
             >
-              メインに戻る
-              <Home className="ml-2 h-5 w-5" />
+              次へ進む
+              <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </CardFooter>
         </Card>
