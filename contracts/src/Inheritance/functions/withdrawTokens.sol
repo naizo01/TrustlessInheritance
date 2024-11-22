@@ -17,26 +17,25 @@ contract withdrawTokens {
         Schema.InheritanceState storage state = Storage.InheritanceState();
 
         require(state.isLocked && !state.isKilled, "Contract is not in locked state or is killed");
-        // ロック期間が終了しているか判定。ロック期間の終了時点をどう参照するべきか。
-        require(block.timestamp >= ロック期間終了時点, "Lock period has not ended");
-
+        require(block.timestamp >= state.lockStartTime + state.lockDuration, "Lock period has not ended");
         require(!state.usedProofs[proof], "Proof already used");
-
-        /**
-         受取人は、ロックされているトークンのうち選択したトークンだけ引き出すことができるようにするのか、それともロックされているトークンをすべて引き出すことになるのか。
-         下記の記述は、initiateInheritance関数で受取人がapprovedTokensの一部をロックし、withdrawTokens関数でロックした一部を選んで引き出す場合。
-         もし、initiateInheritanceでロックしたトークンはすべて受け取ることになるのであれば、initiateInheritance関数に引数として_tokensは与えずにロックされたトークンの配列に対して繰り返しを実行するか、下記の記述に加えて_tokensとロックされたトークンの配列の要素数を比較する記述を加える必要がある。
-         */
+        
+        /*
+        コントラクトにトークンがロックされた後にstate.approvedTokensに記録されている情報が変更される可能性があるならば、state.approvedTokensに_tokensの各要素が含まれるかを判定するのは、ロックしたのに引き出せないなどのエラーにつながる恐れがある。
+        */
+        /*
+         _tokensの各要素はstate.approvedTokensに含まれていると考えてよいのであれば、"Verify all tokens are approved"での検証はいらない。
+        */
         // Verify all tokens are approved
         for (uint256 i = 0; i < _tokens.length; i++) {
-            bool isApproved = false;
-            for (uint256 j = 0; j < ロックされたトークンの配列.length; j++) {
-                if (_tokens[i] == ロックされたトークンの配列[j]) {
-                    isApproved = true;
+            bool isTokenHeld = false;
+            for (uint256 j = 0; j < state.approvedTokens.length; j++) {
+                if (_tokens[i] == state.approvedTokens[j]) {
+                    isTokenHeld = true;
                     break;
                 }
             }
-            require(isApproved, "Token that did not lock was found.");
+            require(isTokenHeld, "Token that did not lock was found.");
         }
 
         // Verify ZK proof
