@@ -36,31 +36,16 @@ import {
 import { useRouter } from "next/navigation";
 import { isAddress } from "ethers";
 
-import { Header } from "@/components/common/Header";
+import { Header } from "@/components/common/variable-header";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-export default function TransferConfirmationPage({ onClick }) {
-  const router = useRouter();
-  const [assets, setAssets] = useState([
-    {
-      id: 1,
-      name: "USDT",
-      type: "トークン",
-      balance: 1000,
-      value: 1000,
-      selected: true,
-    },
-    {
-      id: 2,
-      name: "USDC",
-      type: "トークン",
-      balance: 2500,
-      value: 2500,
-      selected: true,
-    },
-  ]);
+export default function TransferConfirmationPage() {
+  const { state, dispatch } = useBobState();
+
+  const [assets, setAssets] = useState(state.withdrawals);
   const [totalValue, setTotalValue] = useState(0);
   const [destinationAccount, setDestinationAccount] = useState(
-    "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+    state.inheritorAddress
   );
   const [isEditingAccount, setIsEditingAccount] = useState(false);
   const [isValidAccount, setIsValidAccount] = useState(true);
@@ -68,7 +53,7 @@ export default function TransferConfirmationPage({ onClick }) {
 
   useEffect(() => {
     const newTotal = assets.reduce(
-      (sum, asset) => sum + (asset.selected ? asset.value : 0),
+      (sum, asset) => sum + (asset.selected ? asset.transfer : 0),
       0
     );
     setTotalValue(newTotal);
@@ -92,27 +77,41 @@ export default function TransferConfirmationPage({ onClick }) {
 
   const executeTransfer = () => {
     // Implement transfer logic here
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
+    dispatch({
+      type: BOB_ACTIONS.SET_RECIPIENT_ADDRESS,
+      payload: destinationAccount,
+    });
     console.log("Transfer executed");
-    // router.push('/transfer-complete')
-    onClick((prev) => prev + 1);
   };
 
   const stopTransaction = () => {
     // Implement logic to stop the transaction
     console.log("Transaction stopped");
-    // router.push("/"); // Or wherever you want to redirect after stopping the transaction
-    onClick((prev) => 3);
+    dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 3 });
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
-      <Header scrolled={false} scrollToSection={() => {}} />
+      <Header
+        scrolled={false}
+        scrollToSection={() => {}}
+        appBadgeText="相続資産の受け取り"
+        appBadgeClassName="border-yellow-500 text-yellow-500"
+      />
       <main className="flex justify-center p-4 mt-20">
         <Card className="w-full max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold text-gray-900 dark:text-white">
               送金内容の確認
             </CardTitle>
+            <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
+              {state.deceasedAddress &&
+                state.deceasedAddress.replace(
+                  state.deceasedAddress.slice(6, -4),
+                  "...."
+                )}
+            </CardDescription>
             <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
               送金内容と送金先アカウントを確認してください
             </CardDescription>
@@ -139,7 +138,7 @@ export default function TransferConfirmationPage({ onClick }) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {assets.map((asset) => (
+                  {state.withdrawals.map((asset) => (
                     <TableRow key={asset.id}>
                       <TableCell>
                         <Checkbox checked={asset.selected} disabled />
@@ -152,7 +151,7 @@ export default function TransferConfirmationPage({ onClick }) {
                         {asset.balance.toLocaleString()}
                       </TableCell>
                       <TableCell className="text-right">
-                        {asset.value.toLocaleString()}
+                        {asset.transfer.toLocaleString()}
                       </TableCell>
                     </TableRow>
                   ))}

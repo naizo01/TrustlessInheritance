@@ -20,61 +20,98 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Info, ArrowRight } from "lucide-react";
+import { Info, ArrowRight, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useRouter } from "next/navigation";
+import { Header } from "@/components/common/variable-header";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-import { Header } from "@/components/common/Header";
-
-export default function InheritanceAssetsUnlockedPage({ onClick }) {
-  const router = useRouter();
-  const deceasedAddress = "0x742...44e";
-  const [assets, setAssets] = useState([
-    {
-      id: 1,
-      name: "USDT",
-      type: "トークン",
-      balance: 1000,
-      value: 1000,
-      selected: false,
-    },
-    {
-      id: 2,
-      name: "USDC",
-      type: "トークン",
-      balance: 2500,
-      value: 2500,
-      selected: false,
-    },
-  ]);
+export default function InheritanceAssetsUnlockedPage() {
+  const { state, dispatch } = useBobState();
 
   const [totalValue, setTotalValue] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [assets, setAssets] = useState([]);
 
   useEffect(() => {
     const newTotal = assets.reduce(
-      (sum, asset) => sum + (asset.selected ? asset.value : 0),
+      (acc, el) => acc + (el.selected ? el.transfer : 0),
       0
     );
     setTotalValue(newTotal);
   }, [assets]);
 
+  // fake data
+  const fakeData = {
+    assets: [
+      {
+        id: 1,
+        name: "USDT",
+        type: "トークン",
+        balance: 1000,
+        value: 1000,
+        selected: false,
+        transfer: 0,
+      },
+      {
+        id: 2,
+        name: "USDC",
+        type: "トークン",
+        balance: 2000,
+        value: 2000,
+        selected: false,
+        transfer: 0,
+      },
+    ],
+    lockEndDate: new Date(2024, 10, 1), // Nov 01, 2024 -- base 0
+    lockPeriod: 3,
+  };
+
+  useEffect(() => {
+    // simulating ABI call
+    const fetchAssetsData = async () => {
+      await new Promise((res) => setTimeout(res, 3000));
+
+      dispatch({ type: BOB_ACTIONS.SET_ASSETS, payload: fakeData.assets });
+      dispatch({
+        type: BOB_ACTIONS.SET_LOCK_PERIOD,
+        payload: fakeData.lockPeriod,
+      });
+      dispatch({
+        type: BOB_ACTIONS.SET_LOCK_END_DATE,
+        payload: fakeData.lockEndDate,
+      });
+    };
+    fetchAssetsData();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (state.assets.length > 0) {
+      setIsLoading(false);
+      setAssets(state.assets);
+    }
+  }, [state.assets]);
+
   const handleAssetSelection = (id, selected) => {
     setAssets(
-      assets.map((asset) => (asset.id === id ? { ...asset, selected } : asset))
+      assets.map((asset) =>
+        asset.id === id
+          ? { ...asset, selected, transfer: selected ? asset.value : 0 }
+          : asset
+      )
     );
   };
 
-  const handleBalanceChange = (id, newBalance) => {
+  const handleTransferChange = (id, newTransfer) => {
     setAssets(
       assets.map((asset) => {
         if (asset.id === id) {
-          const updatedBalance = Math.min(
-            Math.max(0, newBalance),
-            asset.balance
+          const updatedTransfer = Math.min(
+            Math.max(0, newTransfer),
+            asset.value
           );
           return {
             ...asset,
-            value: updatedBalance,
+            transfer: updatedTransfer,
           };
         }
         return asset;
@@ -83,14 +120,27 @@ export default function InheritanceAssetsUnlockedPage({ onClick }) {
   };
 
   const handleNextStep = () => {
-    // Navigate to the next page for confirming transfer accounts
-    // router.push('/confirm-transfer-accounts')
-    onClick((prev) => prev + 1);
+    const selectedAssets = assets.filter((asset) => asset.selected);
+    dispatch({ type: BOB_ACTIONS.SET_WITHDRAWAL, payload: selectedAssets });
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center space-y-4">
+        <Loader2 className="w-16 h-16 animate-spin text-blue-500" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
-      <Header scrolled={false} scrollToSection={() => {}} />
+      <Header
+        scrolled={false}
+        scrollToSection={() => {}}
+        appBadgeText="相続資産の受け取り"
+        appBadgeClassName="border-yellow-500 text-yellow-500"
+      />
       <main className="flex justify-center p-4 mt-20">
         <Card className="w-full max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">
           <CardHeader className="text-center">
@@ -98,7 +148,11 @@ export default function InheritanceAssetsUnlockedPage({ onClick }) {
               相続財産の確認と送金
             </CardTitle>
             <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
-              {deceasedAddress}
+              {state.deceasedAddress &&
+                state.deceasedAddress.replace(
+                  state.deceasedAddress.slice(6, -4),
+                  "...."
+                )}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -145,16 +199,16 @@ export default function InheritanceAssetsUnlockedPage({ onClick }) {
                         <div className="flex justify-end">
                           <Input
                             type="number"
-                            value={asset.value}
+                            value={asset.transfer}
                             onChange={(e) =>
-                              handleBalanceChange(
+                              handleTransferChange(
                                 asset.id,
                                 Number(e.target.value)
                               )
                             }
                             className="w-24 text-right"
                             min="0"
-                            max={asset.balance}
+                            max={asset.value}
                             disabled={!asset.selected}
                           />
                         </div>

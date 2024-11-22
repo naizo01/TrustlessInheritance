@@ -30,7 +30,8 @@ import {
   Sliders,
   Layers,
 } from "lucide-react";
-import { Header } from "@/components/common/Header"; // 新しいHeaderコンポーネントをインポート
+// import { Header } from "@/components/common/Header";
+import { Header } from "@/components/common/variable-header";
 
 export function EnhancedLandingPage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,7 +55,13 @@ export function EnhancedLandingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-      <Header scrolled={scrolled} scrollToSection={scrollToSection} />{" "}
+      <Header
+        scrolled={scrolled}
+        scrollToSection={scrollToSection}
+        showLandingPageButtons={true}
+        appBadgeText=""
+        appBadgeClassName=""
+      />{" "}
       {/* Headerコンポーネントを使用 */}
       <main className="pt-16">
         <section className="relative h-screen flex items-center justify-center overflow-hidden">

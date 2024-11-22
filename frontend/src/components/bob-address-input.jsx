@@ -22,10 +22,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Header } from "@/components/common/variable-header";
+import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
-import { Header } from "@/components/common/Header";
-
-// ダミーの検索結果
+// Dummy search results
 const dummySearchResults = [
   {
     id: 1,
@@ -44,29 +44,31 @@ const dummySearchResults = [
   },
 ];
 
-export default function AddressInputPage({ onClick }) {
-  const [address, setAddress] = useState("");
+export default function AddressInputPage() {
+  const { state, dispatch } = useBobState();
+
   const [isValidAddress, setIsValidAddress] = useState(false);
   const [isInvalidAddress, setIsInvalidAddress] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<typeof dummySearchResults>(
-    []
-  );
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    const valid = isAddress(address);
+    const valid = isAddress(state.deceasedAddress);
     setIsValidAddress(valid);
-    setIsInvalidAddress(address !== "" && !valid);
-  }, [address]);
+    setIsInvalidAddress(state.deceasedAddress !== "" && !valid);
+  }, [state.deceasedAddress]);
 
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAddress(e.target.value);
+  const handleAddressChange = (e) => {
+    dispatch({
+      type: BOB_ACTIONS.SET_DECEASED_ADDRESS,
+      payload: e.target.value,
+    });
   };
 
   const handleNextStep = () => {
-    console.log("Proceeding with address:", address);
-    onClick((prev) => prev + 1);
+    console.log("Proceeding with address:", state.deceasedAddress);
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
 
   const handleSearch = () => {
@@ -82,14 +84,23 @@ export default function AddressInputPage({ onClick }) {
     setSearchResults(filteredResults);
   };
 
-  const handleSelectAddress = (selectedAddress: string) => {
-    setAddress(selectedAddress);
+  const handleSelectAddress = (selectedAddress) => {
+    dispatch({
+      type: BOB_ACTIONS.SET_DECEASED_ADDRESS,
+      payload: selectedAddress,
+    });
     setIsSearchOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
-      <Header scrolled={false} scrollToSection={() => {}} />
+      <Header
+        scrolled={false}
+        scrollToSection={() => {}}
+        showLandingPageButtons={true}
+        appBadgeText="相続開始の申請"
+        appBadgeClassName=""
+      />
       <main className="flex justify-center p-4 mt-20">
         <Card className="w-full max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">
           <CardHeader className="text-center">
@@ -105,7 +116,7 @@ export default function AddressInputPage({ onClick }) {
               <Input
                 type="text"
                 placeholder="0x..."
-                value={address}
+                value={state.deceasedAddress}
                 onChange={handleAddressChange}
                 className="w-full p-3 border rounded-md text-lg"
               />
@@ -154,35 +165,40 @@ export default function AddressInputPage({ onClick }) {
                       </Button>
                     </div>
                     {searchResults.length > 0 ? (
-                      <ul className="space-y-2 max-h-[50vh] overflow-y-auto">
-                        {searchResults.map((result) => (
-                          <li
-                            key={result.id}
-                            className="flex justify-between items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer"
-                            onDoubleClick={() =>
-                              handleSelectAddress(result.address)
-                            }
-                          >
-                            <div>
-                              <div className="font-semibold">
+                      <div className="mt-4">
+                        <p>検索結果</p>
+                        <ul className="space-y-2 max-h-[50vh] overflow-y-auto">
+                          {searchResults.map((result) => (
+                            <li
+                              key={result.id}
+                              className="flex justify-between items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer"
+                              onDoubleClick={() =>
+                                handleSelectAddress(result.address)
+                              }
+                            >
+                              <div>
+                                {/* <div className="font-semibold">
                                 {result.secret}
+                              </div> */}
+                                <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                                  {result.address}
+                                </div>
                               </div>
-                              <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                                {result.address}
-                              </div>
-                              <Alert
-                                variant="info"
-                                className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 mt-4"
-                              >
-                                <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                                <AlertDescription className="text-blue-800 dark:text-blue-200">
-                                  検索結果のアドレスを使用する場合は、アドレスをダブルクリックください。
-                                </AlertDescription>
-                              </Alert>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
+                            </li>
+                          ))}
+                        </ul>
+                        <div>
+                          <Alert
+                            variant="info"
+                            className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 mt-4"
+                          >
+                            <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                            <AlertDescription className="text-blue-800 dark:text-blue-200">
+                              検索結果のアドレスを使用する場合は、該当アドレスをダブルクリックしてください。
+                            </AlertDescription>
+                          </Alert>
+                        </div>
+                      </div>
                     ) : (
                       searchQuery.trim() !== "" && <p>結果が見つかりません。</p>
                     )}
