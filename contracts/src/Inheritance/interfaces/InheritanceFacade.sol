@@ -14,31 +14,15 @@ contract InheritanceFacade is IInheritanceContract {
 
     function cancelInheritance(address[] calldata _tokens) external override {}
 
-    function initiateInheritanceZk(
+    function initiateInheritance(
         address[] calldata _tokens,
-        bytes calldata proof
+        bytes32 proof
     ) external override {}
 
-    function withdrawTokensZk(
+    function withdrawTokens(
         address[] calldata _tokens,
         uint256[] calldata _amounts,
-        bytes calldata proof
+        bytes32 proof
     ) external override {}
 
-    function initiateInheritanceSig(
-        address[] calldata _tokens,
-        bytes32 signedHash,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external override {}
-
-    function withdrawTokensSig(
-        address[] calldata _tokens,
-        uint256[] calldata _amounts,
-        bytes32 signedHash,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external override {}
 }
