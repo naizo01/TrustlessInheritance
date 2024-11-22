@@ -11,7 +11,8 @@ library Schema {
         bytes32 hash; // 生成したハッシュ
         bool isLocked; // 相続が進行中かどうかを管理
         bool isKilled; // 相続がキャンセルされた場合に、コントラクトが無効化されているかどうかを管理
-        uint256 lockTime; // トークンのロック期間（n ヶ月または n 年）
+        uint256 lockDuration; // トークンのロック期間（n ヶ月または n 年）
+        uint256 lockStartTime; // トークンロックが開始された日時
         uint256 nonce; // 署名の再利用防止のための nonce
         address[] approvedTokens; // `approve`したトークンを保存する配列
         mapping(bytes => bool) usedProofs; // 利用済みの `proof` を記録し、再利用を防ぐためのマッピング
