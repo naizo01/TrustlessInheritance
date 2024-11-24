@@ -19,38 +19,69 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Info, Home, CheckCircle, XCircle } from "lucide-react";
+import {
+  Info,
+  Home,
+  CheckCircle,
+  XCircle,
+  ArrowRight,
+  User,
+  UserCheck,
+} from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
 
 import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
+import { assets as importedAssets } from "@/lib/token";
 
 export default function TransferResultPage() {
   const { state, dispatch } = useBobState();
 
   const [transferStatus, setTransferStatus] = useState("pending"); // 'pending', 'success', or 'failure'
   const [assets, setAssets] = useState(state.withdrawals);
+  const [totalValue, setTotalValue] = useState(0);
 
   useEffect(() => {
     // Simulate transfer process
     const timer = setTimeout(() => {
-      setTransferStatus(Math.random() > 0.4 ? "success" : "failure");
+      setTransferStatus(Math.random() > 0.2 ? "success" : "failure");
     }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
 
-  const totalValue = assets.reduce(
-    (sum, asset) => sum + (asset.selected ? asset.transfer : 0),
-    0
-  );
+  useEffect(() => {
+    const calculateTotal = () => {
+      const newTotal = assets.reduce((sum, asset) => {
+        if (asset.selected && asset.transfer > 0) {
+          const tokenInfo = importedAssets.find(
+            (token) => token.symbol === asset.symbol
+          );
+          if (tokenInfo) {
+            return sum + asset.transfer * tokenInfo.price;
+          }
+        }
+        return sum;
+      }, 0);
+      setTotalValue(newTotal);
+    };
+
+    calculateTotal();
+  }, [assets]);
 
   const handleReturnToMain = () => {
     transferStatus === "success" &&
       dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 0 });
     transferStatus === "failure" &&
       dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 3 });
+  };
+
+  const formatNumber = (num) => {
+    return num.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   return (
@@ -67,21 +98,7 @@ export default function TransferResultPage() {
             <CardTitle className="text-3xl font-bold text-gray-900 dark:text-white">
               送金結果
             </CardTitle>
-            <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
-              `
-              {state.deceasedAddress &&
-                state.deceasedAddress.replace(
-                  state.deceasedAddress.slice(6, -4),
-                  "...."
-                )}
-              {`  >>>  `}
-              {state.recipientAddress &&
-                state.recipientAddress.replace(
-                  state.recipientAddress.slice(6, -4),
-                  "...."
-                )}
-              `
-            </CardDescription>
+
             <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
               送金処理の状況と結果を確認してください
             </CardDescription>
@@ -95,6 +112,42 @@ export default function TransferResultPage() {
                 </div>
               </CardContent>
             </Card>
+            <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-inner">
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col items-center">
+                  <User className="w-8 h-8 text-blue-500 mb-2" />
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
+                    送信元
+                  </span>
+                  <span className="text-xs bg-white dark:bg-gray-800 px-2 py-1 rounded-full shadow-sm">
+                    {state.deceasedAddress &&
+                      state.deceasedAddress.replace(
+                        state.deceasedAddress.slice(6, -4),
+                        "...."
+                      )}
+                  </span>
+                </div>
+                <div className="flex flex-col items-center mx-4">
+                  <ArrowRight className="w-8 h-8 text-green-500 mb-2" />
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                    送金
+                  </span>
+                </div>
+                <div className="flex flex-col items-center">
+                  <UserCheck className="w-8 h-8 text-purple-500 mb-2" />
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
+                    送信先
+                  </span>
+                  <span className="text-xs bg-white dark:bg-gray-800 px-2 py-1 rounded-full shadow-sm">
+                    {state.recipientAddress &&
+                      state.recipientAddress.replace(
+                        state.recipientAddress.slice(6, -4),
+                        "...."
+                      )}
+                  </span>
+                </div>
+              </div>
+            </div>
 
             <div className="rounded-lg border bg-card">
               <Table>
@@ -104,7 +157,7 @@ export default function TransferResultPage() {
                     <TableHead>資産</TableHead>
                     <TableHead>種別</TableHead>
                     <TableHead className="text-right">残高</TableHead>
-                    <TableHead className="text-right">送金額</TableHead>
+                    <TableHead className="text-right">転送量</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -114,14 +167,30 @@ export default function TransferResultPage() {
                         <Checkbox checked={asset.selected} disabled />
                       </TableCell>
                       <TableCell className="font-medium">
-                        {asset.name}
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                            <img
+                              src={asset.logURL}
+                              alt={asset.name}
+                              className="w-6 h-6"
+                            />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-medium text-gray-900">
+                              {asset.name}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              {asset.symbol}
+                            </span>
+                          </div>
+                        </div>
                       </TableCell>
                       <TableCell>{asset.type}</TableCell>
                       <TableCell className="text-right">
-                        {asset.balance.toLocaleString()}
+                        {formatNumber(asset.balance)}
                       </TableCell>
                       <TableCell className="text-right">
-                        {asset.transfer.toLocaleString()}
+                        {formatNumber(asset.transfer)}
                       </TableCell>
                     </TableRow>
                   ))}

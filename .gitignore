@@ -2,3 +2,6 @@
 *.zkey
 build/
 setup/
+mallory.jsx
+.gitignore
+

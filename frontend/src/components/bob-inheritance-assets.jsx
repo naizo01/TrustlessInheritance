@@ -70,7 +70,7 @@ export default function Component() {
             logURL: tokenMatched.logoURL,
             name: tokenMatched.name,
             symbol: symbol,
-            type: tokenMatched.type === "ERC20" ? "Token" : tokenMatched.type,
+            type: `${tokenMatched.type} ﾄｰｸﾝ`,
             balance: balance / 10 ** tokenMatched.decimals,
             value: (balance * tokenMatched.price) / 10 ** tokenMatched.decimals,
             selected: false,

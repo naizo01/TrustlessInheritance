@@ -89,4 +89,4 @@ export const assets = [
     address: "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
     price: 1638.8,
   },
-]; // as of 22 Nov. 2024 6:18 tokyo
+]; // prices are as of 22 Nov. 2024 6:18 tokyo

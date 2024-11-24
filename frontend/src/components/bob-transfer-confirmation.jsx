@@ -38,10 +38,10 @@ import { isAddress } from "ethers";
 
 import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
+import { assets as importedAssets } from "@/lib/token";
 
 export default function TransferConfirmationPage() {
   const { state, dispatch } = useBobState();
-
   const [assets, setAssets] = useState(state.withdrawals);
   const [totalValue, setTotalValue] = useState(0);
   const [destinationAccount, setDestinationAccount] = useState(
@@ -50,13 +50,26 @@ export default function TransferConfirmationPage() {
   const [isEditingAccount, setIsEditingAccount] = useState(false);
   const [isValidAccount, setIsValidAccount] = useState(true);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const newTotal = assets.reduce(
-      (sum, asset) => sum + (asset.selected ? asset.transfer : 0),
-      0
-    );
-    setTotalValue(newTotal);
+    const calculateTotal = () => {
+      const newTotal = assets.reduce((sum, asset) => {
+        if (asset.selected && asset.transfer > 0) {
+          const tokenInfo = importedAssets.find(
+            (token) => token.symbol === asset.symbol
+          );
+          if (tokenInfo) {
+            return sum + asset.transfer * tokenInfo.price;
+          }
+        }
+        return sum;
+      }, 0);
+      setTotalValue(newTotal);
+    };
+
+    calculateTotal();
+    setIsLoading(false);
   }, [assets]);
 
   useEffect(() => {
@@ -91,6 +104,13 @@ export default function TransferConfirmationPage() {
     dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 3 });
   };
 
+  const formatNumber = (num) => {
+    return num.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
       <Header
@@ -121,7 +141,7 @@ export default function TransferConfirmationPage() {
               <CardContent className="pt-6">
                 <div className="text-sm">送金総額</div>
                 <div className="text-4xl font-bold">
-                  ${totalValue.toLocaleString()}
+                  ${formatNumber(totalValue)}
                 </div>
               </CardContent>
             </Card>
@@ -134,7 +154,7 @@ export default function TransferConfirmationPage() {
                     <TableHead>資産</TableHead>
                     <TableHead>種別</TableHead>
                     <TableHead className="text-right">残高</TableHead>
-                    <TableHead className="text-right">送金額</TableHead>
+                    <TableHead className="text-right">転送量</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -144,14 +164,30 @@ export default function TransferConfirmationPage() {
                         <Checkbox checked={asset.selected} disabled />
                       </TableCell>
                       <TableCell className="font-medium">
-                        {asset.name}
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                            <img
+                              src={asset.logURL}
+                              alt={asset.name}
+                              className="w-6 h-6"
+                            />
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-medium text-gray-900">
+                              {asset.name}
+                            </span>
+                            <span className="text-sm text-gray-500">
+                              {asset.symbol}
+                            </span>
+                          </div>
+                        </div>
                       </TableCell>
                       <TableCell>{asset.type}</TableCell>
                       <TableCell className="text-right">
-                        {asset.balance.toLocaleString()}
+                        {formatNumber(asset.balance)}
                       </TableCell>
                       <TableCell className="text-right">
-                        {asset.transfer.toLocaleString()}
+                        {formatNumber(asset.transfer)}
                       </TableCell>
                     </TableRow>
                   ))}
