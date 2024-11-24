@@ -98,20 +98,6 @@ export default function TransferResultPage() {
             <CardTitle className="text-3xl font-bold text-gray-900 dark:text-white">
               送金結果
             </CardTitle>
-
-            <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
-              送金処理の状況と結果を確認してください
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <Card className="bg-blue-600 text-white">
-              <CardContent className="pt-6">
-                <div className="text-sm">送金総額</div>
-                <div className="text-4xl font-bold">
-                  ${totalValue.toLocaleString()}
-                </div>
-              </CardContent>
-            </Card>
             <div className="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-inner">
               <div className="flex items-center justify-between">
                 <div className="flex flex-col items-center">
@@ -148,7 +134,19 @@ export default function TransferResultPage() {
                 </div>
               </div>
             </div>
-
+            <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
+              送金処理の状況と結果を確認してください
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <Card className="bg-blue-600 text-white">
+              <CardContent className="pt-6">
+                <div className="text-sm">送金総額</div>
+                <div className="text-4xl font-bold">
+                  ${formatNumber(totalValue)}
+                </div>
+              </CardContent>
+            </Card>
             <div className="rounded-lg border bg-card">
               <Table>
                 <TableHeader>
