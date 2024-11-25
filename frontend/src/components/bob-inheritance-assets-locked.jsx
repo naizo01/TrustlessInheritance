@@ -51,6 +51,7 @@ export default function InheritanceAssetsLockedPage() {
 
   const handleReturnToMain = () => {
     dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 0 });
+    dispatch({ type: BOB_ACTIONS.RESET_STATE });
   };
 
   const formatNumber = (num) => {

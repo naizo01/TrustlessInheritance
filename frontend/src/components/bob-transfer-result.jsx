@@ -73,6 +73,7 @@ export default function TransferResultPage() {
   const handleReturnToMain = () => {
     transferStatus === "success" &&
       dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 0 });
+    dispatch({ type: BOB_ACTIONS.RESET_STATE });
     transferStatus === "failure" &&
       dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 3 });
   };
