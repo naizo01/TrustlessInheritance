@@ -32,65 +32,14 @@ export default function InheritanceAssetsUnlockedPage() {
   const [totalValue, setTotalValue] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [assets, setAssets] = useState([]);
-  const { transactions } = usePosts(); // import dammy data ia usePost
 
   // Fetch and initialize assets
   useEffect(() => {
-    // simulating ABI call //
-
-    const initializeAssets = async () => {
-      if (transactions.length > 0) {
-        const transaction = transactions.find((tx) =>
-          tx.address.toLowerCase().includes(state.deceasedAddress.toLowerCase())
-        );
-
-        if (transaction) {
-          const initializedAssets = Object.entries(transaction.tokens)
-            .map(([symbol, balance], index) => {
-              const tokenMatched = importedAssets.find(
-                (token) => token.symbol === symbol
-              );
-              if (tokenMatched) {
-                return {
-                  id: index + 1,
-                  logURL: tokenMatched.logoURL,
-                  name: tokenMatched.name,
-                  symbol: symbol,
-                  type:
-                    `${tokenMatched.type} ﾄｰｸﾝ`,
-                  balance: balance / 10 ** tokenMatched.decimals,
-                  value:
-                    (balance * tokenMatched.price) /
-                    10 ** tokenMatched.decimals,
-                  selected: false,
-                  transfer: 0,
-                };
-              }
-              return null;
-            })
-            .filter(Boolean);
-
-          await new Promise((res) => setTimeout(res, 3000)); // Simulated delay
-          setAssets(initializedAssets);
-          dispatch({
-            type: BOB_ACTIONS.SET_ASSETS,
-            payload: initializedAssets,
-          });
-          dispatch({
-            type: BOB_ACTIONS.SET_LOCK_PERIOD,
-            payload: transaction.lockPeriod,
-          });
-          dispatch({
-            type: BOB_ACTIONS.SET_LOCK_END_DATE,
-            payload: transaction.lockEndDate,
-          });
-          setIsLoading(false);
-        }
-      }
-    };
-
-    initializeAssets();
-  }, [transactions, state.deceasedAddress]);
+    // we don't need simulating ABI call here //
+    // data fetch is done in bob-inheritance-asset.jsx //
+    setIsLoading(false);
+    setAssets(state.assets);
+  }, [, state.assets]);
 
   // Update total value when assets change
   useEffect(() => {
@@ -148,14 +97,6 @@ export default function InheritanceAssetsUnlockedPage() {
     dispatch({ type: BOB_ACTIONS.SET_WITHDRAWAL, payload: selectedAssets });
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex flex-col items-center justify-center space-y-4">
-  //       <Loader2 className="w-16 h-16 animate-spin text-blue-500" />
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
