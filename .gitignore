@@ -1,4 +1,3 @@
-.env*.ptau
-*.zkey
-build/
-setup/
+.env
+.DS_Store
+*/.DS_Store

@@ -18,8 +18,17 @@ node_modules
 
 setup/pot12_*.ptau    # 中間ファイルは除外
 
-.env*.ptau
-*.zkey
 build/
-setup/*.ptau
+
+# バイナリファイルを除外
+*.zkey
+*.ptau
+*.zip
+.DS_Store
 setup/*.zkey
+setup/*.ptau
+setup/*.zip
+setup/.DS_Store
+setup/*.wasm
+setup/
+
