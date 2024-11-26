@@ -12,6 +12,9 @@ interface IInheritanceContract {
     // Errors
 
     // Events
+    event InheritanceCancelled(address indexed owner, address[] approvedTokens);
+    event InheritanceInitiated(address indexed owner, bytes proof, uint256 lockStartTime);
+    event TokensWithdrawn(address indexed beneficiary, address[] tokens, uint256[] amounts);
 
     // Functions
     function initialize(bytes32 _hash, uint256 _lockTime) external;
