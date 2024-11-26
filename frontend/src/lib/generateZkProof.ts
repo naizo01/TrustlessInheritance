@@ -17,15 +17,15 @@ export async function generateProof(secret: string): Promise<ProofData> {
 
        const { proof, publicSignals } = await groth16.fullProve(
            input,
-           "/zk/inheritanceProof.wasm",
-           "/zk/inheritanceProof_0001.zkey"
+           "./inheritanceProof.wasm",
+           "./inheritanceProof_0001.zkey"
        );
 
        return {
            pA: proof.pi_a,
            pB: proof.pi_b,
            pC: proof.pi_c,
-           publicSignals  // 変数名を統一
+           publicSignals
        };
    } catch (error) {
        console.error("Error generating proof:", error);
@@ -33,7 +33,7 @@ export async function generateProof(secret: string): Promise<ProofData> {
    }
 }
 
-export async function verifyAndGenerateProof(secret: string): Promise<string> {
+export async function generateAndEncodeProof(secret: string): Promise<string> {
     const proofData = await generateProof(secret);
     
     const abiCoder = new AbiCoder();
