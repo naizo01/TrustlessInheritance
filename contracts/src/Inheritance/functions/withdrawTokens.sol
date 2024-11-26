@@ -21,11 +21,9 @@ contract withdrawTokens {
         require(!state.usedProofs[proof], "Proof already used");
         
         /*
-        コントラクトにトークンがロックされた後にstate.approvedTokensに記録されている情報が変更される可能性があるならば、state.approvedTokensに_tokensの各要素が含まれるかを判定するのは、ロックしたのに引き出せないなどのエラーにつながる恐れがある。
+        approveされた額は0じゃないけど、このコントラクト内の残高は0のトークンをチェックする必要はあるか。
         */
-        /*
-         _tokensの各要素はstate.approvedTokensに含まれていると考えてよいのであれば、"Verify all tokens are approved"での検証はいらない。
-        */
+        
         // Verify all tokens are approved
         for (uint256 i = 0; i < _tokens.length; i++) {
             bool isTokenHeld = false;
