@@ -14,10 +14,14 @@ import { ArrowRight, Upload } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import { Header } from "@/components/common/Header";
+import { generateAndEncodeProof } from "@/lib/generateZkProof"; // rhori追加
+
 
 export default function ZKProofGenerationPage({ onClick }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [filePreview, setFilePreview] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false); //rhori追加
+  const [error, setError] = useState<string | null>(null); //rhori追加
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,10 +41,35 @@ export default function ZKProofGenerationPage({ onClick }) {
     fileInputRef.current?.click();
   };
 
-  const handleGenerateZKProof = () => {
+  const handleGenerateZKProof = async () => {
     console.log("Generating ZK Proof...");
     // Implement ZK Proof generation logic here
-    onClick((prev) => prev + 1);
+    if (!selectedFile) return;
+
+    setIsGenerating(true);
+    setError(null);
+
+    try {
+      // ファイルの内容を読み込む
+      const fileContent = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target?.result as string);
+        reader.onerror = (e) => reject(e);
+        reader.readAsText(selectedFile);
+      });
+
+      // プルーフを生成してエンコード
+      const encodedProof = await generateAndEncodeProof(fileContent);
+      console.log("Generated and encoded proof:", encodedProof);
+
+      // 次のステップへ
+      onClick((prev) => prev + 1);
+    } catch (err) {
+      console.error("Error in proof generation:", err);
+      setError("プルーフの生成中にエラーが発生しました。");
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -99,10 +128,19 @@ export default function ZKProofGenerationPage({ onClick }) {
             <Button
               className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleGenerateZKProof}
-              disabled={!selectedFile}
+              disabled={!selectedFile || isGenerating}
             >
-              ZKプルーフを作成する
-              <ArrowRight className="ml-2 h-5 w-5" />
+              {isGenerating ? (
+                <>
+                  プルーフを生成中...
+                  {/* オプション: ローディングスピナーを追加 */}
+                </>
+              ) : (
+                <>
+                  ZKプルーフを作成する
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </>
+              )}
             </Button>
           </CardFooter>
         </Card>
