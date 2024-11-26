@@ -14,7 +14,7 @@ contract InheritanceStateViewer {
         return Storage.InheritanceState().owner;
     }
 
-    function hash() external view returns (bytes32) {
+    function hash() external view returns (uint) {
         return Storage.InheritanceState().hash;
     }
 

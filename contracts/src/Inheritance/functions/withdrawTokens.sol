@@ -3,9 +3,11 @@ pragma solidity ^0.8.23;
 
 import {Storage} from "bundle/inheritance/storage/Storage.sol";
 import {Schema} from "bundle/inheritance/storage/Schema.sol";
+import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceContract.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {VerifyZkproof} from "bundle/inheritance/functions/zk/VerifyZkproof.sol";
 
-contract WithdrawTokens {
+contract WithdrawTokens is VerifyZkproof {
     /**
      * @notice Withdraws tokens after the lock period using ZK proof
      * @param _tokens The list of token addresses to withdraw
@@ -52,5 +54,6 @@ contract WithdrawTokens {
             uint256 amount = _amounts[i] > balance ? balance : _amounts[i];
             require(token.transfer(msg.sender, amount), "Token transfer failed");
         }
+        emit IInheritanceContract.TokensWithdrawn(msg.sender, _tokens, _amounts);
     }
 }

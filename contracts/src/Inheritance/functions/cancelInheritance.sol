@@ -3,6 +3,7 @@ pragma solidity ^0.8.23;
 
 import {Storage} from "bundle/inheritance/storage/Storage.sol";
 import {Schema} from "bundle/inheritance/storage/Schema.sol";
+import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceContract.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract CancelInheritance {
@@ -11,7 +12,7 @@ contract CancelInheritance {
      */
     function cancelInheritance() external {
         Schema.InheritanceState storage state = Storage.InheritanceState();
-        
+
         require(msg.sender == state.owner, "Only the owner can cancel inheritance");
         require(state.approvedTokens.length > 0, "No approved tokens");
         require(!state.isKilled, "Contract is already killed");
@@ -24,6 +25,6 @@ contract CancelInheritance {
             }
         }
         state.isKilled = true;
-        emit InheritanceCancelled(state.owner, state.approvedTokens);
+        emit IInheritanceContract.InheritanceCancelled(state.owner, state.approvedTokens);
     }
 }

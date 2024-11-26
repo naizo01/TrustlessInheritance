@@ -11,7 +11,7 @@ contract AddApprovedTokens {
      */
     function addApprovedTokens(address[] calldata _tokens) external {
         Schema.InheritanceState storage state = Storage.InheritanceState();
-        
+
         for (uint256 i = 0; i < _tokens.length; i++) {
             state.approvedTokens.push(_tokens[i]);
         }
