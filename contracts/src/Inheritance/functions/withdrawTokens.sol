@@ -2,9 +2,10 @@
 pragma solidity ^0.8.23;
 
 import {Storage} from "bundle/inheritance/storage/Storage.sol";
+import {Schema} from "bundle/inheritance/storage/Schema.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract withdrawTokens {
+contract WithdrawTokens {
     /**
      * @notice Withdraws tokens after the lock period using ZK proof
      * @param _tokens The list of token addresses to withdraw

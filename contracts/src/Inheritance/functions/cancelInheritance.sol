@@ -2,9 +2,10 @@
 pragma solidity ^0.8.23;
 
 import {Storage} from "bundle/inheritance/storage/Storage.sol";
+import {Schema} from "bundle/inheritance/storage/Schema.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract cancelInheritance {
+contract CancelInheritance {
     /**
      * @notice Cancels the inheritance process
      */
