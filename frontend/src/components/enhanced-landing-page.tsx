@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 // import { Header } from "@/components/common/Header";
 import { Header } from "@/components/common/variable-header";
+import Image from 'next/image';
 
 export function EnhancedLandingPage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,32 +65,40 @@ export function EnhancedLandingPage() {
       />{" "}
       {/* Headerコンポーネントを使用 */}
       <main className="pt-16">
-        <section className="relative h-screen flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <img
-              src="https://g-qgytzacqry5.vusercontent.net/placeholder.svg?height=1080&width=1920"
-              alt=""
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black opacity-50"></div>
-          </div>
-          <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-              大切な暗号資産を、
-              <br className="sm:hidden" />
-              確実に未来へ
-            </h2>
-            <p className="text-xl sm:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
-              最新のブロックチェーン技術で実現する、次世代型資産継承ソリューション
-            </p>
-            <Button
-              size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
-            >
-              今すぐ始める
-            </Button>
+      <section className="relative h-screen w-full overflow-hidden">
+          <Image
+            src="/images/main_visual.png"
+            alt="MainVisual"
+            layout="fill"
+            objectFit="cover"
+            quality={100}
+            priority
+          />
+          <div className="absolute inset-0 bg-black/20" />
+          
+          <div className="relative z-10 h-full container mx-auto flex flex-col justify-start items-start pt-20">
+            <div className="max-w-3xl px-4 sm:px-6 lg:px-8 space-y-6 mb-12">
+              <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-white tracking-wide">
+                four Next
+              </h1>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl text-white font-medium leading-relaxed">
+                大切な暗号資産を、確実に未来へ
+              </h2>
+              <p className="text-sm sm:text-base lg:text-lg text-white/90 font-light leading-relaxed max-w-2xl">
+                ～最新のブロックチェーン技術で実現する、次世代型資産継承ソリューション～
+              </p>
+            </div>
+            <div className="w-full flex justify-center mt-auto mb-64">
+              <Button
+                size="lg"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
+              >
+                今すぐ始める
+              </Button>
+            </div>
           </div>
         </section>
+
 
         <section id="features" className="py-20 bg-white dark:bg-gray-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
