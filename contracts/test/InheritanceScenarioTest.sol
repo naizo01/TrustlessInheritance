@@ -20,17 +20,21 @@ contract InheritanceScenarioTest is MCTest {
 
     function setUp() public {
         factory = new InheritanceFactory();
+
         dictionaryAddress = InheritanceDeployer.deployDictionaryInheritance(mc);
         factory.setDictionaryAddress(dictionaryAddress);
 
+        vm.startPrank(alice);
         testToken1 = new TestToken(1e20);
         testToken2 = new TestToken(1e20);
+        vm.stopPrank();
     }
 
     function test_success() public {
+        uint hash = uint(1);
         vm.startPrank(alice);
         inheritanceContract = IInheritanceContract(
-            factory.createProxy("0x123456", 90 days)
+            factory.createProxy(hash, 90 days)
         );
         testToken1.approve(address(inheritanceContract), type(uint256).max);
         testToken2.approve(address(inheritanceContract), type(uint256).max);
@@ -43,11 +47,25 @@ contract InheritanceScenarioTest is MCTest {
         uint256[] memory amounts = new uint256[](2);
         amounts[0] = 1e20;
         amounts[1] = 1e20;
+        bytes memory byteData1 = abi.encodePacked(uint256(1));
+        bytes memory byteData2 = abi.encodePacked(uint256(2));
 
         vm.startPrank(bob);
+        inheritanceContract.initiateInheritance(byteData1);
+
         vm.warp(vm.getBlockTimestamp() + 90 days);
-        inheritanceContract.initiateInheritance(tokens, bytes32(0));
-        inheritanceContract.withdrawTokens(tokens, amounts, bytes32(0));
+
+        inheritanceContract.withdrawTokens(tokens, amounts, byteData2);
+        assertEq(
+            testToken1.balanceOf(bob),
+            1e20,
+            "testToken1 balance is not 1e20"
+        );
+        assertEq(
+            testToken2.balanceOf(bob),
+            1e20,
+            "testToken2 balance is not 1e20"
+        );
         vm.stopPrank();
     }
 
