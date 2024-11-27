@@ -66,10 +66,12 @@ function createProxy() external {
 全ての変数は ERC7201 に準拠します。
 
 - `address owner`: Alice のアドレス
+- `address factory`: factoryコントラクト のアドレス
 - `bytes32 hash`: 生成したハッシュ
 - `bool isLocked`: 相続が進行中かどうかを管理
 - `bool isKilled`: 相続がキャンセルされた場合に、コントラクトが無効化されているかどうかを管理
-- `uint256 lockTime`: トークンのロック期間（n ヶ月または n 年）
+- `uint256 lockDuration`: トークンのロック期間（n ヶ月または n 年）
+- `uint256 lockStartTime`: トークンロックが開始された日時
 - `uint256 nance`: 署名の再利用防止のための nonce
 - `address[] public approvedTokens`: `approve`したトークンを保存する配列
 - `mapping(bytes => bool) public usedProofs`: 利用済みの `proof` を記録し、再利用を防ぐためのマッピング
@@ -101,12 +103,12 @@ function addApprovedTokens(address[] calldata _tokens) external {
 ロック期間中に Alice がトークンを引き出すための関数です。
 
 ```solidity
-function cancelInheritance(address[] calldata _tokens) external {
+function cancelInheritance() external {
     // 相続キャンセル処理
 }
 ```
 
-## ZK を使った検証パターン
+## ZK を使った検証
 
 - **Alice が登録するハッシュ値**:
 
@@ -120,73 +122,25 @@ function cancelInheritance(address[] calldata _tokens) external {
 
 ### 関数コントラクト（implementation にとして登録するコントラクト）
 
-#### 1.4. **initiateInheritanceZk**
+#### 1.4. **initiateInheritance**
 
 Bob がスマートコントラクトにトークンをロックして相続プロセスを開始するための関数です。署名による認証も行われます。
 
 ```solidity
-function initiateInheritanceZk(
-    address[] calldata _tokens,
-    bytes proof
-) external {
+function initiateInheritance(bytes calldata proof) external {
     // 相続開始
 }
 ```
 
-#### 1.5. **withdrawTokensZk**
+#### 1.5. **withdrawTokens**
 
 ロック期間終了後、Bob がトークンを引き出すための関数です。
 
 ```solidity
-function withdrawTokensZk(
+function withdrawTokens(
     address[] calldata _tokens,
     uint256[] calldata _amounts,
-    bytes proof
-) external {
-    // トークン引き出し処理
-}
-```
-
-## 署名を使った検証パターン
-
-- **Alice が登録するハッシュ値**:
-
-  - `Aliceアドレス + Bobアドレス + スマートコントラクトアドレス`
-  - `register`関数でハッシュを登録します。
-
-- **署名の検証**:
-  - 署名は「`Aliceアドレス + Bobアドレス + nonce`」で生成され、リプレイアタックを防ぐために、nonce はスマートコントラクトで管理されます。
-
-### 関数コントラクト（implementation にとして登録するコントラクト）
-
-#### 2.4. **initiateInheritanceSig**
-
-Bob がスマートコントラクトにトークンをロックして相続プロセスを開始するための関数です。署名による認証も行われます。
-
-```solidity
-function initiateInheritanceSig(
-    address[] calldata _tokens,
-    bytes32 signedHash,
-    uint8 v,
-    bytes32 r,
-    bytes32 s
-) external {
-    // 相続開始
-}
-```
-
-#### 2.5. **withdrawTokensSig**
-
-ロック期間終了後、Bob がトークンを引き出すための関数です。
-
-```solidity
-function withdrawTokensSig(
-    address[] calldata _tokens,
-    uint256[] calldata _amounts,
-    bytes32 signedHash,
-    uint8 v,
-    bytes32 r,
-    bytes32 s
+    bytes calldata proof
 ) external {
     // トークン引き出し処理
 }
