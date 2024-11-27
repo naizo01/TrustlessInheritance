@@ -12,22 +12,24 @@ interface IInheritanceContract {
     // Errors
 
     // Events
+    event InheritanceCancelled(address indexed owner, address[] approvedTokens);
+    event InheritanceInitiated(address indexed owner, bytes proof, uint256 lockStartTime);
+    event TokensWithdrawn(address indexed beneficiary, address[] tokens, uint256[] amounts);
 
     // Functions
-    function initialize(bytes32 _hash, uint256 _lockTime) external;
+    function initialize(uint _hash, uint256 _lockTime, address _owner) external;
 
     function addApprovedTokens(address[] calldata _tokens) external;
 
     function cancelInheritance(address[] calldata _tokens) external;
 
     function initiateInheritance(
-        address[] calldata _tokens,
-        bytes32 proof
+        bytes calldata proof
     ) external;
 
     function withdrawTokens(
         address[] calldata _tokens,
         uint256[] calldata _amounts,
-        bytes32 proof
+        bytes calldata proof
     ) external;
 }

@@ -2,10 +2,13 @@
 pragma solidity ^0.8.23;
 
 import {Storage} from "bundle/inheritance/storage/Storage.sol";
-import "@openzeppelin/contracts/utils/math/Math.sol";
+import {Schema} from "bundle/inheritance/storage/Schema.sol";
+import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceContract.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/utils/math/Math.sol";
+import {VerifyZkproof} from "bundle/inheritance/functions/zk/VerifyZkproof.sol";
 
-contract initiateInheritance {
+contract InitiateInheritance is VerifyZkproof {
     /**
      * @notice Initiates the inheritance process using ZK proof
      * @param proof The ZK proof for verification
@@ -44,5 +47,7 @@ contract initiateInheritance {
         // Update state
         state.lockStartTime = block.timestamp;
         state.isLocked = true;
+
+        emit IInheritanceContract.InheritanceInitiated(state.owner, proof, state.lockStartTime);
     }
 }

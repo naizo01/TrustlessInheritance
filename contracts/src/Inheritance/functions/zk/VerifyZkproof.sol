@@ -3,14 +3,10 @@
 pragma solidity ^0.8.23;
 
 import {Storage} from "bundle/inheritance/storage/Storage.sol";
-import "./verifier.sol";
+import {Schema} from "bundle/inheritance/storage/Schema.sol";
+import "./Groth16Verifier.sol";
 
-contract VerifyZkproof {
-    Groth16Verifier public verifier;
-
-    constructor(address _verifierAddress) {
-        verifier = Groth16Verifier(_verifierAddress);
-    }
+contract VerifyZkproof is Groth16Verifier {
 
     // ZKP検証用の構造体
     struct ZKProof {
@@ -25,16 +21,16 @@ contract VerifyZkproof {
      * @param proof エンコードされたZK proof
      * @return 検証結果
      */
-    function verifyZKProof(bytes calldata proof) external view returns (bool) {
+    function verifyZKProof(bytes calldata proof) public view returns (bool) {
         // bytesからZKProofにデコード
         ZKProof memory zkProof = abi.decode(proof, (ZKProof));
 
         // 保存されているハッシュと照合
         Schema.InheritanceState storage state = Storage.InheritanceState();
-        require(state.secretHash == zkProof.pubSignals[0], "Hash mismatch");
+        require(state.hash == zkProof.pubSignals[1], "Hash mismatch");
 
         // Groth16 Verifierを使用して検証
-        return verifier.verifyProof(
+        return verifyProof(
             zkProof.pA,
             zkProof.pB,
             zkProof.pC,

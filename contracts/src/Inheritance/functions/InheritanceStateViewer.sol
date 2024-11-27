@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import {Schema} from "./Schema.sol";
-import {Storage} from "./Storage.sol";
+import {Storage} from "bundle/inheritance/storage/Storage.sol";
+import {Schema} from "bundle/inheritance/storage/Schema.sol";
 
 /**
  * @title InheritanceStateViewer with Getters
@@ -14,7 +14,7 @@ contract InheritanceStateViewer {
         return Storage.InheritanceState().owner;
     }
 
-    function hash() external view returns (bytes32) {
+    function hash() external view returns (uint) {
         return Storage.InheritanceState().hash;
     }
 
@@ -26,8 +26,12 @@ contract InheritanceStateViewer {
         return Storage.InheritanceState().isKilled;
     }
 
-    function lockTime() external view returns (uint256) {
-        return Storage.InheritanceState().lockTime;
+    function lockDuration() external view returns (uint256) {
+        return Storage.InheritanceState().lockDuration;
+    }
+
+    function lockStartTime() external view returns (uint256) {
+        return Storage.InheritanceState().lockStartTime;
     }
 
     function nonce() external view returns (uint256) {

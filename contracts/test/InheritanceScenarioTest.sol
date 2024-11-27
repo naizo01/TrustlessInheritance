@@ -7,6 +7,7 @@ import {Storage} from "bundle/inheritance/storage/Storage.sol";
 import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceContract.sol";
 import {InheritanceFactory} from "bundle/InheritanceFactory.sol";
 import {TestToken} from "bundle/test/TestToken.sol";
+import {ProofData} from "./ProofData.sol";
 
 contract InheritanceScenarioTest is MCTest {
     using InheritanceDeployer for MCDevKit;
@@ -20,17 +21,20 @@ contract InheritanceScenarioTest is MCTest {
 
     function setUp() public {
         factory = new InheritanceFactory();
+
         dictionaryAddress = InheritanceDeployer.deployDictionaryInheritance(mc);
         factory.setDictionaryAddress(dictionaryAddress);
 
+        vm.startPrank(alice);
         testToken1 = new TestToken(1e20);
         testToken2 = new TestToken(1e20);
+        vm.stopPrank();
     }
 
     function test_success() public {
         vm.startPrank(alice);
         inheritanceContract = IInheritanceContract(
-            factory.createProxy("0x123456", 90 days)
+            factory.createProxy(ProofData.getHash(), 90 days)
         );
         testToken1.approve(address(inheritanceContract), type(uint256).max);
         testToken2.approve(address(inheritanceContract), type(uint256).max);
@@ -44,10 +48,25 @@ contract InheritanceScenarioTest is MCTest {
         amounts[0] = 1e20;
         amounts[1] = 1e20;
 
+        bytes memory proofBytes1 = abi.encode(ProofData.getProof1());
+
         vm.startPrank(bob);
-        inheritanceContract.initiateInheritance(tokens, bytes32(0));
+        inheritanceContract.initiateInheritance(proofBytes1);
+
         vm.warp(vm.getBlockTimestamp() + 90 days);
-        inheritanceContract.withdrawTokens(tokens, amounts, bytes32(0));
+
+        bytes memory proofBytes2 = abi.encode(ProofData.getProof2());
+        inheritanceContract.withdrawTokens(tokens, amounts, proofBytes2);
+        assertEq(
+            testToken1.balanceOf(bob),
+            1e20,
+            "testToken1 balance is not 1e20"
+        );
+        assertEq(
+            testToken2.balanceOf(bob),
+            1e20,
+            "testToken2 balance is not 1e20"
+        );
         vm.stopPrank();
     }
 
