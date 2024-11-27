@@ -16,6 +16,7 @@ library Schema {
     /// @custom:storage-location erc7201:InheritanceContract.InheritanceState
     struct InheritanceState {
         address owner; // Alice のアドレス
+        address factory; // factoryコントラクト のアドレス
         uint hash; // 生成したハッシュ
         bool isLocked; // 相続が進行中かどうかを管理
         bool isKilled; // 相続がキャンセルされた場合に、コントラクトが無効化されているかどうかを管理

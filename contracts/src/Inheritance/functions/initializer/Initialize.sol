@@ -11,10 +11,11 @@ contract Initialize is Initializable {
      * @param _hash The hash to be stored
      * @param _lockTime The lock time for the inheritance
      */
-    function initialize(uint _hash, uint256 _lockTime, address _owner) external {
+    function initialize(uint _hash, uint256 _lockTime, address _owner, address _factory) external {
         Schema.InheritanceState storage state = Storage.InheritanceState();
         state.hash = _hash;
         state.lockDuration = _lockTime;
         state.owner = _owner;
+        state.factory = _factory;
     }
 }

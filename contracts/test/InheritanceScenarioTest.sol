@@ -5,7 +5,7 @@ import {MCTest, MCDevKit, stdError} from "@mc-devkit/Flattened.sol";
 import {InheritanceDeployer} from "../script/deploy/InheritanceDeployer.sol";
 import {Storage} from "bundle/inheritance/storage/Storage.sol";
 import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceContract.sol";
-import {InheritanceFactory} from "bundle/InheritanceFactory.sol";
+import {InheritanceFactory} from "bundle/inheritance/InheritanceFactory.sol";
 import {TestToken} from "bundle/test/TestToken.sol";
 import {ProofData} from "./ProofData.sol";
 
