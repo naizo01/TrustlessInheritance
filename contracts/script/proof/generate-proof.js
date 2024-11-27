@@ -1,6 +1,7 @@
 // scripts/generate-proof.js
 const snarkjs = require("snarkjs");
 const circomlibjs = require("circomlibjs");
+const path = require("path");
 
 /**
  * 文字列を回路入力用の数値に変換
@@ -47,10 +48,12 @@ async function main() {
         console.log('Circuit Input:', input);
 
         // 4. プルーフの生成
+        const wasmPath = path.resolve(__dirname, '../../setup/inheritanceProof.wasm');
+        const zkeyPath = path.resolve(__dirname, '../../setup/inheritanceProof_0001.zkey');
         const { proof, publicSignals } = await snarkjs.groth16.fullProve(
             input,
-            "../../setup/inheritanceProof.wasm",
-            "../../setup/inheritanceProof_0001.zkey"
+            wasmPath,
+            zkeyPath
         );
 
         // 5. Foundryテスト用のフォーマットで出力
