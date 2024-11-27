@@ -5,7 +5,7 @@ export const assets = [
     decimals: 18,
     logoURL: "/logo/token.png",
     type: "Native",
-    address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", // Placeholder address for ETH
+    address: "0x7f6ACec645EE980cb43142dEe21DC321d6b88F25", // Placeholder address for ETH
     price: 3347.53,
   },
   {
@@ -14,7 +14,7 @@ export const assets = [
     decimals: 6,
     logoURL: "/logo/usdt.png",
     type: "ERC20",
-    address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    address: "0x5E4D21133Ff33327db9edfE879edf3Acc45e7330",
     price: 1,
   },
   {
@@ -23,7 +23,7 @@ export const assets = [
     decimals: 6,
     logoURL: "/logo/usdc.png",
     type: "ERC20",
-    address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    address: "0xef470258E0E529248f12548851CBDd46B21f9B6b",
     price: 1,
   },
   {
@@ -32,7 +32,7 @@ export const assets = [
     decimals: 18,
     logoURL: "/logo/dai.png",
     type: "ERC20",
-    address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    address: "0x0f52Dd84111D3172358A0DD47bcf4fBd8CB2774D",
     price: 1,
   },
   {
@@ -41,7 +41,7 @@ export const assets = [
     decimals: 8,
     logoURL: "https://via.placeholder.com/50x50.png?text=WBTC",
     type: "ERC20",
-    address: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+    address: "0x092BE1bD0832fef2dC0cd39e94FddB4d958c3051",
     price: 97896,
   },
   {
@@ -50,7 +50,7 @@ export const assets = [
     decimals: 18,
     logoURL: "https://via.placeholder.com/50x50.png?text=LINK",
     type: "ERC20",
-    address: "0x514910771AF9Ca656af840dff83E8264EcF986CA",
+    address: "0xcEC8A5Df403cBA88DEbAF54bE76bEed0B5B5B857",
     price: 14.81,
   },
   {
@@ -59,7 +59,7 @@ export const assets = [
     decimals: 18,
     logoURL: "https://via.placeholder.com/50x50.png?text=UNI",
     type: "ERC20",
-    address: "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984",
+    address: "0x47F906bd43659d0015acf63347bBF20fD6390505",
     price: 9.08,
   },
   {
@@ -68,7 +68,7 @@ export const assets = [
     decimals: 18,
     logoURL: "https://via.placeholder.com/50x50.png?text=AAVE",
     type: "ERC20",
-    address: "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
+    address: "0x0383cBFe319bdDb631e40d392A0f705b6A54b2a1",
     price: 166.4,
   },
   {
@@ -77,7 +77,7 @@ export const assets = [
     decimals: 18,
     logoURL: "https://via.placeholder.com/50x50.png?text=COMP",
     type: "ERC20",
-    address: "0xc00e94Cb662C3520282E6f5717214004A7f26888",
+    address: "0x0e17b5F340E0843C95D8Ce2372f74F412B9f7316",
     price: 53.79,
   },
   {
@@ -86,7 +86,7 @@ export const assets = [
     decimals: 18,
     logoURL: "https://via.placeholder.com/50x50.png?text=MKR",
     type: "ERC20",
-    address: "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
+    address: "0x01dF9A454a81e0460ff31A0dCb63D668CD01cD18",
     price: 1638.8,
   },
 ]; // prices are as of 22 Nov. 2024 6:18 tokyo
