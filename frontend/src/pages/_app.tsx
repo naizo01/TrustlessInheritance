@@ -4,6 +4,7 @@ import { WagmiProvider, createConfig, http } from "wagmi";
 import { mainnet } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
+import { PostProvider } from "@/app/postContext";
 
 const config = createConfig(
   getDefaultConfig({
@@ -36,7 +37,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <ConnectKitProvider>
-          <Component {...pageProps} />
+          <PostProvider>
+            <Component {...pageProps} />
+          </PostProvider>
         </ConnectKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

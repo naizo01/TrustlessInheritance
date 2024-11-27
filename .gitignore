@@ -1,5 +1,9 @@
+.env*.ptau
+*.zkey
+build/
+setup/
+mallory.jsx
+.gitignore
+
+
 .env
-.DS_Store
-*/.DS_Store
-
-

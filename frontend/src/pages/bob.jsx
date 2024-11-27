@@ -54,6 +54,7 @@ export const BOB_ACTIONS = {
   SET_APPROVAL: "SET_APPROVAL",
   SET_MATURED: "SET_MATURED",
   SET_PROOF: "SET_PROOF",
+  RESET_STATE: "RESET_STATE",
 };
 
 // Reducer
@@ -88,7 +89,9 @@ function bobReducer(state, action) {
     case BOB_ACTIONS.SET_RECIPIENT_ADDRESS:
       return { ...state, recipientAddress: action.payload };
     case BOB_ACTIONS.SET_PROOF:
-      return {...state, proof: action.payload};
+      return { ...state, proof: action.payload };
+    case BOB_ACTIONS.RESET_STATE:
+      return { ...initialState };
     default:
       throw new Error("unknown action required");
   }

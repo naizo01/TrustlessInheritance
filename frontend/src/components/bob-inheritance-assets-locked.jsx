@@ -30,52 +30,12 @@ export default function InheritanceAssetsLockedPage() {
   const [totalValue, setTotalValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  // fake data
-  const fakeData = {
-    assets: [
-      {
-        id: 1,
-        name: "USDT",
-        type: "トークン",
-        balance: 1000,
-        value: 1000,
-        selected: false,
-        transfer:0
-      },
-      {
-        id: 2,
-        name: "USDC",
-        type: "トークン",
-        balance: 2000,
-        value: 2000,
-        selected: false,
-        transfer: 0
-      },
-    ],
-    lockEndDate: null,
-    lockPeriod: 3,
-  };
-
-  useEffect(() => {
-    // simulating ABI call
-    const fetchAssetsData = async () => {
-      await new Promise((res) => setTimeout(res, 3000));
-      // if no data in state, i.e. not through step 6
-      dispatch({ type: BOB_ACTIONS.SET_ASSETS, payload: fakeData.assets });
-      dispatch({
-        type: BOB_ACTIONS.SET_LOCK_PERIOD,
-        payload: fakeData.lockPeriod,
-      });
-      dispatch({ type: BOB_ACTIONS.SET_LOCK_END_DATE }); // assuming approved today
-    };
-    !state.lockEndDate && fetchAssetsData();
-  }, []);
-
   useEffect(() => {
     if (state.assets.length > 0) {
-      const sumTotalValue = state.assets
-        .reduce((acc, asset) => acc + asset.value, 0)
-        .toLocaleString();
+      const sumTotalValue = state.assets.reduce(
+        (acc, asset) => acc + asset.value,
+        0
+      );
       setTotalValue(sumTotalValue);
       setIsLoading(false);
     }
@@ -91,6 +51,14 @@ export default function InheritanceAssetsLockedPage() {
 
   const handleReturnToMain = () => {
     dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 0 });
+    dispatch({ type: BOB_ACTIONS.RESET_STATE });
+  };
+
+  const formatNumber = (num) => {
+    return num.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   return (
@@ -124,7 +92,9 @@ export default function InheritanceAssetsLockedPage() {
               <Card className="bg-blue-600 text-white">
                 <CardContent className="pt-6">
                   <div className="text-sm">相続可能総額</div>
-                  <div className="text-4xl font-bold">${totalValue}</div>
+                  <div className="text-4xl font-bold">
+                    ${formatNumber(totalValue)}
+                  </div>
                 </CardContent>
               </Card>
 
@@ -146,14 +116,33 @@ export default function InheritanceAssetsLockedPage() {
                           <Check className="h-4 w-4 text-green-500" />
                         </TableCell>
                         <TableCell className="font-medium">
-                          {asset.name}
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                              <img
+                                src={
+                                  asset.logURL ||
+                                  `/placeholder.svg?height=32&width=32`
+                                }
+                                alt={asset.name}
+                                className="w-6 h-6"
+                              />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="font-medium text-gray-900">
+                                {asset.name}
+                              </span>
+                              <span className="text-sm text-gray-500">
+                                {asset.symbol}
+                              </span>
+                            </div>
+                          </div>
                         </TableCell>
                         <TableCell>{asset.type}</TableCell>
                         <TableCell className="text-right">
-                          {asset.balance.toLocaleString()}
+                          {formatNumber(asset.balance)}
                         </TableCell>
                         <TableCell className="text-right">
-                          ${asset.value.toLocaleString()}
+                          ${formatNumber(asset.value)}
                         </TableCell>
                       </TableRow>
                     ))}
@@ -169,13 +158,13 @@ export default function InheritanceAssetsLockedPage() {
                   <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                   <AlertDescription className="text-blue-800 dark:text-blue-200">
                     選択した資産は相続プロセス開始後、{state.lockPeriod}
-                    ヶ月間ロックされます。この期間中、被相続人は相続をキャンセルすることができます。
+                    ヶ月間ロックされます。この期間中、被相続人は相続をキャンセルすることができます。正確なロック期間の満了時期は"ロック期間満了日"をご参照ください。
                   </AlertDescription>
                 </Alert>
 
                 <div className="text-center p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
                   <p className="text-yellow-800 dark:text-yellow-200 font-medium">
-                    ロック期間満了日: {formattedEndDate} （同日を含む）
+                    ロック期間満了日: {formattedEndDate} （同日を含まず）
                   </p>
                 </div>
               </div>

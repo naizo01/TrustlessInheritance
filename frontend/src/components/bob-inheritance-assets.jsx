@@ -22,57 +22,98 @@ import { ArrowRight, Info, Check, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
+import { usePosts } from "@/app/postContext";
+import { assets as importedAssets } from "@/lib/token";
+import { Noto_Sans_Wancho } from "next/font/google";
 
 export default function Component() {
   const { state, dispatch } = useBobState();
-  const [assetsInfo, setAssetsInfo] = useState({ assets: [], lockPeriod: 0 });
-  const [totalValue, setTotalValue] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-
-  // fake data
-  const fakeData = {
-    assets: [
-      {
-        id: 1,
-        name: "USDT",
-        type: "トークン",
-        balance: 1000,
-        value: 1000,
-        selected: false,
-      },
-      {
-        id: 2,
-        name: "USDC",
-        type: "トークン",
-        balance: 2000,
-        value: 2000,
-        selected: false,
-      },
-    ],
+  const [assetsInfo, setAssetsInfo] = useState({
+    assets: [],
+    lockPeriod: 0,
     lockEndDate: null,
-    lockPeriod: 3,
-  };
+  });
+  const [totalValue, setTotalValue] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const { transactions } = usePosts(); // import dummy data via usePosts
 
   useEffect(() => {
-    // simulating ABI call
-    const fetchAssetsData = async () => {
-      await new Promise((res) => setTimeout(res, 3000));
-      setAssetsInfo(fakeData);
-    };
-    fetchAssetsData();
-  }, []);
+    // simulating ABI call //
+
+    // fetch transactions and create assets data
+    if (transactions.length > 0) {
+      const transaction = transactions.find((tx) =>
+        tx.address.toLowerCase().includes(state.deceasedAddress.toLowerCase())
+      );
+      const data = {
+        assets: [],
+        lockEndDate: transaction.lockEndDate,
+        lockPeriod: transaction.lockPeriod,
+      };
+      dispatch({
+        type: BOB_ACTIONS.SET_LOCK_END_DATE,
+        payload: transaction.lockEndDate,
+      });
+      dispatch({
+        type: BOB_ACTIONS.SET_LOCK_PERIOD,
+        payload: transaction.lockPeriod,
+      });
+
+      // update assets array
+      Object.entries(transaction.tokens).forEach(([symbol, balance], index) => {
+        const tokenMatched = importedAssets.find(
+          (token) => token.symbol === symbol
+        );
+        if (tokenMatched) {
+          data.assets.push({
+            id: index + 1,
+            logURL: tokenMatched.logoURL,
+            name: tokenMatched.name,
+            symbol: symbol,
+            type: `${tokenMatched.type} ﾄｰｸﾝ`,
+            balance: balance / 10 ** tokenMatched.decimals,
+            value: (balance * tokenMatched.price) / 10 ** tokenMatched.decimals,
+            selected: false,
+          });
+        }
+      });
+
+      // wait for 3 secnods
+      const fetchAssetsData = async () => {
+        await new Promise((res) => setTimeout(res, 3000));
+        setAssetsInfo(data);
+      };
+
+      fetchAssetsData();
+    } else {
+      console.log("No matching transaction found");
+    }
+  }, [transactions, state.deceasedAddress]);
 
   useEffect(() => {
     if (assetsInfo.assets.length > 0) {
-      const sumTotalValue = assetsInfo.assets
-        .reduce((acc, asset) => acc + asset.value, 0)
-        .toLocaleString();
+      const sumTotalValue = assetsInfo.assets.reduce(
+        (acc, asset) => acc + asset.value,
+        0
+      );
       setTotalValue(sumTotalValue);
       setIsLoading(false);
       dispatch({ type: BOB_ACTIONS.SET_ASSETS, payload: assetsInfo.assets });
 
-      ///// to simulate approved & matured ///// otherwise, comment out
-      // dispatch({ type: BOB_ACTIONS.SET_MATURED });
+      ///// switch among waiting, approved, and matured /////
+      if (assetsInfo.lockEndDate) {
+        const currentDate = new Date();
+        const lockEndDate = new Date(assetsInfo.lockEndDate);
+        console.log(currentDate, lockEndDate);
+
+        if (lockEndDate > currentDate) {
+          // if approved but not matured
+          dispatch({ type: BOB_ACTIONS.SET_APPROVAL });
+        } else if (lockEndDate <= currentDate) {
+          // if matured
+          dispatch({ type: BOB_ACTIONS.SET_MATURED });
+        }
+      }
     }
   }, [assetsInfo]);
 
@@ -84,6 +125,13 @@ export default function Component() {
       payload: assetsInfo.lockPeriod,
     });
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
+  };
+
+  const formatNumber = (num) => {
+    return num.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   return (
@@ -117,7 +165,9 @@ export default function Component() {
               <Card className="bg-blue-600 text-white">
                 <CardContent className="pt-6">
                   <div className="text-sm">相続可能総額</div>
-                  <div className="text-4xl font-bold">${totalValue}</div>
+                  <div className="text-4xl font-bold">
+                    ${formatNumber(totalValue)}
+                  </div>
                 </CardContent>
               </Card>
 
@@ -140,14 +190,30 @@ export default function Component() {
                           <Check className="h-4 w-4 text-green-500" />
                         </TableCell>
                         <TableCell className="font-medium">
-                          {asset.name}
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                              <img
+                                src={asset.logURL}
+                                alt={asset.name}
+                                className="w-6 h-6"
+                              />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="font-medium text-gray-900">
+                                {asset.name}
+                              </span>
+                              <span className="text-sm text-gray-500">
+                                {asset.symbol}
+                              </span>
+                            </div>
+                          </div>
                         </TableCell>
                         <TableCell>{asset.type}</TableCell>
                         <TableCell className="text-right">
-                          {asset.balance.toLocaleString()}
+                          {formatNumber(asset.balance)}
                         </TableCell>
                         <TableCell className="text-right">
-                          ${asset.value.toLocaleString()}
+                          ${formatNumber(asset.value)}
                         </TableCell>
                       </TableRow>
                     ))}
