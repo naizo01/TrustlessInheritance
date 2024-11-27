@@ -6,7 +6,7 @@ import {Schema} from "bundle/inheritance/storage/Schema.sol";
 import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceContract.sol";
 import {IInheritanceFactory} from "bundle/inheritance/interfaces/IInheritanceFactory.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {ZKPUtil} from "bundle/inheritance/functions/zk/ZKPUtil.sol";
+import {ZKPUtil} from "bundle/inheritance/zk/ZKPUtil.sol";
 
 
 contract WithdrawTokens {

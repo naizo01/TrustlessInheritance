@@ -4,7 +4,7 @@ pragma solidity ^0.8.23;
 import {Proxy} from "@ucs.mc/proxy/Proxy.sol";
 import {Initialize} from "bundle/Inheritance/functions/initializer/Initialize.sol";
 import {IInheritanceFactory} from "bundle/Inheritance/interfaces/IInheritanceFactory.sol";
-import {Groth16Verifier} from "bundle/inheritance/functions/zk/Groth16Verifier.sol";
+import {Groth16Verifier} from "bundle/inheritance/zk/Groth16Verifier.sol";
 
 
 contract InheritanceFactory is Groth16Verifier{

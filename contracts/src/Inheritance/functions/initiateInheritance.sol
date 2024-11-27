@@ -7,7 +7,7 @@ import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceCo
 import {IInheritanceFactory} from "bundle/inheritance/interfaces/IInheritanceFactory.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
-import {ZKPUtil} from "bundle/inheritance/functions/zk/ZKPUtil.sol";
+import {ZKPUtil} from "bundle/inheritance/zk/ZKPUtil.sol";
 
 contract InitiateInheritance {
     /**
