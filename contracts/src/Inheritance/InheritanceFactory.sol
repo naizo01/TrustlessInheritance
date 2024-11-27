@@ -2,9 +2,12 @@
 pragma solidity ^0.8.23;
 
 import {Proxy} from "@ucs.mc/proxy/Proxy.sol";
-import {Initialize} from "./Inheritance/functions/initializer/Initialize.sol";
+import {Initialize} from "bundle/Inheritance/functions/initializer/Initialize.sol";
+import {IInheritanceFactory} from "bundle/Inheritance/interfaces/IInheritanceFactory.sol";
+import {Groth16Verifier} from "bundle/inheritance/functions/zk/Groth16Verifier.sol";
 
-contract InheritanceFactory {
+
+contract InheritanceFactory is Groth16Verifier{
     // オーナーアドレス -> プロキシアドレスのマッピング
     mapping(address => address) public ownerToProxy;
 
@@ -13,13 +16,6 @@ contract InheritanceFactory {
 
     // 管理者アドレスを保持する変数
     address public admin;
-
-    // プロキシ作成を記録するイベント
-    event ProxyCreated(
-        address indexed owner,
-        address proxyAddress,
-        uint keyHash
-    );
 
     // コンストラクタで初期管理者を設定
     constructor() {
@@ -51,7 +47,7 @@ contract InheritanceFactory {
     ) external returns (address) {
         bytes memory initializerData = abi.encodeCall(
             Initialize.initialize,
-            (_hash, _lockTime, msg.sender)
+            (_hash, _lockTime, msg.sender, address(this))
         );
 
         address proxyAddress = address(
@@ -60,7 +56,7 @@ contract InheritanceFactory {
 
         ownerToProxy[msg.sender] = proxyAddress;
 
-        emit ProxyCreated(msg.sender, proxyAddress, _hash);
+        emit IInheritanceFactory.ProxyCreated(msg.sender, proxyAddress, _hash);
         return proxyAddress;
     }
 }
