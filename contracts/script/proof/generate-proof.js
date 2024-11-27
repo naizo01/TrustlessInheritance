@@ -56,6 +56,8 @@ async function main() {
             zkeyPath
         );
 
+        console.log(proof)
+
         // 5. Foundryテスト用のフォーマットで出力
         console.log('\nFoundry Test Values:');
         console.log('=== Copy from here ===');
@@ -67,12 +69,12 @@ async function main() {
 
         console.log(`\nuint256[2][2] memory pB = [
     [
-        ${proof.pi_b[0][1]},
-        ${proof.pi_b[0][0]}
+        ${proof.pi_b[0][0]},
+        ${proof.pi_b[0][1]}
     ],
     [
-        ${proof.pi_b[1][1]},
-        ${proof.pi_b[1][0]}
+        ${proof.pi_b[1][0]},
+        ${proof.pi_b[1][1]}
     ]
 ];`);
 
