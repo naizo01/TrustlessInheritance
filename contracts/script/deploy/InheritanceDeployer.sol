@@ -45,7 +45,7 @@ library InheritanceDeployer {
         mc.use("UsedProofs", viewer.usedProofs.selector, address(viewer));
 
         mc.useFacade(address(new InheritanceFacade()));
-        mc.deploy();
+        mc.deployDictionary();
         return mc.toDictionaryAddress();
     }
 }
