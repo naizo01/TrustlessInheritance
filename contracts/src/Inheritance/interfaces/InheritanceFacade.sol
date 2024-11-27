@@ -8,21 +8,20 @@ import "./IInheritanceContract.sol";
  * @custom:version IInheritanceContract:0.1.0
  */
 contract InheritanceFacade is IInheritanceContract {
-    function initialize(bytes32 _hash, uint256 _lockTime) external override {}
+    function initialize(uint _hash, uint256 _lockTime, address _owner) external override {}
 
     function addApprovedTokens(address[] calldata _tokens) external override {}
 
     function cancelInheritance(address[] calldata _tokens) external override {}
 
     function initiateInheritance(
-        address[] calldata _tokens,
-        bytes32 proof
+        bytes calldata proof
     ) external override {}
 
     function withdrawTokens(
         address[] calldata _tokens,
         uint256[] calldata _amounts,
-        bytes32 proof
+        bytes calldata proof
     ) external override {}
 
 }

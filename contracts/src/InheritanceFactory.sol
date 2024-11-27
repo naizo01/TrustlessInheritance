@@ -2,7 +2,7 @@
 pragma solidity ^0.8.23;
 
 import {Proxy} from "@ucs.mc/proxy/Proxy.sol";
-import {IInheritanceContract} from "./Inheritance/interfaces/IInheritanceContract.sol";
+import {Initialize} from "./Inheritance/functions/initializer/Initialize.sol";
 
 contract InheritanceFactory {
     // オーナーアドレス -> プロキシアドレスのマッピング
@@ -18,7 +18,7 @@ contract InheritanceFactory {
     event ProxyCreated(
         address indexed owner,
         address proxyAddress,
-        bytes32 keyHash
+        uint keyHash
     );
 
     // コンストラクタで初期管理者を設定
@@ -46,12 +46,12 @@ contract InheritanceFactory {
 
     // 各ユーザーのプロキシをデプロイし初期化を行う
     function createProxy(
-        bytes32 _hash,
+        uint _hash,
         uint256 _lockTime
     ) external returns (address) {
         bytes memory initializerData = abi.encodeCall(
-            IInheritanceContract.initialize,
-            (_hash, _lockTime)
+            Initialize.initialize,
+            (_hash, _lockTime, msg.sender)
         );
 
         address proxyAddress = address(
