@@ -5,7 +5,7 @@ import {MCDevKit} from "@mc-devkit/Flattened.sol";
 // Interface
 import {InheritanceFacade} from "bundle/inheritance/interfaces/InheritanceFacade.sol";
 // Functions
-import {Initialize} from "bundle/inheritance/functions/initializer/Initialize.sol";
+import {Initialize} from "bundle/inheritance/functions/Initialize.sol";
 import {AddApprovedTokens} from "bundle/inheritance/functions/AddApprovedTokens.sol";
 import {CancelInheritance} from "bundle/inheritance/functions/CancelInheritance.sol";
 import {WithdrawTokens} from "bundle/inheritance/functions/WithdrawTokens.sol";
