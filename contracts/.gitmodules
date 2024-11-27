@@ -1,3 +1,0 @@
-[submodule "lib/mc"]
-	path = lib/mc
-	url = https://github.com/metacontract/mc
