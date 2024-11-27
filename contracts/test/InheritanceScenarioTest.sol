@@ -7,6 +7,7 @@ import {Storage} from "bundle/inheritance/storage/Storage.sol";
 import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceContract.sol";
 import {InheritanceFactory} from "bundle/InheritanceFactory.sol";
 import {TestToken} from "bundle/test/TestToken.sol";
+import {ProofData} from "./ProofData.sol";
 
 contract InheritanceScenarioTest is MCTest {
     using InheritanceDeployer for MCDevKit;
@@ -31,10 +32,9 @@ contract InheritanceScenarioTest is MCTest {
     }
 
     function test_success() public {
-        uint hash = uint(1);
         vm.startPrank(alice);
         inheritanceContract = IInheritanceContract(
-            factory.createProxy(hash, 90 days)
+            factory.createProxy(ProofData.getHash(), 90 days)
         );
         testToken1.approve(address(inheritanceContract), type(uint256).max);
         testToken2.approve(address(inheritanceContract), type(uint256).max);
@@ -47,15 +47,16 @@ contract InheritanceScenarioTest is MCTest {
         uint256[] memory amounts = new uint256[](2);
         amounts[0] = 1e20;
         amounts[1] = 1e20;
-        bytes memory byteData1 = abi.encodePacked(uint256(1));
-        bytes memory byteData2 = abi.encodePacked(uint256(2));
+
+        bytes memory proofBytes1 = abi.encode(ProofData.getProof1());
 
         vm.startPrank(bob);
-        inheritanceContract.initiateInheritance(byteData1);
+        inheritanceContract.initiateInheritance(proofBytes1);
 
         vm.warp(vm.getBlockTimestamp() + 90 days);
 
-        inheritanceContract.withdrawTokens(tokens, amounts, byteData2);
+        bytes memory proofBytes2 = abi.encode(ProofData.getProof2());
+        inheritanceContract.withdrawTokens(tokens, amounts, proofBytes2);
         assertEq(
             testToken1.balanceOf(bob),
             1e20,
