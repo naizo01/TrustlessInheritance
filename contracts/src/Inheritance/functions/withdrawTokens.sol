@@ -14,14 +14,15 @@ contract WithdrawTokens is VerifyZkproof {
      * @param _amounts The amounts of each token to withdraw
      * @param proof The ZK proof for verification
      */
-    function withdrawTokens(address[] calldata _tokens, uint256[] calldata _amounts, bytes calldata proof) external {
+    function withdrawTokens(address[] calldata _tokens, uint256[] calldata _amounts, Schema.ZKProof calldata proof) external {
         require(_tokens.length == _amounts.length, "Tokens and amounts length mismatch");
         
         Schema.InheritanceState storage state = Storage.InheritanceState();
+        bytes32 proofHash = hashZKProof(proof);
 
         require(state.isLocked && !state.isKilled, "Contract is not in locked state or is killed");
         require(block.timestamp >= state.lockStartTime + state.lockDuration, "Lock period has not ended");
-        require(!state.usedProofs[proof], "Proof already used");
+        require(!state.usedProofs[proofHash], "Proof already used");
         
         /*
         approveされた額は0じゃないけど、このコントラクト内の残高は0のトークンをチェックする必要はあるか。
@@ -40,10 +41,15 @@ contract WithdrawTokens is VerifyZkproof {
         }
 
         // Verify ZK proof
-        require(verifyZKProof(proof), "Invalid ZK proof");
+        require(!verifyProof(
+            proof.pA,
+            proof.pB,
+            proof.pC,
+            proof.pubSignals
+        ), "Invalid ZK proof");
 
         // Mark proof as used
-        state.usedProofs[proof] = true;
+        state.usedProofs[proofHash] = true;
 
         // Transfer tokens
         for (uint256 i = 0; i < _tokens.length; i++) {

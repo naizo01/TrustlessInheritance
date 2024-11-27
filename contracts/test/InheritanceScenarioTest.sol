@@ -48,15 +48,13 @@ contract InheritanceScenarioTest is MCTest {
         amounts[0] = 1e20;
         amounts[1] = 1e20;
 
-        bytes memory proofBytes1 = abi.encode(ProofData.getProof1());
-
         vm.startPrank(bob);
-        inheritanceContract.initiateInheritance(proofBytes1);
+        inheritanceContract.initiateInheritance(ProofData.getProof1());
 
         vm.warp(vm.getBlockTimestamp() + 90 days);
-
-        bytes memory proofBytes2 = abi.encode(ProofData.getProof2());
-        inheritanceContract.withdrawTokens(tokens, amounts, proofBytes2);
+        inheritanceContract.isLocked();
+        inheritanceContract.isKilled();
+        inheritanceContract.withdrawTokens(tokens, amounts, ProofData.getProof2());
         assertEq(
             testToken1.balanceOf(bob),
             1e20,

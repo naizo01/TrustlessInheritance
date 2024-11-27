@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
+import {Schema} from "bundle/inheritance/storage/Schema.sol";
+
 /**
  * @title InheritanceContract Interface v0.1.0
  * @custom:version schema:0.1.0
@@ -9,11 +11,13 @@ pragma solidity ^0.8.23;
  * @custom:version events:0.1.0
  */
 interface IInheritanceContract {
+
+
     // Errors
 
     // Events
     event InheritanceCancelled(address indexed owner, address[] approvedTokens);
-    event InheritanceInitiated(address indexed owner, bytes proof, uint256 lockStartTime);
+    event InheritanceInitiated(address indexed owner, bytes32 proof, uint256 lockStartTime);
     event TokensWithdrawn(address indexed beneficiary, address[] tokens, uint256[] amounts);
 
     // Functions
@@ -24,12 +28,30 @@ interface IInheritanceContract {
     function cancelInheritance(address[] calldata _tokens) external;
 
     function initiateInheritance(
-        bytes calldata proof
+        Schema.ZKProof calldata proof
     ) external;
 
     function withdrawTokens(
         address[] calldata _tokens,
         uint256[] calldata _amounts,
-        bytes calldata proof
+        Schema.ZKProof calldata proof
     ) external;
+
+    function owner() external view returns (address);
+
+    function hash() external view returns (uint);
+
+    function isLocked() external view returns (bool);
+
+    function isKilled() external view returns (bool);
+
+    function lockDuration() external view returns (uint256);
+
+    function lockStartTime() external view returns (uint256);
+
+    function nonce() external view returns (uint256);
+
+    function approvedTokens() external view returns (address[] memory);
+
+    function usedProofs(bytes32 proofHash) external view returns (bool);
 }

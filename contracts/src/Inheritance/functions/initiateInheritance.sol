@@ -13,18 +13,23 @@ contract InitiateInheritance is VerifyZkproof {
      * @notice Initiates the inheritance process using ZK proof
      * @param proof The ZK proof for verification
      */
-    function initiateInheritance(bytes calldata proof) external {
+    function initiateInheritance(Schema.ZKProof calldata proof) external {
         Schema.InheritanceState storage state = Storage.InheritanceState();
+        bytes32 proofHash = hashZKProof(proof);
 
         require(!state.isLocked, "Inheritance process already initiated");
         require(!state.isKilled, "Inheritance contract is killed");
-        require(!state.usedProofs[proof], "Proof already used");
+        require(!state.usedProofs[proofHash], "Proof already used");
 
         // Verify ZK proof
-        require(verifyZKProof(proof), "Invalid ZK proof");
-
+        require(!verifyProof(
+            proof.pA,
+            proof.pB,
+            proof.pC,
+            proof.pubSignals
+        ), "Invalid ZK proof");
         // Mark proof as used
-        state.usedProofs[proof] = true;
+        state.usedProofs[proofHash] = true;
 
         // Lock tokens
         for (uint i = 0; i < state.approvedTokens.length; i++) {
@@ -48,6 +53,6 @@ contract InitiateInheritance is VerifyZkproof {
         state.lockStartTime = block.timestamp;
         state.isLocked = true;
 
-        emit IInheritanceContract.InheritanceInitiated(state.owner, proof, state.lockStartTime);
+        emit IInheritanceContract.InheritanceInitiated(state.owner, proofHash, state.lockStartTime);
     }
 }

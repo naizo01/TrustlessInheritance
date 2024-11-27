@@ -15,13 +15,29 @@ contract InheritanceFacade is IInheritanceContract {
     function cancelInheritance(address[] calldata _tokens) external override {}
 
     function initiateInheritance(
-        bytes calldata proof
+        Schema.ZKProof calldata proof
     ) external override {}
 
     function withdrawTokens(
         address[] calldata _tokens,
         uint256[] calldata _amounts,
-        bytes calldata proof
+        Schema.ZKProof calldata proof
     ) external override {}
+    function owner() external view returns (address){}
 
+    function hash() external view returns (uint){}
+
+    function isLocked() external view returns (bool){}
+
+    function isKilled() external view returns (bool){}
+
+    function lockDuration() external view returns (uint256){}
+
+    function lockStartTime() external view returns (uint256){}
+
+    function nonce() external view returns (uint256){}
+
+    function approvedTokens() external view returns (address[] memory){}
+
+    function usedProofs(bytes32 proofHash) external view returns (bool){}
 }

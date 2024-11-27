@@ -42,7 +42,7 @@ contract InheritanceStateViewer {
         return Storage.InheritanceState().approvedTokens;
     }
 
-    function usedProofs(bytes memory proof) external view returns (bool) {
-        return Storage.InheritanceState().usedProofs[proof];
+    function usedProofs(bytes32 proofHash) external view returns (bool) {
+        return Storage.InheritanceState().usedProofs[proofHash];
     }
 }
