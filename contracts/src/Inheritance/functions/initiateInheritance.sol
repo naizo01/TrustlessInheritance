@@ -4,30 +4,34 @@ pragma solidity ^0.8.23;
 import {Storage} from "bundle/inheritance/storage/Storage.sol";
 import {Schema} from "bundle/inheritance/storage/Schema.sol";
 import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceContract.sol";
+import {IInheritanceFactory} from "bundle/inheritance/interfaces/IInheritanceFactory.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
-import {VerifyZkproof} from "bundle/inheritance/functions/zk/VerifyZkproof.sol";
+import {ZKPUtil} from "bundle/inheritance/functions/zk/ZKPUtil.sol";
 
-contract InitiateInheritance is VerifyZkproof {
+contract InitiateInheritance {
     /**
      * @notice Initiates the inheritance process using ZK proof
      * @param proof The ZK proof for verification
      */
     function initiateInheritance(Schema.ZKProof calldata proof) external {
         Schema.InheritanceState storage state = Storage.InheritanceState();
-        bytes32 proofHash = hashZKProof(proof);
+        bytes32 proofHash = ZKPUtil.hashZKProof(proof);
 
         require(!state.isLocked, "Inheritance process already initiated");
         require(!state.isKilled, "Inheritance contract is killed");
         require(!state.usedProofs[proofHash], "Proof already used");
 
         // Verify ZK proof
-        require(!verifyProof(
-            proof.pA,
-            proof.pB,
-            proof.pC,
-            proof.pubSignals
-        ), "Invalid ZK proof");
+        require(
+            IInheritanceFactory(state.factory).verifyProof(
+                proof.pA,
+                proof.pB,
+                proof.pC,
+                proof.pubSignals
+            ),
+            "Invalid ZK proof"
+        );
         // Mark proof as used
         state.usedProofs[proofHash] = true;
 

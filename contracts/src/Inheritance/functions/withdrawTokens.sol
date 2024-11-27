@@ -4,10 +4,12 @@ pragma solidity ^0.8.23;
 import {Storage} from "bundle/inheritance/storage/Storage.sol";
 import {Schema} from "bundle/inheritance/storage/Schema.sol";
 import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceContract.sol";
+import {IInheritanceFactory} from "bundle/inheritance/interfaces/IInheritanceFactory.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {VerifyZkproof} from "bundle/inheritance/functions/zk/VerifyZkproof.sol";
+import {ZKPUtil} from "bundle/inheritance/functions/zk/ZKPUtil.sol";
 
-contract WithdrawTokens is VerifyZkproof {
+
+contract WithdrawTokens {
     /**
      * @notice Withdraws tokens after the lock period using ZK proof
      * @param _tokens The list of token addresses to withdraw
@@ -18,7 +20,7 @@ contract WithdrawTokens is VerifyZkproof {
         require(_tokens.length == _amounts.length, "Tokens and amounts length mismatch");
         
         Schema.InheritanceState storage state = Storage.InheritanceState();
-        bytes32 proofHash = hashZKProof(proof);
+        bytes32 proofHash = ZKPUtil.hashZKProof(proof);
 
         require(state.isLocked && !state.isKilled, "Contract is not in locked state or is killed");
         require(block.timestamp >= state.lockStartTime + state.lockDuration, "Lock period has not ended");
@@ -41,12 +43,15 @@ contract WithdrawTokens is VerifyZkproof {
         }
 
         // Verify ZK proof
-        require(!verifyProof(
-            proof.pA,
-            proof.pB,
-            proof.pC,
-            proof.pubSignals
-        ), "Invalid ZK proof");
+        require(
+            IInheritanceFactory(state.factory).verifyProof(
+                proof.pA,
+                proof.pB,
+                proof.pC,
+                proof.pubSignals
+            ),
+            "Invalid ZK proof"
+        );
 
         // Mark proof as used
         state.usedProofs[proofHash] = true;
