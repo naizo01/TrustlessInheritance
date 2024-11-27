@@ -10,7 +10,7 @@ library Schema {
         uint[2] pA;
         uint[2][2] pB;
         uint[2] pC;
-        uint[2] pubSignals;
+        uint[1] pubSignals;
     }
 
     /// @custom:storage-location erc7201:InheritanceContract.InheritanceState

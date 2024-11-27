@@ -57,31 +57,32 @@ async function main() {
         );
 
         console.log(proof)
+        console.log(publicSignals)
 
         // 5. Foundryテスト用のフォーマットで出力
-        console.log('\nFoundry Test Values:');
-        console.log('=== Copy from here ===');
+//         console.log('\nFoundry Test Values:');
+//         console.log('=== Copy from here ===');
         
-        console.log(`uint256[2] memory pA = [
-    ${proof.pi_a[0]},
-    ${proof.pi_a[1]}
-];`);
+//         console.log(`uint256[2] memory pA = [
+//     ${proof.pi_a[0]},
+//     ${proof.pi_a[1]}
+// ];`);
 
-        console.log(`\nuint256[2][2] memory pB = [
-    [
-        ${proof.pi_b[0][0]},
-        ${proof.pi_b[0][1]}
-    ],
-    [
-        ${proof.pi_b[1][0]},
-        ${proof.pi_b[1][1]}
-    ]
-];`);
+//         console.log(`\nuint256[2][2] memory pB = [
+//     [
+//         ${proof.pi_b[0][0]},
+//         ${proof.pi_b[0][1]}
+//     ],
+//     [
+//         ${proof.pi_b[1][0]},
+//         ${proof.pi_b[1][1]}
+//     ]
+// ];`);
 
-        console.log(`\nuint256[2] memory pC = [
-    ${proof.pi_c[0]},
-    ${proof.pi_c[1]}
-];`);
+//         console.log(`\nuint256[2] memory pC = [
+//     ${proof.pi_c[0]},
+//     ${proof.pi_c[1]}
+// ];`);
 
         console.log(`\nuint256[2] memory pubSignals = [
     ${publicSignals[0]},

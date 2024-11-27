@@ -32,6 +32,6 @@ interface IInheritanceFactory {
         uint[2] memory _pA,
         uint[2][2] memory _pB,
         uint[2] memory _pC,
-        uint[2] memory _pubSignals
+        uint[1] memory _pubSignals
     ) external view returns (bool);
 }
