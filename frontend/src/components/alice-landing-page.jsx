@@ -125,8 +125,7 @@ function SubLandingPage() {
       iconColor: "bg-purple-100 text-purple-500",
       number: "3",
       title: "相続人と共有する秘密情報の登録",
-      description:
-        "相続人は、登録した秘密情報を基に、その地位の正当性を証明します。",
+      description: "正当な相続人の証明に用いる、秘密情報を登録します。",
     },
     {
       icon: Wallet,
