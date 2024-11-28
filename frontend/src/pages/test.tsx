@@ -5,6 +5,7 @@ import CreateProxyButton from '@/components/sample/CreateProxyButton';
 import ProxyCreatedEventsList from '@/components/sample/ProxyCreatedEventsList';
 import { ConnectKitButton } from "connectkit";
 
+
 export default function Home() {
   return (
     <div>
@@ -12,13 +13,13 @@ export default function Home() {
       <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '20px' }}>
         <TokenBalances />
       </div>
-      <div style={{ border: '1px solid #ccc', padding: '10px' }}>
+      <div style={{ border: "1px solid #ccc", padding: "10px" }}>
         <ApproveToken />
       </div>
-      <div style={{ border: '1px solid #ccc', padding: '10px' }}>
+      <div style={{ border: "1px solid #ccc", padding: "10px" }}>
         <CreateProxyButton />
       </div>
-      <div style={{ border: '1px solid #ccc', padding: '10px' }}>
+      <div style={{ border: "1px solid #ccc", padding: "10px" }}>
         <ProxyCreatedEventsList />
       </div>
     </div>
