@@ -5,23 +5,31 @@ import {
   } from "wagmi";
   import inheritanceContractAbi from "@/lib/abi/IInheritanceContract.json";
   
-  export type UseAddApprovedTokensReturn = {
+  // ZKProofの型定義
+  export type ZKProof = {
+    pA: [bigint, bigint];
+    pB: [[bigint, bigint], [bigint, bigint]];
+    pC: [bigint, bigint];
+    pubSignals: [bigint];
+  };
+  
+  export type UseInitiateInheritanceReturn = {
     waitFn: ReturnType<typeof useWaitForTransactionReceipt>;
     writeContract: () => void;
   };
   
-  export default function useAddApprovedTokens(
+  export default function useInitiateInheritance(
     contractAddress: `0x${string}`,
-    tokens: `0x${string}`[]
-  ): UseAddApprovedTokensReturn {
+    proof: ZKProof
+  ): UseInitiateInheritanceReturn {
     const { chain, address: owner } = useAccount();
     const isReady = owner && contractAddress && chain;
   
     const config = {
       address: contractAddress,
       abi: inheritanceContractAbi,
-      functionName: "addApprovedTokens" as const,
-      args: [tokens],
+      functionName: "initiateInheritance" as const,
+      args: [proof],
       chain: chain,
     };
   

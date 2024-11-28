@@ -32,6 +32,7 @@ const CreateProxyButton = () => {
               handleHashInput(value);
             }}
             placeholder="Enter value to hash"
+            style={{ color: 'white'}}
           />
         </label>
       </div>
@@ -43,6 +44,7 @@ const CreateProxyButton = () => {
             value={lockTime.toString()}
             onChange={(e) => setLockTime(BigInt(e.target.value))}
             placeholder="Enter lock time"
+            style={{ color: 'white'}}
           />
         </label>
       </div>

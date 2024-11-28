@@ -5,23 +5,22 @@ import {
   } from "wagmi";
   import inheritanceContractAbi from "@/lib/abi/IInheritanceContract.json";
   
-  export type UseAddApprovedTokensReturn = {
+  export type UseCancelInheritanceReturn = {
     waitFn: ReturnType<typeof useWaitForTransactionReceipt>;
     writeContract: () => void;
   };
   
-  export default function useAddApprovedTokens(
-    contractAddress: `0x${string}`,
-    tokens: `0x${string}`[]
-  ): UseAddApprovedTokensReturn {
+  export default function useCancelInheritance(
+    contractAddress: `0x${string}`
+  ): UseCancelInheritanceReturn {
     const { chain, address: owner } = useAccount();
     const isReady = owner && contractAddress && chain;
   
     const config = {
       address: contractAddress,
       abi: inheritanceContractAbi,
-      functionName: "addApprovedTokens" as const,
-      args: [tokens],
+      functionName: "cancelInheritance" as const,
+      args: [],
       chain: chain,
     };
   
