@@ -1,9 +1,7 @@
-import { useEffect } from "react";
-import { useReadContract, useAccount } from "wagmi";
+import { useReadContract } from "wagmi";
 import { erc20Abi } from "viem";
 
 export default function useBalanceOf(address, tokenAddress) {
-  const { address: accentAddress } = useAccount();
   const config = {
     address: tokenAddress,
     abi: erc20Abi,
@@ -13,9 +11,8 @@ export default function useBalanceOf(address, tokenAddress) {
     functionName: "balanceOf",
     args: [address],
     query: {
-      enabled: !!accentAddress,
+      enabled: !!address,
     },
   });
-
   return readFn;
 }

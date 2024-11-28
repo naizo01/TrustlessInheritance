@@ -1,21 +1,21 @@
 import "../app/globals.css"; // グローバルなCSSをインポート
 import type { AppProps } from "next/app";
 import { WagmiProvider, createConfig, http } from "wagmi";
-import { mainnet } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 import { PostProvider } from "@/app/postContext";
+import { anvil, baseSepolia } from "viem/chains";
 
 const config = createConfig(
   getDefaultConfig({
     // Your dApps chains
-    chains: [mainnet],
+    chains: [baseSepolia, anvil],
     transports: {
       // RPC URL for each chain
-      [mainnet.id]: http(
-        `https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`
-      ),
+      [baseSepolia.id]: http(),
+      [anvil.id]: http(),
     },
+    ssr: true,
 
     // Required API Keys
     walletConnectProjectId:
