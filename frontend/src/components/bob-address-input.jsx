@@ -27,25 +27,6 @@ import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
 import { usePosts } from "@/app/postContext";
 
-// Dummy search results
-// const dummySearchResults = [
-//   {
-//     id: 1,
-//     secret: "3時のおやつはババロア",
-//     address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
-//   },
-//   {
-//     id: 2,
-//     secret: "3時のおやつカンパニー",
-//     address: "0xB8A1726abC8b984c60DD400370AA846705175c4D",
-//   },
-//   {
-//     id: 3,
-//     secret: "鈴木一郎が同級生",
-//     address: "0x1e290652CaeDF92cf430DCa1c5B6faC90F4A13D9",
-//   },
-// ];
-
 export default function AddressInputPage() {
   const { state, dispatch } = useBobState();
 

@@ -29,6 +29,7 @@ export function Header({
           { text: "注意事項", onClick: () => scrollToSection("cautions") },
         ]
       : []),
+    { text: "検索", href: "/charlie" },
     { text: "被相続人用", href: "/alice" },
     { text: "相続人用", href: "/bob" },
   ];

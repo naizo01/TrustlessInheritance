@@ -46,6 +46,7 @@ export default function ApproveToken() {
                 assets.find((token) => token.symbol === e.target.value)
               )
             }
+            style={{ color: 'white'}}
           >
             {assets.map((token) => (
               <option key={token.symbol} value={token.symbol}>
@@ -63,6 +64,7 @@ export default function ApproveToken() {
             value={approveAddress}
             onChange={(e) => setApproveAddress(e.target.value)}
             placeholder="Enter address"
+            style={{ color: 'white'}}
           />
         </label>
       </div>

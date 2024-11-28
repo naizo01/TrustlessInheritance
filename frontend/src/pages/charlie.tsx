@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { Button } from "@/components/ui/button"
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,10 +9,10 @@ import {
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { ArrowRight, Search, AlertCircle } from 'lucide-react'
-import { isAddress } from "ethers"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ArrowRight, Search, AlertCircle } from "lucide-react";
+import { isAddress } from "ethers";
 import {
   Table,
   TableBody,
@@ -20,9 +20,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Header } from "@/components/common/variable-header"
+} from "@/components/ui/table";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Header } from "@/components/common/variable-header";
 
 const availableAddresses = [
   "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
@@ -67,7 +67,7 @@ const mockData = {
 };
 
 const fetchInheritanceData = async (address: string) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
   if (address in mockData) {
     return mockData[address as keyof typeof mockData];
   }
@@ -75,46 +75,46 @@ const fetchInheritanceData = async (address: string) => {
 };
 
 export default function InheritanceDataCheck() {
-  const [address, setAddress] = useState("")
-  const [isValidAddress, setIsValidAddress] = useState(false)
-  const [inheritanceData, setInheritanceData] = useState<any>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState("")
+  const [address, setAddress] = useState("");
+  const [isValidAddress, setIsValidAddress] = useState(false);
+  const [inheritanceData, setInheritanceData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputAddress = e.target.value
-    setAddress(inputAddress)
-    setIsValidAddress(isAddress(inputAddress))
-    
+    const inputAddress = e.target.value;
+    setAddress(inputAddress);
+    setIsValidAddress(isAddress(inputAddress));
+
     // アドレスの自動補完
-    const matchedAddresses = availableAddresses.filter(addr => 
+    const matchedAddresses = availableAddresses.filter((addr) =>
       addr.toLowerCase().startsWith(inputAddress.toLowerCase())
     );
     setSuggestions(matchedAddresses);
-  }
+  };
 
   const handleSearch = async () => {
-    if (!isValidAddress) return
+    if (!isValidAddress) return;
 
-    setIsLoading(true)
-    setError("")
+    setIsLoading(true);
+    setError("");
     try {
-      const data = await fetchInheritanceData(address)
-      setInheritanceData(data)
+      const data = await fetchInheritanceData(address);
+      setInheritanceData(data);
     } catch (err) {
-      setError("データの取得に失敗しました。もう一度お試しください。")
-      setInheritanceData(null)
+      setError("データの取得に失敗しました。もう一度お試しください。");
+      setInheritanceData(null);
     }
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
       <Header
         scrolled={false}
         scrollToSection={() => {}}
-        showLandingPageButtons={true}
+        showLandingPageButtons={false}
         appBadgeText="相続データ確認"
         appBadgeClassName=""
       />
@@ -193,13 +193,15 @@ export default function InheritanceDataCheck() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {inheritanceData.assets.map((asset: any, index: number) => (
-                          <TableRow key={index}>
-                            <TableCell>{asset.name}</TableCell>
-                            <TableCell>{asset.balance}</TableCell>
-                            <TableCell>{asset.value}</TableCell>
-                          </TableRow>
-                        ))}
+                        {inheritanceData.assets.map(
+                          (asset: any, index: number) => (
+                            <TableRow key={index}>
+                              <TableCell>{asset.name}</TableCell>
+                              <TableCell>{asset.balance}</TableCell>
+                              <TableCell>{asset.value}</TableCell>
+                            </TableRow>
+                          )
+                        )}
                       </TableBody>
                     </Table>
                   </CardContent>
@@ -218,12 +220,14 @@ export default function InheritanceDataCheck() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {inheritanceData.inheritors.map((inheritor: any, index: number) => (
-                          <TableRow key={index}>
-                            <TableCell>{inheritor.address}</TableCell>
-                            <TableCell>{inheritor.share}</TableCell>
-                          </TableRow>
-                        ))}
+                        {inheritanceData.inheritors.map(
+                          (inheritor: any, index: number) => (
+                            <TableRow key={index}>
+                              <TableCell>{inheritor.address}</TableCell>
+                              <TableCell>{inheritor.share}</TableCell>
+                            </TableRow>
+                          )
+                        )}
                       </TableBody>
                     </Table>
                   </CardContent>
@@ -241,6 +245,5 @@ export default function InheritanceDataCheck() {
         </Card>
       </main>
     </div>
-  )
+  );
 }
-
