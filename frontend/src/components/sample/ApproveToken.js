@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useAccount } from "wagmi";
 import useApprove from "@/hooks/useApprove";
 import { assets } from "@/lib/token";
@@ -6,18 +6,23 @@ import { assets } from "@/lib/token";
 export default function ApproveToken() {
   const { address: userAddress } = useAccount();
   const [selectedToken, setSelectedToken] = useState(assets[0]);
+  const [approveAddress, setApproveAddress] = useState("");
 
   // uint256の最大値
   const maxUint256 = BigInt("0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
 
   const { writeContract, waitFn, readFn } = useApprove(
-    "0x5E4D21133Ff33327db9edfE879edf3Acc45e7330",
+    approveAddress || "0x5E4D21133Ff33327db9edfE879edf3Acc45e7330",
     selectedToken.address,
     maxUint256
   );
 
   const handleApprove = () => {
-    writeContract();
+    if (approveAddress) {
+      writeContract();
+    } else {
+      alert("Please enter a valid address to approve.");
+    }
   };
 
   const getButtonText = () => {
@@ -50,6 +55,17 @@ export default function ApproveToken() {
           </select>
         </label>
       </div>
+      <div>
+        <label>
+          Approve Address:
+          <input
+            type="text"
+            value={approveAddress}
+            onChange={(e) => setApproveAddress(e.target.value)}
+            placeholder="Enter address"
+          />
+        </label>
+      </div>
       <button onClick={handleApprove} disabled={!userAddress || waitFn.isLoading}>
         {getButtonText()}
       </button>
@@ -58,7 +74,7 @@ export default function ApproveToken() {
       {waitFn.isError && <p>Transaction failed. Please try again.</p>}
       <div>
         <h3>Current Allowance</h3>
-        <p>{readFn.data ? readFn.data.toString(): 0}</p>
+        <p>{readFn.data ? readFn.data.toString() : 0}</p>
       </div>
     </div>
   );
