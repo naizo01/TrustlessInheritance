@@ -28,10 +28,12 @@ function stringToNumber(str: string): string {
 * @param input 入力値（数値文字列）
 * @returns ハッシュ値
 */
-async function calculatePoseidonHash(input: string): Promise<string> {
-   const poseidon = await buildPoseidon();
-   return poseidon.F.toString(poseidon([input]));
-}
+export async function calculatePoseidonHash(input: string): Promise<string> {
+    const poseidon = await buildPoseidon();
+    const hash = poseidon.F.toString(poseidon([input]));
+    const solidityHash = BigInt(hash).toString(16);
+    return "0x" + solidityHash;
+ }
 
 export async function generateProof(secret: string): Promise<ProofData> {
   try {
