@@ -4,9 +4,10 @@ import { createPublicClient, http } from "viem";
 import { anvil, baseSepolia } from "viem/chains";
 
 export default async function getProxyCreatedEvents() {
+  const apikey = process.env.NEXT_PUBLIC_ALCHEMY_ID
   const publicClient = createPublicClient({
     chain: baseSepolia,
-    transport: http('https://sepolia.base.org') 
+    transport: http(`https://base-sepolia.g.alchemy.com/v2/${apikey}`) 
   });
   const abi = parseAbiItem("event ProxyCreated(address indexed,address, uint)")
   const filter = await publicClient.createEventFilter({
