@@ -22,7 +22,7 @@ const CreateProxyButton = () => {
     <div>
       <div>
         <label>
-          Value to Hash:
+          private value:
           <input
             type="number"
             value={inputValue}
