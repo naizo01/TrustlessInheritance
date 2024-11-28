@@ -1,6 +1,11 @@
 import React from "react";
 import TokenBalances from "@/components/sample/TokenBalances";
 import ApproveToken from "@/components/sample/ApproveToken";
+import React from "react";
+import TokenBalances from "@/components/sample/TokenBalances";
+import ApproveToken from "@/components/sample/ApproveToken";
+import CreateProxyButton from "@/components/sample/CreateProxyButton";
+import ProxyCreatedEventsList from "@/components/sample/ProxyCreatedEventsList";
 
 export default function Home() {
   return (
@@ -16,6 +21,12 @@ export default function Home() {
       </div>
       <div style={{ border: "1px solid #ccc", padding: "10px" }}>
         <ApproveToken />
+      </div>
+      <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+        <CreateProxyButton />
+      </div>
+      <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+        <ProxyCreatedEventsList />
       </div>
     </div>
   );
