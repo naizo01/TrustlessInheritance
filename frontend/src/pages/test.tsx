@@ -1,9 +1,6 @@
 import React from "react";
 import TokenBalances from "@/components/sample/TokenBalances";
 import ApproveToken from "@/components/sample/ApproveToken";
-import React from "react";
-import TokenBalances from "@/components/sample/TokenBalances";
-import ApproveToken from "@/components/sample/ApproveToken";
 import CreateProxyButton from "@/components/sample/CreateProxyButton";
 import ProxyCreatedEventsList from "@/components/sample/ProxyCreatedEventsList";
 
