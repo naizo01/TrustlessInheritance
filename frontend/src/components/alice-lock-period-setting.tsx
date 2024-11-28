@@ -1,27 +1,39 @@
-"use client"
+"use client";
 
-import { motion, AnimatePresence } from "framer-motion"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-} from "@/components/ui/dialog"
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
 
 import { useState } from "react";
 import { Header } from "@/components/common/variable-header";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
 
+// Define types for the state and actions
+type AliceState = {
+  // Add other state properties as needed
+  lockPeriod: string;
+};
+
+type AliceAction =
+  | { type: typeof ALICE_ACTIONS.SET_LOCK_PERIOD; payload: string }
+  | { type: typeof ALICE_ACTIONS.MOVE_FORWARD };
+
+type AliceDispatch = React.Dispatch<AliceAction>;
+
 export default function LockPeriodSetting() {
-  const { state, dispatch } = useAliceState(); // オブジェクトのプロパティを直接使用
+  const { state, dispatch } = useAliceState() as {
+    state: AliceState;
+    dispatch: AliceDispatch;
+  }; // オブジェクトのプロパティを直接使用
   const [period, setPeriod] = useState<string>("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const handleQuickSelect = (months: number) => {
-    setPeriod(months.toString())
+    setPeriod(months.toString());
   };
-  const handleConfirm = () => {
+  const handleConfirm = (): void => {
+    dispatch({ type: ALICE_ACTIONS.SET_LOCK_PERIOD, payload: Number(period) });
     dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   };
 
@@ -46,8 +58,12 @@ export default function LockPeriodSetting() {
                   最初にロック期間を設定してください。
                 </h1>
                 <ul className="space-y-2 text-gray-600 dark:text-gray-400">
-                  <li>・相続開始後、一定期間は資産を引き出すことができます。</li>
-                  <li>・ロック期間中は、万が一不正な申請が行われた場合でも資産を取り戻すことができます。</li>
+                  <li>
+                    ・相続開始後、一定期間は資産を引き出すことができます。
+                  </li>
+                  <li>
+                    ・ロック期間中は、万が一不正な申請が行われた場合でも資産を取り戻すことができます。
+                  </li>
                 </ul>
               </div>
 
@@ -131,10 +147,7 @@ export default function LockPeriodSetting() {
               <p>です。よろしいですか？</p>
             </div>
             <DialogFooter className="flex gap-4 mt-6">
-              <Button
-                variant="outline"
-                className="flex-1"
-              >
+              <Button variant="outline" className="flex-1">
                 戻る
               </Button>
               <Button
@@ -148,5 +161,5 @@ export default function LockPeriodSetting() {
         </Dialog>
       </div>
     </div>
-  )
+  );
 }
