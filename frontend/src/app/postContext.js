@@ -55,21 +55,23 @@ const dummyTransactions = [
 const dummyPositions = [
   {
     address: "0xE0F189CfdCfeda40A28dc577D7c26C2Ad6CeeB6A",
-    token: {
+    tokens: {
       ETH: "10000000000000000000",
       USDT: "1000000000",
       USDC: "1000000000",
       DAI: "1000000000000000000000",
     },
+    secret: null,
   },
   {
-    address: "0x0", // Replace with a valid eth address
-    token: {
-      ETH: "10000000000000000000",
-      USDT: "1000000000",
-      USDC: "1000000000",
-      DAI: "1000000000000000000000",
+    address: "0xbc0C6ae768e9D2d5454055cd0997ff9f9C32dCAe", // my address
+    tokens: {
+      ETH: "30000000000000000000",
+      USDT: "2500000000",
+      USDC: "800000000",
+      DAI: "500000000000000000000",
     },
+    secret: null,
   },
 ];
 
