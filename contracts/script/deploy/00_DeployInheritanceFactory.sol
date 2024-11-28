@@ -5,7 +5,7 @@ import {MCScript, MCDevKit} from "@mc-devkit/Flattened.sol";
 import "bundle/Inheritance/InheritanceFactory.sol";
 
 contract DeployInheritanceFactory is MCScript {
-    function run() external  startBroadcastWith("DEPLOYER_PRIV_KEY") {
+    function run() external  startBroadcastWith("PRIVATE_KEY") {
         // InheritanceFactoryコントラクトのデプロイ
         InheritanceFactory factory = new InheritanceFactory();
 
