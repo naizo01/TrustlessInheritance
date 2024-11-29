@@ -2,18 +2,17 @@ const snarkjs = require("snarkjs");
 const fs = require("fs");
 
 (async function () {
-    // 入力データの準備
-    // 例として、ASCIIコードの配列を使用
-    const inputArray = [80, 97, 115, 115, 119, 111, 114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // "Password" + padding
+    // 数値入力の準備
+    let input = 9999999999;
 
     // 証明の生成
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
-        { in: inputArray },
-        "build/password_validator_js/password_validator.wasm",
+        { in : input },
+        "build/Password_validator_js/Password_validator.wasm",
         "circuit_password.zkey"
     );
 
-    console.log("Public Signals:", publicSignals);
+    console.log("Public Signals (Length):", publicSignals); // 文字列の長さを出力
     console.log("Proof:", proof);
 
     // Solidity用のコールデータの生成

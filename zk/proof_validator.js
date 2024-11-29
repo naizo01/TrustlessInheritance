@@ -14,7 +14,7 @@ const fs = require("fs");
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         { in: inputArray, hash: hash },
         "build/poseidon_validator_js/poseidon_validator.wasm",
-        "circuit_0001.zkey"
+        "circuit_validator.zkey"
     );
 
     console.log("Public Signals:", publicSignals);

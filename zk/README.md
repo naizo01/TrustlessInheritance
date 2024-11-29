@@ -19,4 +19,5 @@ circom Password_validator.circom --wasm --r1cs -o ./build
 npx snarkjs groth16 setup build/Password_validator.r1cs powersOfTau28_hez_final_12.ptau circuit_password.zkey
 npx snarkjs zkey export verificationkey circuit_password.zkey verification_key_password.json
 npx snarkjs zkey export solidityverifier circuit_password.zkey Groth16Verifier_password.sol
+node verify_password.js 
 ```
