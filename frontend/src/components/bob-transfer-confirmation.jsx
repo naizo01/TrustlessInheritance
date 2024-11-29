@@ -104,10 +104,10 @@ export default function TransferConfirmationPage() {
     dispatch({ type: BOB_ACTIONS.MOVE_SPECIFIC, payload: 3 });
   };
 
-  const formatNumber = (num) => {
+  const formatNumber = (num, decimal = 2) => {
     return num.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      minimumFractionDigits: decimal,
+      maximumFractionDigits: decimal,
     });
   };
 
@@ -184,10 +184,10 @@ export default function TransferConfirmationPage() {
                       </TableCell>
                       <TableCell>{asset.type}</TableCell>
                       <TableCell className="text-right">
-                        {formatNumber(asset.balance)}
+                        {formatNumber(asset.balance, 3)}
                       </TableCell>
                       <TableCell className="text-right">
-                        {formatNumber(asset.transfer)}
+                        {formatNumber(asset.transfer, 3)}
                       </TableCell>
                     </TableRow>
                   ))}

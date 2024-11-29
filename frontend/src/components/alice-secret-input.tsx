@@ -9,29 +9,34 @@ import { ArrowLeft } from "lucide-react";
 import { Header } from "@/components/common/variable-header";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
 
-export default function LockPeriodSetting({
-  onClick,
-}: {
-  onClick: (num: number) => void;
-}) {
-  const { state, dispatch } = useAliceState(); // オブジェクトのプロパティを直接使用
-  const [secretInfo, setSecretInfo] = useState("");
+// Define the type for the dispatch function
+type AliceDispatch = React.Dispatch<AliceAction>;
 
-  // const handleNext = () => {
-  //   dispatch({ type: ALICE_ACTIONS.SET_SECRET, payload: secretInfo });
-  //   dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
-  // };
+// Define the type for Alice actions
+type AliceAction =
+  | { type: typeof ALICE_ACTIONS.SET_SECRET; payload: string }
+  | { type: typeof ALICE_ACTIONS.MOVE_FORWARD }
+  | { type: typeof ALICE_ACTIONS.MOVE_BACKWARD };
 
-  // const handlePrevious = () => {
-  //   dispatch({ type: ALICE_ACTIONS.MOVE_BACKWARD });
-  // };
+export default function LockPeriodSetting() {
+  const { dispatch } = useAliceState() as { dispatch: AliceDispatch }; // オブジェクトのプロパティを直接使用
+  const [secretInfo, setSecretInfo] = useState<string>("");
 
-  const handleSubmit = () => {
-    // 秘密情報登録のロジックをここに実装
-    console.log("秘密情報を登録:", secretInfo);
-    if (typeof onClick === "function") {
-    }
+  const handleNext = (): void => {
+    dispatch({ type: ALICE_ACTIONS.SET_SECRET, payload: secretInfo });
+    dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   };
+
+  const handlePrevious = (): void => {
+    dispatch({ type: ALICE_ACTIONS.MOVE_BACKWARD });
+  };
+
+  // const handleSubmit = () => {
+  //   // 秘密情報登録のロジックをここに実装
+  //   console.log("秘密情報を登録:", secretInfo);
+  //   if (typeof onClick === "function") {
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -67,14 +72,14 @@ export default function LockPeriodSetting({
                 <Button
                   variant="outline"
                   className="flex-1"
-                  // onClick={handlePrevious}
+                  onClick={handlePrevious}
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   前画面へ戻る
                 </Button>
                 <Button
                   className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                  // onClick={handleNext}
+                  onClick={handleNext}
                   disabled={!secretInfo}
                 >
                   秘密情報の登録

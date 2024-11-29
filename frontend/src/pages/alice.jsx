@@ -8,9 +8,10 @@ import { InheritanceUi } from "@/components/inheritance-ui";
 //import BobLandingPage from "@/components/bob-landing-page";
 import LockPeriodSetting from "@/components/alice-lock-period-setting";
 import SecretInput from "@/components/alice-secret-input";
-import InheritanceAssetSelection from "@/components/alice-inheritance-asset-selection";
+import InheritanceAssetSelection from "@/components/alice-inheritance-asset-selection.jsx";
 import InheritanceStatus from "@/components/alice-inheritance-status";
 import SubLandingPage from "@/components/alice-landing-page";
+import InheritanceAssetConfirmation from "@/components/alice-inheritance-asset-confirmation";
 import { PostProvider, usePosts } from "@/app/postContext";
 
 // Aliceのデータを管理するためのContextを作成します
@@ -49,6 +50,7 @@ export const ALICE_ACTIONS = {
   SET_GRANTED: "SET_GRANTED",
   SET_OPENING: "SET_OPENING",
   SET_SECRET: "SET_SECRET",
+  RESET_STATE: "RESET_STATE",
 };
 
 // Reducerを定義: 現在の状態とアクションに基づいて新しい状態を返します
@@ -67,7 +69,7 @@ function aliceReducer(state, action) {
     case ALICE_ACTIONS.SET_GRANTED:
       return { ...state, granted: action.payload };
     case ALICE_ACTIONS.SET_LOCK_PERIOD:
-      return { ...state, lockPeriod: action.payload };
+      return { ...state, lockPeriod: +action.payload };
     case ALICE_ACTIONS.SET_SUBMITTED:
       return { ...state, status: "submitted" };
     case ALICE_ACTIONS.SET_OPENING:
@@ -82,6 +84,8 @@ function aliceReducer(state, action) {
       };
     case ALICE_ACTIONS.SET_SECRET:
       return { ...state, secret: action.payload };
+    case ALICE_ACTIONS.RESET_STATE:
+      return { ...initialState };
     default:
       throw new Error("unknown action required");
   }
@@ -104,6 +108,8 @@ export default function Home() {
         return <SecretInput />;
       case 3:
         return <InheritanceAssetSelection />;
+      case 4:
+        return <InheritanceAssetConfirmation />;
       default:
         throw new Error("unknown step required");
     }

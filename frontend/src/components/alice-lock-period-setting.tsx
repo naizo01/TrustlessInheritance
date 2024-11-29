@@ -37,6 +37,12 @@ export default function LockPeriodSetting() {
   //   dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   // };
 
+  const handleConfirm = () => {
+    dispatch({ type: ALICE_ACTIONS.SET_LOCK_PERIOD, payload: period });
+    dispatch({ type: ALICE_ACTIONS.SET_LOCK_END_DATE });
+    dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <Header
@@ -152,7 +158,7 @@ export default function LockPeriodSetting() {
               </Button>
               <Button
                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                // onClick={handleConfirm}
+                onClick={handleConfirm}
               >
                 OK
               </Button>
