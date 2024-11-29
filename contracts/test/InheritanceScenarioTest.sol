@@ -68,5 +68,4 @@ contract InheritanceScenarioTest is MCTest {
         vm.stopPrank();
     }
 
-    receive() external payable {}
 }
