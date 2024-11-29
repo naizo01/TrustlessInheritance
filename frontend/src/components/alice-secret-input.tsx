@@ -17,14 +17,14 @@ export default function LockPeriodSetting({
   const { state, dispatch } = useAliceState(); // オブジェクトのプロパティを直接使用
   const [secretInfo, setSecretInfo] = useState("");
 
-  const handleNext = () => {
-    dispatch({ type: ALICE_ACTIONS.SET_SECRET, payload: secretInfo });
-    dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
-  };
+  // const handleNext = () => {
+  //   dispatch({ type: ALICE_ACTIONS.SET_SECRET, payload: secretInfo });
+  //   dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
+  // };
 
-  const handlePrevious = () => {
-    dispatch({ type: ALICE_ACTIONS.MOVE_BACKWARD });
-  };
+  // const handlePrevious = () => {
+  //   dispatch({ type: ALICE_ACTIONS.MOVE_BACKWARD });
+  // };
 
   const handleSubmit = () => {
     // 秘密情報登録のロジックをここに実装
@@ -67,14 +67,14 @@ export default function LockPeriodSetting({
                 <Button
                   variant="outline"
                   className="flex-1"
-                  onClick={handlePrevious}
+                  // onClick={handlePrevious}
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   前画面へ戻る
                 </Button>
                 <Button
                   className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={handleNext}
+                  // onClick={handleNext}
                   disabled={!secretInfo}
                 >
                   秘密情報の登録

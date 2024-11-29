@@ -35,10 +35,10 @@ export default function InheritanceAssetSelection({
   onClick: (num: number) => void;
 }) {
   const { state, dispatch } = useAliceState(); // オブジェクトのプロパティを直接使用
-  const handleNext = () => {
-    dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
-    dispatch({ type: ALICE_ACTIONS.SET_OPENING });
-  };
+  // const handleNext = () => {
+  //   dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
+  //   dispatch({ type: ALICE_ACTIONS.SET_OPENING });
+  // };
   const router = useRouter();
   const [assets, setAssets] = useState<Asset[]>([
     {
@@ -128,9 +128,9 @@ export default function InheritanceAssetSelection({
     router.push("/lock-period");
   };
 
-  const handleMoveBackword = () => {
-    dispatch({ type: ALICE_ACTIONS.MOVE_BACKWARD });
-  };
+  // const handleMoveBackword = () => {
+  //   dispatch({ type: ALICE_ACTIONS.MOVE_BACKWARD });
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -223,7 +223,7 @@ export default function InheritanceAssetSelection({
               <div className="flex flex-col gap-4">
                 <Button
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6"
-                  onClick={handleNext}
+                  // onClick={handleNext}
                   disabled={!assets.some((asset) => asset.selected)}
                 >
                   選択した資産の相続を許可
@@ -231,7 +231,7 @@ export default function InheritanceAssetSelection({
                 <Button
                   variant="outline"
                   className="w-full"
-                  onClick={handleMoveBackword}
+                  // onClick={handleMoveBackword}
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   前画面へ戻る
