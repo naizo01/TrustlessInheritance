@@ -13,25 +13,25 @@ library ProofData {
         return
             Schema.ZKProof({
                 pA: [
-                    0x1c47eb0f8ddf19edb4add8d08d24f64807c1c1388c42f786665a9bc6a6cf41c6,
-                    0x2cee9379edb8a7961fbf8d122a8a8774b440ab76066e20d360a9dd09c01ebb8d
+                    0x1e15968851ae2ea7133f03bdf8061fde8cd751998aaf37bca16e7cc454930cd5,
+                    0x147c53fc481a8ed7be0233ebd8252b2206bcab71e668c3223c3ddd3ca45f65b8
                 ],
                 pB: [
                     [
-                        0x1ad1020e66cee666a3f22782916cdb3dc27792ec96c6fbd2a722f56a610d4a0c,
-                        0x0856580846bc495168eb4a3337c69a16286c94387558c9207366e033be03a408
+                        0x1b59a4ba09f9cd8b696bd69a08c068533645b785681d3182d944d49e54da72ce,
+                        0x1124dc7264974f2fbc3ae41a7ec5b8be5f68b53c8c09683706b2a56a7e315cf0
                     ],
                     [
-                        0x04e1c3dc2b3a8113f2ad52e1844ba6d3aa09628b5deca9264c51764671ca0a7d,
-                        0x1bdbfadc9ba1f032dbf673fda729e1742875398764f22f02f080b9cbe4df98cb
+                        0x04bb201135b69da303fd75844741e708b2ef352bee1177d97a401b55de1f2d1d,
+                        0x2c4a2f9c0d02251bee8a5d838d24a644a20b0373ec22c179c82acfb1b74d80b9
                     ]
                 ],
                 pC: [
-                    0x08091c0923fc9cce2442a64e4f4bb09577bdba74fe2e58a3b17f000838e14e40,
-                    0x03922b405a413629b3f700d03e810fbdaa396c3b33e54134bc09cc848bb971a0
+                    0x0fdee69e61d95a4c2e4fd2c96d746fcbe74c862b9eba4db95fb4dd18112ab75a,
+                    0x00cdaae8eb225a01a4ef694c67756325c486c5554c4e6985c93ff02cd6994c8f
                 ],
                 pubSignals: [
-                    0x2778f900758cc46e051040641348de3dacc6d2a31e2963f22cbbfb8f65464241
+                    0x0fb849f7cf35865c838cef48782e803b2c38263e2f467799c87eff168eb4d897
                 ]
             });
     }
@@ -40,25 +40,25 @@ library ProofData {
         return
             Schema.ZKProof({
                 pA: [
-                    0x036020a79758e0294650c3ea4fc4a5aa46b1ea06a6315daaecdb2eb7063ed14c,
-                    0x0c4b7acca98f2b68fc8a5e13571da207c78b49c451c3d507f11cbc8bcb4d2edf
+                    0x2c2542e6f8de48029b034e20041613826100e22630319562d2fbf969f26ee74b,
+                    0x1db65c9327655392c22702a0d4559f1cac427dcf9e562bea7b515f391384fa55
                 ],
                 pB: [
                     [
-                        0x0e219a86bbca2ed02bb2e8cc45e428457a4bc8fc5eb8e36a947c41582213a2ec,
-                        0x08caff9fb06e9671230ecae7f80ad0c3eaabc16b04e6df63956eea0d6213708b
+                        0x22772d516603cfec5f967c9cc618545c6cc90447a54df3cf89d67e7a1af3be0e,
+                        0x075ec505670f10e264425b3edd9ba75a51258eaa107c30c92adfad46b5423817
                     ],
                     [
-                        0x09b40b3f67702564b67684ae5da37fd54dfcca731c6b99d19e775b70cc566c5c,
-                        0x10e3197a94b93411693f5e2fb119b711ea77e16dd9ed6497c2c13f341a2e3c2b
+                        0x122fbd675f0ef26d5f5ecd76d648b7a565c645fdbf2c3e70687001b88f140e79,
+                        0x082695c40c797104fc7ec3f56856a1e381bc2c0e402ccd0338d76093b5a31eb5
                     ]
                 ],
                 pC: [
-                    0x15edc754e752259785b2b345f72f6e75cf27cb22f7e693476e8a3911a009b2b4,
-                    0x1e97a78bd5be55d3de9c2dcefeaa93ea07a62a5eaf3c8c63cc8f478c31c59adc
+                    0x012c48bae27f130d7331fd1ba3451baae5a02964a37fefd481cfeda3b822b96d,
+                    0x1daa3e53c230146171777b35d1f414f73b89cee75d0f3dfae47a09cca9507b88
                 ],
                 pubSignals: [
-                    0x2778f900758cc46e051040641348de3dacc6d2a31e2963f22cbbfb8f65464241
+                    0x0fb849f7cf35865c838cef48782e803b2c38263e2f467799c87eff168eb4d897
                 ]
             });
     }
@@ -71,27 +71,25 @@ library ProofData {
         return
             Schema.ZKProof({
                 pA: [
-                    0x2833183146448bf3463ff91a0535df07c050a587fb5d0b335b93f046161ecbc4,
-                    0x0fe0c4c7396526aad83d3fa3e5a8cecf25cba5f59a659627f2ae7501a80dc9fd
+                    0x00e8bff94ca04173d7563644afe4d369864533105d0ecad3f7945d0408b052ec,
+                    0x2ed85957d465e5ea1aaf36ff68715861550a173b18aa594240e49defbc25bc86
                 ],
                 pB: [
                     [
-                        0x12403e95e8d8e51cdea55447ad0b63fee2cb2005312e7b0165cbbc909176a747,
-                        0x21563bd855faf219c391da4dc47e2913bf687848b1a152e535e6c5bf16122845
+                        0x139a3b52c94e3ac9bea92d0de5b0e074dc52474af4676236ff9c52d8c087904c,
+                        0x23f202f8e5bad06561c17ec3ab25d3db7e1574d51eea48b2a1c72530801b9069
                     ],
                     [
-                        0x2fbd7c5604d968d18368a0df81d9c97fda59252774e006c0b3177f6a35d5e3d4,
-                        0x02e6cdc61a48db790f5ed7c66a4763e58f1dedef60d9ea6075ac6dcb4c285f68
+                        0x069d4dba4fcf27e171059ebbb125f53eaa8c4716f8b5fb605f3ed2a02c8b90ba,
+                        0x092f1ecbfd8c33d49e279b10fccceb4d597198fa70f7674aa1fe140f3128c5e2
                     ]
                 ],
                 pC: [
-                    0x26b91476415ea635a1e53af61e7f9cc28f4a0e31600201c0a49fbe7e28eba39b,
-                    0x1b88c2e14050c600b315701ea492513e2d1955789be9b5e6d50cce3e0414fa73
+                    0x01038d4edf8544a3633fb7d39b1b2716c1261506fa436d8601131e9954cd0f97,
+                    0x21066697298954f87e511d84ce606d47e0a129cbbcea7e2b083636dd3989506a
                 ],
                 pubSignals: [
-                    uint256(
-                        0x0000000000000000000000000000000000000000000000000000000000000000
-                    )
+                    0x0fb849f7cf35865c838cef48782e803b2c38263e2f467799c87eff168eb4d897
                 ]
             });
     }

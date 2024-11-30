@@ -6,7 +6,7 @@ import {Initialize} from "bundle/inheritance/functions/Initialize.sol";
 import {IInheritanceFactory} from "bundle/inheritance/interfaces/IInheritanceFactory.sol";
 import {Schema} from "bundle/inheritance/storage/Schema.sol";
 import {Groth16Verifier} from "bundle/inheritance/zk/Groth16Verifier.sol";
-import {Groth16VerifierValidator} from "bundle/inheritance/zk/Groth16VerifierValidator.sol";
+import {Groth16VerifierPassword} from "bundle/inheritance/zk/Groth16VerifierPassword.sol";
 
 contract InheritanceFactory is Groth16Verifier {
     // オーナーアドレス -> プロキシアドレスのマッピング
@@ -17,11 +17,11 @@ contract InheritanceFactory is Groth16Verifier {
 
     // 管理者アドレスを保持する変数
     address public admin;
-    Groth16VerifierValidator public zk;
+    Groth16VerifierPassword public zk;
 
     // コンストラクタで初期管理者を設定
     constructor(address _zk) {
-        zk = Groth16VerifierValidator(_zk);
+        zk = Groth16VerifierPassword(_zk);
         admin = msg.sender;
     }
 
@@ -45,11 +45,11 @@ contract InheritanceFactory is Groth16Verifier {
 
     // 各ユーザーのプロキシをデプロイし初期化を行う
     function createProxy(
-        uint _hash,
         uint256 _lockTime,
         Schema.ZKProof calldata proof
     ) external returns (address) {
         zk.verifyProof(proof.pA, proof.pB, proof.pC, proof.pubSignals);
+        uint _hash = proof.pubSignals[0];
 
         bytes memory initializerData = abi.encodeCall(
             Initialize.initialize,

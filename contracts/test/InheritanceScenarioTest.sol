@@ -8,12 +8,12 @@ import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceCo
 import {InheritanceFactory} from "bundle/inheritance/InheritanceFactory.sol";
 import {TestToken} from "bundle/test/TestToken.sol";
 import {ProofData} from "./ProofData.sol";
-import {Groth16VerifierValidator} from "bundle/inheritance/zk/Groth16VerifierValidator.sol";
+import {Groth16VerifierPassword} from "bundle/inheritance/zk/Groth16VerifierPassword.sol";
 
 contract InheritanceScenarioTest is MCTest {
     using InheritanceDeployer for MCDevKit;
     address public dictionaryAddress;
-    Groth16VerifierValidator zk;
+    Groth16VerifierPassword zk;
     InheritanceFactory factory;
     IInheritanceContract inheritanceContract;
     TestToken testToken1;
@@ -22,7 +22,7 @@ contract InheritanceScenarioTest is MCTest {
     address bob = address(0x02);
 
     function setUp() public {
-        zk = new Groth16VerifierValidator();
+        zk = new Groth16VerifierPassword();
         factory = new InheritanceFactory(address(zk));
 
         dictionaryAddress = InheritanceDeployer.deployDictionaryInheritance(mc);
@@ -37,7 +37,7 @@ contract InheritanceScenarioTest is MCTest {
     function test_success() public {
         vm.startPrank(alice);
         inheritanceContract = IInheritanceContract(
-            factory.createProxy(ProofData.getHash(), 90 days, ProofData.getProofValidator1())
+            factory.createProxy(90 days, ProofData.getProofValidator1())
         );
         testToken1.approve(address(inheritanceContract), type(uint256).max);
         testToken2.approve(address(inheritanceContract), type(uint256).max);

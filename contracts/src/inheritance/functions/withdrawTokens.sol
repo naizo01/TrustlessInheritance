@@ -25,7 +25,8 @@ contract WithdrawTokens {
         require(state.isLocked && !state.isKilled, "Contract is not in locked state or is killed");
         require(block.timestamp >= state.lockStartTime + state.lockDuration, "Lock period has not ended");
         require(!state.usedProofs[proofHash], "Proof already used");
-        
+        require(proof.pubSignals[0] == state.hash, "Invalid proof: hash mismatch");
+
         /*
         approveされた額は0じゃないけど、このコントラクト内の残高は0のトークンをチェックする必要はあるか。
         */

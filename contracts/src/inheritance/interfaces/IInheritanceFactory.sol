@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
+import {Schema} from "bundle/inheritance/storage/Schema.sol";
+
 /**
  * @title InheritanceFactory Interface
  */
@@ -18,8 +20,8 @@ interface IInheritanceFactory {
     function setDictionaryAddress(address newDictionaryAddress) external;
 
     function createProxy(
-        uint _hash,
-        uint256 _lockTime
+        uint256 _lockTime,
+        Schema.ZKProof calldata proof
     ) external returns (address);
 
     function ownerToProxy(address owner) external view returns (address);
