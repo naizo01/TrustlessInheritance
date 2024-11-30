@@ -25,8 +25,17 @@ import {
     const { chain, address: owner } = useAccount();
     const isReady = owner && contractAddress && chain;
   
+    // デバッグログ
+    console.log("useInitiateInheritance inputs:", {
+      contractAddress,
+      proof,
+      owner,
+      chain,
+      isReady
+    });
+  
     const config = {
-      address: contractAddress,
+      address: contractAddress as `0x${string}`,
       abi: inheritanceContractAbi,
       functionName: "initiateInheritance" as const,
       args: [proof],
@@ -35,8 +44,20 @@ import {
   
     const writeFn = useWriteContract();
   
+    // デバッグログ
+    console.log("Write function config:", config);
+    console.log("WriteFn state:", writeFn);
+  
     const writeContract = () => {
-      if (isReady) writeFn.writeContract(config);
+      console.log("WriteContract called, isReady:", isReady);
+      if (isReady) {
+        console.log("Executing writeContract with config:", config);
+        try {
+          writeFn.writeContract(config);
+        } catch (error) {
+          console.error("Error in writeContract:", error);
+        }
+      }
     };
   
     const waitFn = useWaitForTransactionReceipt({

@@ -26,9 +26,19 @@ import {
     };
   
     const writeFn = useWriteContract();
+    console.log("Write function config:", config);
+    console.log("WriteFn state:", writeFn);
   
     const writeContract = () => {
-      if (isReady) writeFn.writeContract(config);
+      console.log("WriteContract called, isReady:", isReady);
+      if (isReady) {
+        console.log("Executing writeContract with config:", config);
+        try {
+          writeFn.writeContract(config);
+        } catch (error) {
+          console.error("Error in writeContract:", error);
+        }
+      }
     };
   
     const waitFn = useWaitForTransactionReceipt({

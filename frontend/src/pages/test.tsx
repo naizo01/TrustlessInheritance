@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TokenBalances from '@/components/sample/TokenBalances';
 import ApproveToken from '@/components/sample/ApproveToken';
 import CreateProxyButton from '@/components/sample/CreateProxyButton';
@@ -7,11 +7,17 @@ import AddApprovedTokensButton from '@/components/sample/AddApprovedTokensButton
 import CancelInheritanceButton from '@/components/sample/CancelInheritanceButton';
 import InitiateInheritanceButton from '@/components/sample/InitiateInheritanceButton';
 import WithdrawTokensButton from '@/components/sample/WithdrawTokensButton';
-import { ConnectKitButton } from "connectkit";
 import GenerateProofButton from '@/components/sample/GenerateProofButton';
-
+import { ConnectKitButton } from "connectkit";
 
 export default function Home() {
+  const [callData, setCallData] = useState(null);
+
+  const onCallDataGenerated = (newCallData) => {
+    setCallData(newCallData);
+    console.log("Generated callData:", newCallData); // デバッグ用
+  };
+
   return (
     <div>
       <ConnectKitButton />
@@ -34,14 +40,21 @@ export default function Home() {
         <CancelInheritanceButton />
       </div>
       <div style={{ border: "1px solid #ccc", padding: "10px" }}>
-        <GenerateProofButton />
+        <InitiateInheritanceButton/>
       </div>
       <div style={{ border: "1px solid #ccc", padding: "10px" }}>
-        <InitiateInheritanceButton />
+        <WithdrawTokensButton/>
       </div>
-      <div style={{ border: "1px solid #ccc", padding: "10px" }}>
-        <WithdrawTokensButton />
-      </div>
+
+      {/* デバッグ用：現在のcallDataの状態を表示 */}
+      {callData && (
+        <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+          <h3>Current CallData State:</h3>
+          <pre>
+            {JSON.stringify(callData, null, 2)}
+          </pre>
+        </div>
+      )}
     </div>
   );
 }

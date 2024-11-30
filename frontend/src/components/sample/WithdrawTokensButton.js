@@ -1,26 +1,39 @@
 import React, { useState } from "react";
 import { useAccount } from "wagmi";
 import useWithdrawTokens from "@/hooks/useWithdrawTokens";
+import useGenerateProof from "@/hooks/useGenerateProof";
 import { assets } from "@/lib/token";
 
 export default function WithdrawTokensButton() {
   const { address: userAddress } = useAccount();
   const [contractAddress, setContractAddress] = useState('');
+  const [inputValue, setInputValue] = useState(""); // private input
   const [selectedTokens, setSelectedTokens] = useState([assets[0]]);
   const [amounts, setAmounts] = useState([0n]);
-  const [proof, setProof] = useState({
-    pA: [0n, 0n],
-    pB: [[0n, 0n], [0n, 0n]],
-    pC: [0n, 0n],
-    pubSignals: [0n]
-  });
+  const [proof, setProof] = useState(null); // proof data
 
+  const { generateProof } = useGenerateProof();
   const { writeContract, waitFn } = useWithdrawTokens(
     contractAddress,
-    selectedTokens.map(token => token.address),
+    selectedTokens.map((token) => token.address),
     amounts,
     proof
   );
+
+  const handleGenerateProof = async () => {
+    try {
+      const input = Number(inputValue);
+      if (isNaN(input)) {
+        throw new Error("Please enter a valid number");
+      }
+
+      const proofData = await generateProof(input, selectedTokens, amounts);
+      console.log("Generated proof data:", proofData);
+      setProof(proofData);
+    } catch (err) {
+      console.error("Error generating proof:", err);
+    }
+  };
 
   const handleAddTokenField = () => {
     setSelectedTokens([...selectedTokens, assets[0]]);
@@ -29,7 +42,7 @@ export default function WithdrawTokensButton() {
 
   const handleTokenChange = (index, symbol) => {
     const newTokens = [...selectedTokens];
-    newTokens[index] = assets.find(token => token.symbol === symbol);
+    newTokens[index] = assets.find((token) => token.symbol === symbol);
     setSelectedTokens(newTokens);
   };
 
@@ -39,7 +52,7 @@ export default function WithdrawTokensButton() {
       newAmounts[index] = BigInt(value);
       setAmounts(newAmounts);
     } catch (error) {
-      console.error('Invalid amount:', error);
+      console.error("Invalid amount:", error);
     }
   };
 
@@ -50,34 +63,13 @@ export default function WithdrawTokensButton() {
     setAmounts(newAmounts);
   };
 
-  const handleProofUpload = (e) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      try {
-        const proofData = JSON.parse(e.target.result);
-        const convertedProof = {
-          pA: proofData.pA.map(n => BigInt(n)),
-          pB: proofData.pB.map(row => row.map(n => BigInt(n))),
-          pC: proofData.pC.map(n => BigInt(n)),
-          pubSignals: proofData.pubSignals.map(n => BigInt(n))
-        };
-        setProof(convertedProof);
-      } catch (error) {
-        console.error('Error parsing proof file:', error);
-        alert('Invalid proof file format');
-      }
-    };
-    reader.readAsText(file);
-  };
-
   const handleWithdraw = () => {
     if (!contractAddress) {
       alert("Please enter a valid contract address.");
       return;
     }
-    if (selectedTokens.length !== amounts.length) {
-      alert("Token and amount counts must match.");
+    if (!proof) {
+      alert("Please generate proof before withdrawing.");
       return;
     }
     writeContract();
@@ -102,19 +94,32 @@ export default function WithdrawTokensButton() {
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
             placeholder="Enter contract address"
-            style={{ color: 'white' }}
+            style={{ color: "white" }}
+          />
+        </label>
+      </div>
+
+      <div style={{ marginBottom: "20px" }}>
+        <label>
+          Input Value:
+          <input
+            type="number"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Enter private input value"
+            style={{ color: "white" }}
           />
         </label>
       </div>
 
       {selectedTokens.map((token, index) => (
-        <div key={index} style={{ marginBottom: '10px' }}>
+        <div key={index} style={{ marginBottom: "10px" }}>
           <label>
             Select Token:
             <select
               value={token.symbol}
               onChange={(e) => handleTokenChange(index, e.target.value)}
-              style={{ color: 'white', marginRight: '10px' }}
+              style={{ color: "white", marginRight: "10px" }}
             >
               {assets.map((asset) => (
                 <option key={asset.symbol} value={asset.symbol}>
@@ -130,10 +135,10 @@ export default function WithdrawTokensButton() {
               value={amounts[index].toString()}
               onChange={(e) => handleAmountChange(index, e.target.value)}
               placeholder="Enter amount"
-              style={{ color: 'white', marginRight: '10px' }}
+              style={{ color: "white", marginRight: "10px" }}
             />
           </label>
-          <button 
+          <button
             onClick={() => handleRemoveTokenField(index)}
             disabled={selectedTokens.length === 1}
           >
@@ -142,26 +147,21 @@ export default function WithdrawTokensButton() {
         </div>
       ))}
 
-      <div style={{ marginBottom: '10px' }}>
-        <button onClick={handleAddTokenField}>
-          Add Another Token
-        </button>
+      <div style={{ marginBottom: "10px" }}>
+        <button onClick={handleAddTokenField}>Add Another Token</button>
       </div>
 
-      <div style={{ marginBottom: '20px' }}>
-        <label>
-          ZK Proof:
-          <input
-            type="file"
-            accept=".json"
-            onChange={handleProofUpload}
-          />
-        </label>
-      </div>
-      
-      <button 
-        onClick={handleWithdraw} 
-        disabled={!userAddress || waitFn.isLoading}
+      <button
+        onClick={handleGenerateProof}
+        disabled={!inputValue || !selectedTokens.length || !amounts.length}
+        style={{ marginRight: "10px" }}
+      >
+        Generate Proof
+      </button>
+
+      <button
+        onClick={handleWithdraw}
+        disabled={!userAddress || waitFn.isLoading || !proof}
       >
         {getButtonText()}
       </button>
@@ -171,14 +171,17 @@ export default function WithdrawTokensButton() {
       {waitFn.isError && <p>Transaction failed. Please try again.</p>}
 
       {/* デバッグ情報 */}
-      <div style={{ marginTop: '20px' }}>
+      <div style={{ marginTop: "20px" }}>
         <h3>Current Proof Status:</h3>
         <pre>
-          {JSON.stringify(proof, (_, v) => 
-            typeof v === 'bigint' ? v.toString() : v, 2
+          {JSON.stringify(
+            proof,
+            (_, v) => (typeof v === "bigint" ? v.toString() : v),
+            2
           )}
         </pre>
       </div>
     </div>
   );
 }
+
