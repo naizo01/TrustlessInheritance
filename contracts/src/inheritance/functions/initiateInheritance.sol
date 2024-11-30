@@ -21,6 +21,7 @@ contract InitiateInheritance {
         require(!state.isLocked, "Inheritance process already initiated");
         require(!state.isKilled, "Inheritance contract is killed");
         require(!state.usedProofs[proofHash], "Proof already used");
+        require(proof.pubSignals[0] == state.hash, "Invalid proof: hash mismatch");
 
         // Verify ZK proof
         require(

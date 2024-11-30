@@ -1,13 +1,19 @@
 const snarkjs = require("snarkjs");
+const circomlibjs = require("circomlibjs");
 const fs = require("fs");
 
 (async function () {
     // 数値入力の準備
-    let input = 9999999999;
+    let input = 123456789;
+
+    const poseidon = await circomlibjs.buildPoseidon();
+    const hash = poseidon.F.toString(poseidon([input]));
+
+    console.log("hash:",hash)
 
     // 証明の生成
     const { proof, publicSignals } = await snarkjs.groth16.fullProve(
-        { in : input },
+        { in : input, hash: hash },
         "build/Password_validator_js/Password_validator.wasm",
         "circuit_password.zkey"
     );
