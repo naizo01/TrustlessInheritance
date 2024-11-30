@@ -7,10 +7,10 @@ import {
   
   // ZKProofの型定義
   export type ZKProof = {
-    pA: [bigint, bigint];
-    pB: [[bigint, bigint], [bigint, bigint]];
-    pC: [bigint, bigint];
-    pubSignals: [bigint];
+    pA: [any, any];
+    pB: [[any, any], [any, any]];
+    pC: [any, any];
+    pubSignals: [any];
   };
   
   export type UseWithdrawTokensReturn = {
