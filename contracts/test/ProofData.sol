@@ -4,7 +4,6 @@ pragma solidity ^0.8.23;
 import {Schema} from "bundle/inheritance/storage/Schema.sol";
 
 library ProofData {
-
     function getHash() internal pure returns (uint) {
         return
             0x2778f900758cc46e051040641348de3dacc6d2a31e2963f22cbbfb8f65464241;
@@ -60,6 +59,39 @@ library ProofData {
                 ],
                 pubSignals: [
                     0x2778f900758cc46e051040641348de3dacc6d2a31e2963f22cbbfb8f65464241
+                ]
+            });
+    }
+
+    function getProofValidator1()
+        internal
+        pure
+        returns (Schema.ZKProof memory)
+    {
+        return
+            Schema.ZKProof({
+                pA: [
+                    0x2833183146448bf3463ff91a0535df07c050a587fb5d0b335b93f046161ecbc4,
+                    0x0fe0c4c7396526aad83d3fa3e5a8cecf25cba5f59a659627f2ae7501a80dc9fd
+                ],
+                pB: [
+                    [
+                        0x12403e95e8d8e51cdea55447ad0b63fee2cb2005312e7b0165cbbc909176a747,
+                        0x21563bd855faf219c391da4dc47e2913bf687848b1a152e535e6c5bf16122845
+                    ],
+                    [
+                        0x2fbd7c5604d968d18368a0df81d9c97fda59252774e006c0b3177f6a35d5e3d4,
+                        0x02e6cdc61a48db790f5ed7c66a4763e58f1dedef60d9ea6075ac6dcb4c285f68
+                    ]
+                ],
+                pC: [
+                    0x26b91476415ea635a1e53af61e7f9cc28f4a0e31600201c0a49fbe7e28eba39b,
+                    0x1b88c2e14050c600b315701ea492513e2d1955789be9b5e6d50cce3e0414fa73
+                ],
+                pubSignals: [
+                    uint256(
+                        0x0000000000000000000000000000000000000000000000000000000000000000
+                    )
                 ]
             });
     }

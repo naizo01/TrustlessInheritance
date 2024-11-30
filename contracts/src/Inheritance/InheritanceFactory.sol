@@ -4,10 +4,11 @@ pragma solidity ^0.8.23;
 import {Proxy} from "@ucs.mc/proxy/Proxy.sol";
 import {Initialize} from "bundle/inheritance/functions/Initialize.sol";
 import {IInheritanceFactory} from "bundle/inheritance/interfaces/IInheritanceFactory.sol";
+import {Schema} from "bundle/inheritance/storage/Schema.sol";
 import {Groth16Verifier} from "bundle/inheritance/zk/Groth16Verifier.sol";
+import {Groth16VerifierValidator} from "bundle/inheritance/zk/Groth16VerifierValidator.sol";
 
-
-contract InheritanceFactory is Groth16Verifier{
+contract InheritanceFactory is Groth16Verifier {
     // オーナーアドレス -> プロキシアドレスのマッピング
     mapping(address => address) public ownerToProxy;
 
@@ -16,9 +17,11 @@ contract InheritanceFactory is Groth16Verifier{
 
     // 管理者アドレスを保持する変数
     address public admin;
+    Groth16VerifierValidator public zk;
 
     // コンストラクタで初期管理者を設定
-    constructor() {
+    constructor(address _zk) {
+        zk = Groth16VerifierValidator(_zk);
         admin = msg.sender;
     }
 
@@ -43,8 +46,11 @@ contract InheritanceFactory is Groth16Verifier{
     // 各ユーザーのプロキシをデプロイし初期化を行う
     function createProxy(
         uint _hash,
-        uint256 _lockTime
+        uint256 _lockTime,
+        Schema.ZKProof calldata proof
     ) external returns (address) {
+        zk.verifyProof(proof.pA, proof.pB, proof.pC, proof.pubSignals);
+
         bytes memory initializerData = abi.encodeCall(
             Initialize.initialize,
             (_hash, _lockTime, msg.sender, address(this))
