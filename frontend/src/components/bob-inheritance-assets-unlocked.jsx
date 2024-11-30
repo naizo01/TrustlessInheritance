@@ -57,10 +57,10 @@ export default function InheritanceAssetsUnlockedPage() {
     setTotalValue(newTotal);
   }, [assets]);
 
-  const formatNumber = (num) => {
+  const formatNumber = (num, decimal = 2) => {
     return num.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      minimumFractionDigits: decimal,
+      maximumFractionDigits: decimal,
     });
   };
 
@@ -178,7 +178,7 @@ export default function InheritanceAssetsUnlockedPage() {
                       </TableCell>
                       <TableCell>{asset.type}</TableCell>
                       <TableCell className="text-right">
-                        {formatNumber(asset.balance)}
+                        {formatNumber(asset.balance, 3)}
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end">
@@ -194,7 +194,7 @@ export default function InheritanceAssetsUnlockedPage() {
                             className="w-24 text-right"
                             min="0"
                             max={asset.balance}
-                            step="0.01"
+                            step="0.001"
                             disabled={!asset.selected}
                           />
                         </div>
