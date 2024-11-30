@@ -70,10 +70,9 @@ export default function Component() {
     setIsLoading(true);
     setError(null);
     try {
-      console.log("Generating ZK Proof...");
       // Implement ZK Proof generation logic here
       // Simulate ZK Proof generation with a delay
-      await new Promise((resolve) => setTimeout(resolve, 20000)); //20sec
+      await new Promise((resolve) => setTimeout(resolve, 3000)); //3sec
 
       dispatch({ type: BOB_ACTIONS.SET_PROOF, payload: "generated zk proof" });
       dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });

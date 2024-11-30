@@ -219,7 +219,7 @@ export default function InheritanceAssetsUnlockedPage() {
             >
               <Info className="h-4 w-4 text-green-600 dark:text-green-400" />
               <AlertDescription className="text-green-800 dark:text-green-200">
-                次のページで、各資産の送金先アカウントを確認・変更できます。
+                ここで選択した資産について、以降のページで、ZKプルーフの生成、各資産の送金先アカウントを確認・変更を行います。
               </AlertDescription>
             </Alert>
           </CardContent>
@@ -229,7 +229,7 @@ export default function InheritanceAssetsUnlockedPage() {
               onClick={handleNextStep}
               disabled={totalValue === 0}
             >
-              資産・金額・送金アカウントの確認
+              ZKプルーフの生成・送金アカウントの確認
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </CardFooter>

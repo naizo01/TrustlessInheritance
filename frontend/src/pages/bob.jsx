@@ -116,12 +116,13 @@ export default function Home() {
           return <InheritanceAssetsUnlockedPage />;
       case 4:
         if (state.status === "waiting") return <ZKProofGenerationPage />;
-        if (state.status === "matured") return <TransferConfirmationPage />;
+        if (state.status === "matured") return <ZKProofGenerationPage />;
       case 5:
         if (state.status === "waiting") return <ZKProofConfirmationPage />;
-        if (state.status === "matured") return <TransferResultPage />;
+        if (state.status === "matured") return <TransferConfirmationPage />;
       case 6:
         if (state.status === "waiting") return <ApplicationResultPage />;
+        if (state.status === "matured") return <TransferResultPage />;
       default:
         throw new Error("unknown step required");
     }
