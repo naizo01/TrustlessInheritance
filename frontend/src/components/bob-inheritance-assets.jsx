@@ -127,10 +127,10 @@ export default function Component() {
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
 
-  const formatNumber = (num) => {
+  const formatNumber = (num, decimal = 2) => {
     return num.toLocaleString(undefined, {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      minimumFractionDigits: decimal,
+      maximumFractionDigits: decimal,
     });
   };
 
@@ -210,7 +210,7 @@ export default function Component() {
                         </TableCell>
                         <TableCell>{asset.type}</TableCell>
                         <TableCell className="text-right">
-                          {formatNumber(asset.balance)}
+                          {formatNumber(asset.balance, 3)}
                         </TableCell>
                         <TableCell className="text-right">
                           ${formatNumber(asset.value)}

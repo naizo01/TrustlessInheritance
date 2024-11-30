@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,6 +23,8 @@ export default function Component() {
   const [showDirectInput, setShowDirectInput] = useState(false);
   const [directInput, setDirectInput] = useState("");
   const [secretInfo, setSecretInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
   const handleFileSelect = (event) => {
@@ -64,13 +66,26 @@ export default function Component() {
     setSelectedFile(null);
   };
 
-  const handleGenerateZKProof = () => {
-    console.log("Generating ZK Proof...");
-    // Implement ZK Proof generation logic here
+  const handleGenerateZKProof = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      console.log("Generating ZK Proof...");
+      // Implement ZK Proof generation logic here
+      // Simulate ZK Proof generation with a delay
+      await new Promise((resolve) => setTimeout(resolve, 20000)); //20sec
 
-    dispatch({ type: BOB_ACTIONS.SET_PROOF, payload: "generated zk proof" });
-    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
-  };
+      dispatch({ type: BOB_ACTIONS.SET_PROOF, payload: "generated zk proof" });
+      dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
+    } catch (err) {
+      console.error("Error generating ZK Proof:", err);
+      setError(
+        "ZK Proofの生成中にエラーが発生しました。もう一度お試しください。"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, [secretInfo, dispatch]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
@@ -174,9 +189,23 @@ export default function Component() {
               onClick={handleGenerateZKProof}
               disabled={!secretInfo}
             >
-              ZKプルーフを作成する
-              <ArrowRight className="ml-2 h-5 w-5" />
+              {isLoading ? (
+                <>
+                  <span className="animate-spin mr-2">⏳</span>
+                  ZKプルーフ生成中...
+                </>
+              ) : (
+                <>
+                  ZKプルーフを作成する
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </>
+              )}
             </Button>
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
           </CardFooter>
         </Card>
       </main>

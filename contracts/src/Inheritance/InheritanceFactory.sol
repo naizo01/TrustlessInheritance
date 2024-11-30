@@ -2,8 +2,8 @@
 pragma solidity ^0.8.23;
 
 import {Proxy} from "@ucs.mc/proxy/Proxy.sol";
-import {Initialize} from "bundle/Inheritance/functions/Initialize.sol";
-import {IInheritanceFactory} from "bundle/Inheritance/interfaces/IInheritanceFactory.sol";
+import {Initialize} from "bundle/inheritance/functions/Initialize.sol";
+import {IInheritanceFactory} from "bundle/inheritance/interfaces/IInheritanceFactory.sol";
 import {Groth16Verifier} from "bundle/inheritance/zk/Groth16Verifier.sol";
 
 

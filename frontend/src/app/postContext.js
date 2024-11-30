@@ -50,36 +50,93 @@ const dummyTransactions = [
   },
 ];
 
-// これから相続手続きが行われる予定のblance
+// これから相続手続きが行われる予定のwalletに記録されるblance
 // for alice
 const dummyPositions = [
   {
-    address: "0xE0F189CfdCfeda40A28dc577D7c26C2Ad6CeeB6A",
-    token: {
+    address: "0xbc0C6ae768e9D2d5454055cd0997ff9f9C32dCAe", // my address 1
+    tokens: {
       ETH: "10000000000000000000",
-      USDT: "1000000000",
-      USDC: "1000000000",
+      USDT: "8000000000000000000000",
+      USDC: "3300000000000000000",
       DAI: "1000000000000000000000",
+      MKR: "50000000000000000000",
     },
+    secret: null,
   },
   {
-    address: "0x0", // Replace with a valid eth address
-    token: {
+    address: "0xD0248721c8b65932b6Cdc9fffaeD94287C9BB222", // my address 2
+    tokens: {
       ETH: "10000000000000000000",
-      USDT: "1000000000",
-      USDC: "1000000000",
+      USDT: "1000000000000000000000",
+      USDC: "250000000000000000000",
       DAI: "1000000000000000000000",
+      WBTC: "100000000000000000000",
     },
+    secret: null,
+  },
+  {
+    address: "0x32CF6e0bDBec1DA0f4A047E5644f9EA6137D2b58", // my address 3
+    tokens: {
+      ETH: "2000000000000000000",
+      USDT: "1000000000000000000000",
+      USDC: "60000000000000000000",
+      DAI: "80000000000000000000",
+      AAVE: "2350000000000000000000",
+    },
+    secret: null,
   },
 ];
 
+// networkに記録される相続取引記録
+// for alice
+const dummyNetworkRegistration = [
+  {
+    address: "0xD0248721c8b65932b6Cdc9fffaeD94287C9BB222", // my address 2
+    tokens: {
+      ETH: "10000000000000000000", // usd33,475.30
+      USDT: "1000000000000000000000",
+      USDC: "250000000000000000000",
+      WBTC: "100000000000000000000", // usd9,789.60
+    },
+    secret: "222",
+    lockPeriod: "6",
+    lockEndDate: null,
+  },
+  {
+    address: "0x32CF6e0bDBec1DA0f4A047E5644f9EA6137D2b58", // my address 3
+    tokens: {
+      ETH: "2000000000000000000",
+      USDT: "1000000000000000000000",
+      AAVE: "2350000000000000000000",
+    },
+    secret: "333",
+    lockPeriod: "9",
+    lockEndDate: new Date(2025, 7, 25), // Aug 25, 2025 -- base 0
+  },
+];
+
+// my addressの状態 as of 2024/11/30
+// my address 1: networkに登録なし
+// my address 2: networkに登録あり、相続申請なし
+// my address 3: networkに登録あり、相続申請あり
+// aliceのページ変遷をデモデータで試す場合は、my address 1～3を、自分のwalletのアドレスに置き換えてください。
+
 function PostProvider({ children }) {
-  const [positions, setPositions] = useState(dummyPositions);
+  const [wallet, setWallet] = useState(dummyPositions);
+  const [network, setNetwork] = useState(dummyNetworkRegistration);
   const [transactions, setTransactions] = useState(dummyTransactions);
 
   return (
     <PostContext.Provider
-      value={{ positions, setPositions, transactions, setTransactions }}
+      value={{
+        wallet,
+        setWallet,
+        network,
+        setNetwork,
+        transactions,
+        setTransactions,
+      }}
     >
       {children}
     </PostContext.Provider>

@@ -1,5 +1,5 @@
 import "../app/globals.css"; // グローバルなCSSをインポート
-import type { AppProps } from "next/app";
+import { AppProps } from "next/app";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
@@ -32,7 +32,7 @@ const config = createConfig(
 );
 
 const queryClient = new QueryClient();
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
