@@ -39,7 +39,6 @@ export default function LockPeriodSetting() {
 
   const handleConfirm = () => {
     dispatch({ type: ALICE_ACTIONS.SET_LOCK_PERIOD, payload: period });
-    dispatch({ type: ALICE_ACTIONS.SET_LOCK_END_DATE });
     dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   };
 

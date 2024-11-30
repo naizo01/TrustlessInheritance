@@ -12,6 +12,7 @@ import InheritanceAssetSelection from "@/components/alice-inheritance-asset-sele
 import InheritanceStatus from "@/components/alice-inheritance-status";
 import SubLandingPage from "@/components/alice-landing-page";
 import InheritanceAssetConfirmation from "@/components/alice-inheritance-asset-confirmation";
+import InheritanceRegistrationReport from "@/components/alice-inheritance-registration-report";
 import { PostProvider, usePosts } from "@/app/postContext";
 
 // Aliceのデータを管理するためのContextを作成します
@@ -28,7 +29,7 @@ export const useAliceState = () => {
 // アプリケーションの初期状態を定義
 const initialState = {
   step: 0,
-  status: "new", // new, submitted, opening
+  status: "new", // new, registered, submitted
   deceasedAddress: "", // use useAddress; it's more reliable
   lockEndDate: null, // including this date
   lockPeriod: null, // num of months
@@ -48,7 +49,7 @@ export const ALICE_ACTIONS = {
   SET_ASSETS: "SET_ASSETS",
   SET_SUBMITTED: "SET_SUBMITTED",
   SET_GRANTED: "SET_GRANTED",
-  SET_OPENING: "SET_OPENING",
+  SET_REGISTERED: "SET_REGISTERED",
   SET_SECRET: "SET_SECRET",
   RESET_STATE: "RESET_STATE",
 };
@@ -70,10 +71,11 @@ function aliceReducer(state, action) {
       return { ...state, granted: action.payload };
     case ALICE_ACTIONS.SET_LOCK_PERIOD:
       return { ...state, lockPeriod: +action.payload };
+    case ALICE_ACTIONS.SET_REGISTERED:
+      return { ...state, status: "registered" };
     case ALICE_ACTIONS.SET_SUBMITTED:
       return { ...state, status: "submitted" };
-    case ALICE_ACTIONS.SET_OPENING:
-      return { ...state, status: "opening" };
+
     case ALICE_ACTIONS.SET_LOCK_END_DATE:
       return {
         ...state,
@@ -110,6 +112,8 @@ export default function Home() {
         return <InheritanceAssetSelection />;
       case 4:
         return <InheritanceAssetConfirmation />;
+      case 5:
+        return <InheritanceRegistrationReport />;
       default:
         throw new Error("unknown step required");
     }

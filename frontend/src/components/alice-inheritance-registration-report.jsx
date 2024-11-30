@@ -3,8 +3,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -18,9 +16,8 @@ import { Header } from "@/components/common/variable-header";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
 import { assets as importedAssets } from "@/lib/token";
 
-export default function InheritanceAssetConfirmation() {
+export default function InheritanceRegistrationReport() {
   const { state, dispatch } = useAliceState();
-  //   const selectedAssets = state.assets.assets.filter((asset) => asset.selected);
 
   const totalValue = state.granted.reduce((sum, asset) => {
     const tokenInfo = importedAssets.find(
@@ -31,14 +28,6 @@ export default function InheritanceAssetConfirmation() {
     }
     return sum;
   }, 0);
-
-  const handleNext = () => {
-    // 相続の登録function call
-    //
-
-    // ページ変遷、stateのinitialize
-    dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
-  };
 
   const formatNumber = (num, decimal = 2) => {
     return num.toLocaleString(undefined, {
@@ -55,12 +44,17 @@ export default function InheritanceAssetConfirmation() {
     });
   };
 
+  const handleReturnToMain = () => {
+    dispatch({ type: ALICE_ACTIONS.MOVE_SPECIFIC, payload: 0 });
+    dispatch({ type: ALICE_ACTIONS.RESET_STATE });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <Header
         scrolled={false}
         scrollToSection={() => {}}
-        appBadgeText="選択内容の確認"
+        appBadgeText="登録完了"
         appBadgeClassName=""
       />
       <div className="container mx-auto px-4 py-24">
@@ -71,9 +65,15 @@ export default function InheritanceAssetConfirmation() {
         >
           <Card className="max-w-4xl mx-auto bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">
             <CardContent className="p-8 space-y-8">
-              <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
-                選択内容の確認
-              </h1>
+              <div className="text-center space-y-4">
+                <CheckCircle className="mx-auto h-16 w-16 text-green-500" />
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  登録が完了しました
+                </h1>
+                <p className="text-gray-600 dark:text-gray-300">
+                  以下の内容で相続資産の登録が完了しました。
+                </p>
+              </div>
 
               <motion.div
                 initial={{ x: -20 }}
@@ -81,7 +81,7 @@ export default function InheritanceAssetConfirmation() {
                 className="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 p-6 rounded-lg"
               >
                 <h3 className="text-lg font-medium text-white mb-2">
-                  相続可能総額
+                  登録された相続可能総額
                 </h3>
                 <p className="text-3xl font-bold text-white">
                   ${formatNumber(totalValue)}
@@ -92,7 +92,6 @@ export default function InheritanceAssetConfirmation() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="w-[50px]"></TableHead>
                       <TableHead>資産</TableHead>
                       <TableHead className="text-center">種別</TableHead>
                       <TableHead className="text-right">残高</TableHead>
@@ -102,13 +101,6 @@ export default function InheritanceAssetConfirmation() {
                   <TableBody>
                     {state.granted.map((asset) => (
                       <TableRow key={asset.id}>
-                        <TableCell>
-                          <Checkbox
-                            checked={true}
-                            disabled
-                            id={`checkbox-${asset.id}`}
-                          />
-                        </TableCell>
                         <TableCell className="font-medium">
                           <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
@@ -119,16 +111,18 @@ export default function InheritanceAssetConfirmation() {
                               />
                             </div>
                             <div className="flex flex-col">
-                              <span className="font-medium text-gray-900">
+                              <span className="font-medium text-gray-900 dark:text-white">
                                 {asset.name}
                               </span>
-                              <span className="text-sm text-gray-500">
+                              <span className="text-sm text-gray-500 dark:text-gray-400">
                                 {asset.symbol}
                               </span>
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell>{asset.type}</TableCell>
+                        <TableCell className="text-center">
+                          {asset.type}
+                        </TableCell>
                         <TableCell className="text-right">
                           {formatNumber(asset.balance, 3)}
                         </TableCell>
@@ -156,10 +150,10 @@ export default function InheritanceAssetConfirmation() {
                 <Button
                   variant="outline"
                   className="w-full py-4 text-gray-700 dark:text-gray-200"
-                  onClick={handleNext}
+                  onClick={handleReturnToMain}
                 >
-                  <CheckCircle className="mr-2 h-6 w-6" />
-                  登録を実行
+                  <Home className="mr-2 h-5 w-5" />
+                  メインページに戻る
                 </Button>
               </div>
             </CardContent>

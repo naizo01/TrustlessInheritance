@@ -31,20 +31,27 @@ function SubLandingPage() {
     lockEndDate: null,
   });
   const [isLoading, setIsLoading] = useState(true);
-  const { positions } = usePosts();
+  const { wallet, network } = usePosts();
 
   // ウォレット情報の取得、以降のページのTOKEN関連情報の成型
   const fetchAssetsData = useCallback(async () => {
-    // context apiで、networkをsimulate
-    if (positions.length > 0 && isAddress(address)) {
-      const position = positions.find((pos) =>
+    // context apiで、walletとnetworkをsimulate
+    if (wallet.length > 0 && isAddress(address)) {
+      const walletInfo = wallet.find((pos) =>
         pos.address.toLowerCase().includes(address.toLowerCase())
       );
 
+      // networkに登録がある場合は、networkの情報を取り込む
+      const networkRegistration = network.find((pos) =>
+        pos.address.toLowerCase().includes(address.toLowerCase())
+      );
+      const position = networkRegistration || walletInfo;
+
+      // wallet又はnetworkから取得したposition objectから以降のページで使うTOKEN関連情報を成型
       if (position) {
         const data = {
           assets: [],
-          lockPeriod: position.lockPeriod || 0,
+          lockPeriod: position.lockPeriod || null,
           lockEndDate: position.lockEndDate || null,
         };
 
@@ -71,24 +78,19 @@ function SubLandingPage() {
         // Global State/local stateのassets情報を更新
         dispatch({ type: ALICE_ACTIONS.SET_ASSETS, payload: data });
         setAssetsInfo(data);
+
+        ///// state.statusを更新（if needed） /////
+        // lockPeriodが登録される場合： 同addressで既にnetworkに取引がある
+        data.lockPeriod && dispatch({ type: ALICE_ACTIONS.SET_REGISTERED });
+
+        // lockEndDateが登録される場合： 同addressの登録取引が相続申請の状態
+        data.lockEndDate && dispatch({ type: ALICE_ACTIONS.SET_SUBMITTED });
       }
     }
     setIsLoading(false);
-  }, [address, positions, dispatch]);
+  }, [address, wallet, network, dispatch]);
 
-  // networkの情報を取得、当該address登録の有無を確認
-  useEffect(() => {
-    // address登録の有無を確認
-    // setIsRegistered(...)
-    //
-    // address登録が確認された場合、相続申請の有無を確認
-    // setRegistered(...)
-    //
-    // address登録・相続申請情報を基に、state.statusを更新、更新によりページ変遷を管理
-    //
-  }, [dispatch]);
-
-  //
+  // walletが接続されたら、wallet情報を取得
   useEffect(() => {
     if (isConnected && isAddress(address)) {
       setIsNextEnabled(true);
