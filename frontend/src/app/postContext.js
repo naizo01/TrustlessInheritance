@@ -120,6 +120,7 @@ const dummyNetworkRegistration = [
 // my address 1: networkに登録なし
 // my address 2: networkに登録あり、相続申請なし
 // my address 3: networkに登録あり、相続申請あり
+// aliceのページ変遷をデモデータで試す場合は、my address 1～3を、自分のwalletのアドレスに置き換えてください。
 
 function PostProvider({ children }) {
   const [wallet, setWallet] = useState(dummyPositions);
