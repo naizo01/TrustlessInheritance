@@ -23,7 +23,6 @@ import { assets as importedAssets } from "@/lib/token";
 function SubLandingPage() {
   const { state, dispatch } = useAliceState();
   const { address, isConnected } = useAccount();
-  const [isRegistered, setIsRegistered] = useState(false);
   const [isNextEnabled, setIsNextEnabled] = useState(false);
   const [assetsInfo, setAssetsInfo] = useState({
     assets: [],
@@ -36,6 +35,8 @@ function SubLandingPage() {
   // ウォレット情報の取得、以降のページのTOKEN関連情報の成型
   const fetchAssetsData = useCallback(async () => {
     // context apiで、walletとnetworkをsimulate
+    // ダミーデータは、app/postContext.js内で規定
+    // walletのデータを取得
     if (wallet.length > 0 && isAddress(address)) {
       const walletInfo = wallet.find((pos) =>
         pos.address.toLowerCase().includes(address.toLowerCase())
@@ -80,7 +81,8 @@ function SubLandingPage() {
         setAssetsInfo(data);
 
         ///// state.statusを更新（if needed） /////
-        // lockPeriodが登録される場合： 同addressで既にnetworkに取引がある
+        ///// ページ変遷分岐を管理　　　　　　　/////
+        // lockPeriodが登録される場合： 同addressで既にnetworkに登録がある
         data.lockPeriod && dispatch({ type: ALICE_ACTIONS.SET_REGISTERED });
 
         // lockEndDateが登録される場合： 同addressの登録取引が相続申請の状態

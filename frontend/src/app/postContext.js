@@ -94,10 +94,10 @@ const dummyNetworkRegistration = [
   {
     address: "0xD0248721c8b65932b6Cdc9fffaeD94287C9BB222", // my address 2
     tokens: {
-      ETH: "10000000000000000000",
+      ETH: "10000000000000000000", // usd33,475.30
       USDT: "1000000000000000000000",
       USDC: "250000000000000000000",
-      WBTC: "100000000000000000000",
+      WBTC: "100000000000000000000", // usd9,789.60
     },
     secret: "222",
     lockPeriod: "6",

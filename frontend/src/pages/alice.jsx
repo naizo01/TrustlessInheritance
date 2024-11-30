@@ -9,10 +9,11 @@ import { InheritanceUi } from "@/components/inheritance-ui";
 import LockPeriodSetting from "@/components/alice-lock-period-setting";
 import SecretInput from "@/components/alice-secret-input";
 import InheritanceAssetSelection from "@/components/alice-inheritance-asset-selection.jsx";
-import InheritanceStatus from "@/components/alice-inheritance-status";
+import InheritanceStatus from "@/components/alice-inheritance-status.jsx";
 import SubLandingPage from "@/components/alice-landing-page";
 import InheritanceAssetConfirmation from "@/components/alice-inheritance-asset-confirmation";
 import InheritanceRegistrationReport from "@/components/alice-inheritance-registration-report";
+import InheritanceCancellationResult from "@/components/alice-inheritance-cancellation-result";
 import { PostProvider, usePosts } from "@/app/postContext";
 
 // Aliceのデータを管理するためのContextを作成します
@@ -114,6 +115,8 @@ export default function Home() {
         return <InheritanceAssetConfirmation />;
       case 5:
         return <InheritanceRegistrationReport />;
+      case 100:
+        return <InheritanceCancellationResult />;
       default:
         throw new Error("unknown step required");
     }
