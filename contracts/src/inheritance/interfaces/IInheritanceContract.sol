@@ -25,7 +25,7 @@ interface IInheritanceContract {
 
     function addApprovedTokens(address[] calldata _tokens) external;
 
-    function cancelInheritance(address[] calldata _tokens) external;
+    function cancelInheritance() external;
 
     function initiateInheritance(
         Schema.ZKProof calldata proof

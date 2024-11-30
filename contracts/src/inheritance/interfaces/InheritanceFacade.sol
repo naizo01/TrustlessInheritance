@@ -12,7 +12,7 @@ contract InheritanceFacade is IInheritanceContract {
 
     function addApprovedTokens(address[] calldata _tokens) external override {}
 
-    function cancelInheritance(address[] calldata _tokens) external override {}
+    function cancelInheritance() external override {}
 
     function initiateInheritance(
         Schema.ZKProof calldata proof
