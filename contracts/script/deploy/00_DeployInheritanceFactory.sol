@@ -2,7 +2,7 @@
 pragma solidity ^0.8.23;
 
 import {MCScript, MCDevKit} from "@mc-devkit/Flattened.sol";
-import "bundle/Inheritance/InheritanceFactory.sol";
+import "bundle/inheritance/InheritanceFactory.sol";
 
 contract DeployInheritanceFactory is MCScript {
     function run() external  startBroadcastWith("PRIVATE_KEY") {

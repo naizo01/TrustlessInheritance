@@ -2,7 +2,7 @@
 pragma solidity ^0.8.23;
 
 import {MCScript, MCDevKit} from "@mc-devkit/Flattened.sol";
-import {InheritanceFactory} from "bundle/Inheritance/InheritanceFactory.sol";
+import {InheritanceFactory} from "bundle/inheritance/InheritanceFactory.sol";
 
 contract SetDictionaryAddress is MCScript {
     function run() external startBroadcastWith("PRIVATE_KEY") {
