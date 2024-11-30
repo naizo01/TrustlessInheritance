@@ -34,7 +34,7 @@ contract InheritanceScenarioTest is MCTest {
         vm.stopPrank();
     }
 
-    function test_success() public {
+    function test_success_withdrawTokens() public {
         vm.startPrank(alice);
         inheritanceContract = IInheritanceContract(
             factory.createProxy(90 days, ProofData.getProofValidator1())
@@ -71,4 +71,41 @@ contract InheritanceScenarioTest is MCTest {
         vm.stopPrank();
     }
 
+    function test_success_cancelInheritance() public {
+        vm.startPrank(alice);
+        inheritanceContract = IInheritanceContract(
+            factory.createProxy(90 days, ProofData.getProofValidator1())
+        );
+        testToken1.approve(address(inheritanceContract), type(uint256).max);
+        testToken2.approve(address(inheritanceContract), type(uint256).max);
+        address[] memory tokens = new address[](2);
+        tokens[0] = address(testToken1);
+        tokens[1] = address(testToken2);
+        inheritanceContract.addApprovedTokens(tokens);
+        vm.stopPrank();
+
+        uint256[] memory amounts = new uint256[](2);
+        amounts[0] = 1e20;
+        amounts[1] = 1e20;
+
+        vm.startPrank(bob);
+        inheritanceContract.initiateInheritance(ProofData.getProof1());
+        vm.stopPrank();
+
+        vm.startPrank(alice);
+        inheritanceContract.cancelInheritance();
+        inheritanceContract.isLocked();
+        inheritanceContract.isKilled();
+        assertEq(
+            testToken1.balanceOf(alice),
+            1e20,
+            "testToken1 balance is not 1e20"
+        );
+        assertEq(
+            testToken2.balanceOf(alice),
+            1e20,
+            "testToken2 balance is not 1e20"
+        );
+        vm.stopPrank();
+    }
 }
