@@ -9,7 +9,7 @@ export default function InitiateInheritanceButton() {
   const [inputValue, setInputValue] = useState("");
   const [proofData, setProofData] = useState(null);
   
-  const { generateProof } = useGenerateProof();
+  const { generateProof } = useGenerateProof("bob");
   const { writeContract, waitFn } = useInitiateInheritance(contractAddress, proofData);
 
   const handleGenerateProof = async () => {

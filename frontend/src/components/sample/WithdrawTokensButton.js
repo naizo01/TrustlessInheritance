@@ -12,7 +12,7 @@ export default function WithdrawTokensButton() {
   const [amounts, setAmounts] = useState([0n]);
   const [proof, setProof] = useState(null); // proof data
 
-  const { generateProof } = useGenerateProof();
+  const { generateProof } = useGenerateProof("bob");
   const { writeContract, waitFn } = useWithdrawTokens(
     contractAddress,
     selectedTokens.map((token) => token.address),
