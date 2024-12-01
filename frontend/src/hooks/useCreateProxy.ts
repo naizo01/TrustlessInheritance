@@ -27,8 +27,13 @@ export default function useCreateProxy(
     chain: chain,
   };
 
-  const writeFn = useWriteContract();
-
+  const writeFn = useWriteContract({
+    mutation: {
+      onError: (error) => {
+        console.error("Error writing contract:", error);
+      },
+    },
+  });
   const writeContract = () => {
     if (isReady) writeFn.writeContract(config);
   };

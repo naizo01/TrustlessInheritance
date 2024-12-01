@@ -19,9 +19,9 @@ const CreateProxyButton = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: '20px', borderRadius: '5px' }}>
       <div>
-        <label>
+        <label style={{ color: 'black' }}>
           private value:
           <input
             type="number"
@@ -32,26 +32,31 @@ const CreateProxyButton = () => {
               handleHashInput(value);
             }}
             placeholder="Enter value to hash"
-            style={{ color: 'white'}}
+            style={{ color: 'black', backgroundColor: 'white', border: '1px solid black', borderRadius: '3px', padding: '5px' }}
           />
         </label>
       </div>
       <div>
-        <label>
+        <label style={{ color: 'black' }}>
           Lock Time:
           <input
             type="number"
             value={lockTime.toString()}
             onChange={(e) => setLockTime(BigInt(e.target.value))}
             placeholder="Enter lock time"
-            style={{ color: 'white'}}
+            style={{ color: 'black', backgroundColor: 'white', border: '1px solid black', borderRadius: '3px', padding: '5px' }}
           />
         </label>
       </div>
-      <button onClick={handleCreateProxy}>Create Proxy</button>
-      {waitFn.isLoading && <p>Transaction is processing...</p>}
-      {waitFn.isSuccess && <p>Proxy created successfully!</p>}
-      {waitFn.isError && <p>Error creating proxy.</p>}
+      <button 
+        onClick={handleCreateProxy} 
+        style={{ backgroundColor: 'white', color: 'black', border: '1px solid black', borderRadius: '5px', padding: '10px 20px', cursor: 'pointer' }}
+      >
+        Create Proxy
+      </button>
+      {waitFn.isLoading && <p style={{ color: 'black' }}>Transaction is processing...</p>}
+      {waitFn.isSuccess && <p style={{ color: 'black' }}>Proxy created successfully!</p>}
+      {waitFn.isError && <p style={{ color: 'black' }}>Error creating proxy.</p>}
     </div>
   );
 };
