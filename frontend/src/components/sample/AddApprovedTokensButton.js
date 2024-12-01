@@ -5,12 +5,12 @@ import { assets } from "@/lib/token";
 
 const AddApprovedTokensButton = () => {
   const { address: userAddress } = useAccount();
-  const [contractAddress, setContractAddress] = useState('');
-  const [selectedTokens, setSelectedTokens] = useState([assets[0]]); 
+  const [contractAddress, setContractAddress] = useState("");
+  const [selectedTokens, setSelectedTokens] = useState([assets[0]]);
 
   const { writeContract, waitFn } = useAddApprovedTokens(
     contractAddress,
-    selectedTokens.map(token => token.address)
+    selectedTokens.map((token) => token.address)
   );
 
   const handleAddTokenField = () => {
@@ -19,7 +19,7 @@ const AddApprovedTokensButton = () => {
 
   const handleTokenChange = (index, symbol) => {
     const newTokens = [...selectedTokens];
-    newTokens[index] = assets.find(token => token.symbol === symbol);
+    newTokens[index] = assets.find((token) => token.symbol === symbol);
     setSelectedTokens(newTokens);
   };
 
@@ -38,7 +38,7 @@ const AddApprovedTokensButton = () => {
 
   const handleAddApprovedTokens = () => {
     if (!contractAddress) {
-      alert('Please enter contract address');
+      alert("Please enter contract address");
       return;
     }
     writeContract();
@@ -55,7 +55,14 @@ const AddApprovedTokensButton = () => {
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
             placeholder="Enter contract address"
-            style={{ color: 'white' }}
+            style={{
+              color: "black",
+              backgroundColor: "white",
+              border: "1px solid black",
+              borderRadius: "3px",
+              padding: "5px",
+              width: "500px",
+            }}
           />
         </label>
       </div>
@@ -67,7 +74,13 @@ const AddApprovedTokensButton = () => {
             <select
               value={token.symbol}
               onChange={(e) => handleTokenChange(index, e.target.value)}
-              style={{ color: 'white' }}
+              style={{
+                color: "black",
+                backgroundColor: "white",
+                border: "1px solid black",
+                borderRadius: "3px",
+                padding: "5px",
+              }}
             >
               {assets.map((asset) => (
                 <option key={asset.symbol} value={asset.symbol}>
@@ -76,22 +89,48 @@ const AddApprovedTokensButton = () => {
               ))}
             </select>
           </label>
-          <button 
+          <button
             onClick={() => handleRemoveTokenField(index)}
             disabled={selectedTokens.length === 1}
+            style={{
+              backgroundColor: "white",
+              color: "black",
+              border: "1px solid black",
+              borderRadius: "5px",
+              padding: "10px 20px",
+              cursor: "pointer",
+            }}
           >
             Remove
           </button>
         </div>
       ))}
-      
-      <button onClick={handleAddTokenField}>
+
+      <button
+        onClick={handleAddTokenField}
+        style={{
+          backgroundColor: "white",
+          color: "black",
+          border: "1px solid black",
+          borderRadius: "5px",
+          padding: "10px 20px",
+          cursor: "pointer",
+        }}
+      >
         Add Another Token
       </button>
-      
-      <button 
-        onClick={handleAddApprovedTokens} 
+
+      <button
+        onClick={handleAddApprovedTokens}
         disabled={!userAddress || waitFn.isLoading}
+        style={{
+          backgroundColor: "white",
+          color: "black",
+          border: "1px solid black",
+          borderRadius: "5px",
+          padding: "10px 20px",
+          cursor: "pointer",
+        }}
       >
         {getButtonText()}
       </button>

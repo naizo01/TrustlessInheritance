@@ -94,7 +94,7 @@ export default function WithdrawTokensButton() {
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
             placeholder="Enter contract address"
-            style={{ color: 'black', backgroundColor: 'white', border: '1px solid black', borderRadius: '3px', padding: '5px' }}
+            style={{ color: 'black', backgroundColor: 'white', border: '1px solid black', borderRadius: '3px', padding: '5px', width: "500px" }}
           />
         </label>
       </div>
