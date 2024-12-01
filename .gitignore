@@ -1,5 +1,4 @@
 .env*.ptau
-*.zkey
 build/
 setup/
 mallory.jsx
