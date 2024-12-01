@@ -134,7 +134,37 @@
   },
   {
     "type": "function",
+    "name": "isLockExpired",
+    "inputs": [
+      
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "isLocked",
+    "inputs": [
+      
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isWithdrawComplete",
     "inputs": [
       
     ],
