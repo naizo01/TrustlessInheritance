@@ -54,10 +54,26 @@ contract InheritanceScenarioTest is MCTest {
         vm.startPrank(bob);
         inheritanceContract.initiateInheritance(ProofData.getProof1());
 
-        vm.warp(vm.getBlockTimestamp() + 90 days);
-        inheritanceContract.isLocked();
-        inheritanceContract.isKilled();
-        inheritanceContract.withdrawTokens(tokens, amounts, ProofData.getProof2());
+        vm.warp(vm.getBlockTimestamp() + 91 days);
+
+        // 状態の確認
+        assertTrue(
+            inheritanceContract.isLockExpired(),
+            "Lock should be expired"
+        );
+        assertTrue(inheritanceContract.isLocked(), "Contract should be locked");
+        assertFalse(
+            inheritanceContract.isKilled(),
+            "Contract should not be killed"
+        );
+
+        inheritanceContract.withdrawTokens(
+            tokens,
+            amounts,
+            ProofData.getProof2()
+        );
+
+        // 残高の確認
         assertEq(
             testToken1.balanceOf(bob),
             1e20,
@@ -68,6 +84,13 @@ contract InheritanceScenarioTest is MCTest {
             1e20,
             "testToken2 balance is not 1e20"
         );
+
+        // 引き出し完了の確認
+        assertTrue(
+            inheritanceContract.isWithdrawComplete(),
+            "Withdraw should be complete"
+        );
+
         vm.stopPrank();
     }
 
@@ -88,14 +111,26 @@ contract InheritanceScenarioTest is MCTest {
         amounts[0] = 1e20;
         amounts[1] = 1e20;
 
+        assertFalse(
+            inheritanceContract.isLocked(),
+            "Contract should not be locked"
+        );
+
         vm.startPrank(bob);
         inheritanceContract.initiateInheritance(ProofData.getProof1());
         vm.stopPrank();
 
         vm.startPrank(alice);
         inheritanceContract.cancelInheritance();
-        inheritanceContract.isLocked();
-        inheritanceContract.isKilled();
+
+        // 状態の確認
+        assertTrue(
+            inheritanceContract.isLocked(),
+            "Contract should be locked"
+        );
+        assertTrue(inheritanceContract.isKilled(), "Contract should be killed");
+
+        // 残高の確認
         assertEq(
             testToken1.balanceOf(alice),
             1e20,
@@ -106,6 +141,7 @@ contract InheritanceScenarioTest is MCTest {
             1e20,
             "testToken2 balance is not 1e20"
         );
+
         vm.stopPrank();
     }
 }

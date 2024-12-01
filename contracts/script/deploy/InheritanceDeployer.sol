@@ -38,6 +38,8 @@ library InheritanceDeployer {
         mc.use("Hash", viewer.hash.selector, address(viewer));
         mc.use("IsLocked", viewer.isLocked.selector, address(viewer));
         mc.use("IsKilled", viewer.isKilled.selector, address(viewer));
+        mc.use("isLockExpired", viewer.isLockExpired.selector, address(viewer));
+        mc.use("isWithdrawComplete", viewer.isWithdrawComplete.selector, address(viewer));
         mc.use("LockDuration", viewer.lockDuration.selector, address(viewer));
         mc.use("LockStartTime", viewer.lockStartTime.selector, address(viewer));
         mc.use("Nonce", viewer.nonce.selector, address(viewer));
