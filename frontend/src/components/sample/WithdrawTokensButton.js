@@ -84,42 +84,42 @@ export default function WithdrawTokensButton() {
   };
 
   return (
-    <div>
-      <h2>Withdraw Tokens</h2>
+    <div style={{ padding: '20px', borderRadius: '5px' }}>
+      <h2 style={{ color: 'black' }}>Withdraw Tokens</h2>
       <div>
-        <label>
+        <label style={{ color: 'black' }}>
           Contract Address:
           <input
             type="text"
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
             placeholder="Enter contract address"
-            style={{ color: "white" }}
+            style={{ color: 'black', backgroundColor: 'white', border: '1px solid black', borderRadius: '3px', padding: '5px' }}
           />
         </label>
       </div>
-
-      <div style={{ marginBottom: "20px" }}>
-        <label>
+  
+      <div style={{ marginBottom: '20px' }}>
+        <label style={{ color: 'black' }}>
           Input Value:
           <input
             type="number"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Enter private input value"
-            style={{ color: "white" }}
+            style={{ color: 'black', backgroundColor: 'white', border: '1px solid black', borderRadius: '3px', padding: '5px' }}
           />
         </label>
       </div>
-
+  
       {selectedTokens.map((token, index) => (
-        <div key={index} style={{ marginBottom: "10px" }}>
-          <label>
+        <div key={index} style={{ marginBottom: '10px' }}>
+          <label style={{ color: 'black' }}>
             Select Token:
             <select
               value={token.symbol}
               onChange={(e) => handleTokenChange(index, e.target.value)}
-              style={{ color: "white", marginRight: "10px" }}
+              style={{ color: 'black', backgroundColor: 'white', border: '1px solid black', borderRadius: '3px', padding: '5px', marginRight: '10px' }}
             >
               {assets.map((asset) => (
                 <option key={asset.symbol} value={asset.symbol}>
@@ -128,52 +128,59 @@ export default function WithdrawTokensButton() {
               ))}
             </select>
           </label>
-          <label>
+          <label style={{ color: 'black' }}>
             Amount:
             <input
               type="number"
               value={amounts[index].toString()}
               onChange={(e) => handleAmountChange(index, e.target.value)}
               placeholder="Enter amount"
-              style={{ color: "white", marginRight: "10px" }}
+              style={{ color: 'black', backgroundColor: 'white', border: '1px solid black', borderRadius: '3px', padding: '5px', marginRight: '10px' }}
             />
           </label>
           <button
             onClick={() => handleRemoveTokenField(index)}
             disabled={selectedTokens.length === 1}
+            style={{ backgroundColor: 'white', color: 'black', border: '1px solid black', borderRadius: '5px', padding: '5px 10px', cursor: 'pointer' }}
           >
             Remove
           </button>
         </div>
       ))}
-
-      <div style={{ marginBottom: "10px" }}>
-        <button onClick={handleAddTokenField}>Add Another Token</button>
+  
+      <div style={{ marginBottom: '10px' }}>
+        <button 
+          onClick={handleAddTokenField} 
+          style={{ backgroundColor: 'white', color: 'black', border: '1px solid black', borderRadius: '5px', padding: '10px 20px', cursor: 'pointer' }}
+        >
+          Add Another Token
+        </button>
       </div>
-
+  
       <button
         onClick={handleGenerateProof}
         disabled={!inputValue || !selectedTokens.length || !amounts.length}
-        style={{ marginRight: "10px" }}
+        style={{ marginRight: '10px', backgroundColor: 'white', color: 'black', border: '1px solid black', borderRadius: '5px', padding: '10px 20px', cursor: 'pointer' }}
       >
         Generate Proof
       </button>
-
+  
       <button
         onClick={handleWithdraw}
         disabled={!userAddress || waitFn.isLoading || !proof}
+        style={{ backgroundColor: 'white', color: 'black', border: '1px solid black', borderRadius: '5px', padding: '10px 20px', cursor: 'pointer' }}
       >
         {getButtonText()}
       </button>
-
-      {waitFn.isLoading && <p>Transaction is being processed...</p>}
-      {waitFn.isSuccess && <p>Transaction successful!</p>}
-      {waitFn.isError && <p>Transaction failed. Please try again.</p>}
-
+  
+      {waitFn.isLoading && <p style={{ color: 'black' }}>Transaction is being processed...</p>}
+      {waitFn.isSuccess && <p style={{ color: 'black' }}>Transaction successful!</p>}
+      {waitFn.isError && <p style={{ color: 'black' }}>Transaction failed. Please try again.</p>}
+  
       {/* デバッグ情報 */}
-      <div style={{ marginTop: "20px" }}>
-        <h3>Current Proof Status:</h3>
-        <pre>
+      <div style={{ marginTop: '20px' }}>
+        <h3 style={{ color: 'black' }}>Current Proof Status:</h3>
+        <pre style={{ color: 'black' }}>
           {JSON.stringify(
             proof,
             (_, v) => (typeof v === "bigint" ? v.toString() : v),
