@@ -31,6 +31,10 @@ contract InheritanceFacade is IInheritanceContract {
 
     function isKilled() external view returns (bool){}
 
+    function isLockExpired() external view returns (bool){}
+
+    function isWithdrawComplete() external view returns (bool){}
+
     function lockDuration() external view returns (uint256){}
 
     function lockStartTime() external view returns (uint256){}

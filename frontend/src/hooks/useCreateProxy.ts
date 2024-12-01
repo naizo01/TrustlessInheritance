@@ -12,8 +12,8 @@ export type UseCreateProxyReturn = {
 };
 
 export default function useCreateProxy(
-  hash: string,
-  lockTime: bigint
+  lockTime: bigint,
+  proof: any
 ): UseCreateProxyReturn {
   const { chain, address: owner } = useAccount();
   const factoryAddress = InheritanceFactory;
@@ -23,12 +23,22 @@ export default function useCreateProxy(
     address: factoryAddress as `0x${string}`,
     abi: inheritanceFactoryAbi,
     functionName: "createProxy" as const,
-    args: [hash, lockTime],
+    args: [lockTime,{
+      pA: proof?._pA || [0n, 0n],
+      pB: proof?._pB || [[0n, 0n], [0n, 0n]],
+      pC: proof?._pC || [0n, 0n],
+      pubSignals: proof?._pubSignals || [0n]
+    }],
     chain: chain,
   };
 
-  const writeFn = useWriteContract();
-
+  const writeFn = useWriteContract({
+    mutation: {
+      onError: (error) => {
+        console.error("Error writing contract:", error);
+      },
+    },
+  });
   const writeContract = () => {
     if (isReady) writeFn.writeContract(config);
   };

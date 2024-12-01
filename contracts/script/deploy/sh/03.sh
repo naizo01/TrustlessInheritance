@@ -8,7 +8,7 @@ else
 fi
 
 # forge scriptコマンドを実行
-forge script script/deploy/02_SetDictionaryAddress.sol:SetDictionaryAddress \
+forge script script/deploy/03_SetDictionaryAddress.sol:SetDictionaryAddress \
   --rpc-url $RPC_URL \
   --chain-id $CHAIN_ID \
   --private-key $PRIVATE_KEY \

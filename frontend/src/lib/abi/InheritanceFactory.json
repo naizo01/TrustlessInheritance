@@ -19,14 +19,36 @@
     "name": "createProxy",
     "inputs": [
       {
-        "name": "_hash",
+        "name": "_lockTime",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "_lockTime",
-        "type": "uint256",
-        "internalType": "uint256"
+        "name": "proof",
+        "type": "tuple",
+        "internalType": "struct Schema.ZKProof",
+        "components": [
+          {
+            "name": "pA",
+            "type": "uint256[2]",
+            "internalType": "uint256[2]"
+          },
+          {
+            "name": "pB",
+            "type": "uint256[2][2]",
+            "internalType": "uint256[2][2]"
+          },
+          {
+            "name": "pC",
+            "type": "uint256[2]",
+            "internalType": "uint256[2]"
+          },
+          {
+            "name": "pubSignals",
+            "type": "uint256[1]",
+            "internalType": "uint256[1]"
+          }
+        ]
       }
     ],
     "outputs": [

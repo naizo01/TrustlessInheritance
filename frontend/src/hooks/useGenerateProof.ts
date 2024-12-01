@@ -14,7 +14,7 @@ export type UseGenerateProofReturn = {
   error: Error | null;
 };
 
-export default function useGenerateProof(): UseGenerateProofReturn {
+export default function useGenerateProof(user: string): UseGenerateProofReturn {
   const generateProof = async (input: number): Promise<ProofData> => {
     try {
       const poseidon = await circomlibjs.buildPoseidon();
@@ -22,22 +22,39 @@ export default function useGenerateProof(): UseGenerateProofReturn {
 
       console.log("Generating proof with input:", input, "hash:", hash);
 
+      const wasm: string = (() => {
+        switch (user) {
+          case "bob":
+            return "/zk/poseidon_hasher.wasm";
+          case "alice":
+            return "/zk/Password_validator.wasm";
+          default:
+            throw new Error("Invalid user");
+        }
+      })();
+
+      const zkey: string = (() => {
+        switch (user) {
+          case "bob":
+            return "/zk/circuit_0000.zkey";
+          case "alice":
+            return "/zk/circuit_password.zkey";
+          default:
+            throw new Error("Invalid user");
+        }
+      })();
+
       const { proof, publicSignals } = await snarkjs.groth16.fullProve(
         { in: input, hash: hash },
-        "/zk/poseidon_hasher.wasm",
-        "/zk/circuit_0000.zkey"
+        wasm,
+        zkey
       );
-
-      console.log("Raw proof generated:", proof);
-      console.log("Public signals:", publicSignals);
 
       // Solidity用のコールデータ生成
       const solidityCallData = await snarkjs.groth16.exportSolidityCallData(
         proof,
         publicSignals
       );
-
-      console.log("Solidity call data:", solidityCallData);
 
       // コールデータをJSON形式に変換
       const jsonData = JSON.parse(`[${solidityCallData}]`);
@@ -50,12 +67,6 @@ export default function useGenerateProof(): UseGenerateProofReturn {
       };
 
       console.log("Final proof data:", proofData);
-      console.log("Proof structure:", {
-        pALength: proofData._pA?.length,
-        pBDimensions: [proofData._pB?.length, proofData._pB?.[0]?.length],
-        pCLength: proofData._pC?.length,
-        pubSignalsLength: proofData._pubSignals?.length
-      });
 
       return proofData;
 

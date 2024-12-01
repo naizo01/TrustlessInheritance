@@ -36,4 +36,6 @@ interface IInheritanceFactory {
         uint[2] memory _pC,
         uint[1] memory _pubSignals
     ) external view returns (bool);
+
+    function sendNotification(address recipient) external returns (bool);
 }
