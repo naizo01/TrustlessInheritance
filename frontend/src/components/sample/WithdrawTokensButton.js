@@ -27,7 +27,7 @@ export default function WithdrawTokensButton() {
         throw new Error("Please enter a valid number");
       }
 
-      const proofData = await generateProof(input, selectedTokens, amounts);
+      const proofData = await generateProof(input);
       console.log("Generated proof data:", proofData);
       setProof(proofData);
     } catch (err) {
