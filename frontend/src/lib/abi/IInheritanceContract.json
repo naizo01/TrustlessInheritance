@@ -33,11 +33,7 @@
     "type": "function",
     "name": "cancelInheritance",
     "inputs": [
-      {
-        "name": "_tokens",
-        "type": "address[]",
-        "internalType": "address[]"
-      }
+      
     ],
     "outputs": [
       
