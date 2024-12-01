@@ -4,3 +4,6 @@
 [submodule "contracts/lib/mc"]
 	path = contracts/lib/mc
 	url = https://github.com/metacontract/mc
+[submodule "contracts/lib/push-smart-contracts"]
+	path = contracts/lib/push-smart-contracts
+	url = https://github.com/push-protocol/push-smart-contracts
