@@ -19,26 +19,26 @@ export type UseInitiateInheritanceReturn = {
 
 export default function useInitiateInheritance(
   contractAddress: `0x${string}`,
-  proof: ZKProof
+  proof: any
 ): UseInitiateInheritanceReturn {
   const { chain, address: owner } = useAccount();
-  const isReady = owner && contractAddress && chain && 
-    proof?._pA?.length === 2 && 
-    proof?._pB?.length === 2 && 
-    proof?._pC?.length === 2 && 
-    proof?._pubSignals?.length === 1;
+  // const isReady = owner && contractAddress && chain && 
+  //   proof?._pA?.length === 2 && 
+  //   proof?._pB?.length === 2 && 
+  //   proof?._pC?.length === 2 && 
+  //   proof?._pubSignals?.length === 1;
 
-  console.log("Validation check:", {
-    hasOwner: !!owner,
-    hasContract: !!contractAddress,
-    hasChain: !!chain,
-    proofValidation: {
-      pALength: proof?._pA?.length,
-      pBLength: proof?._pB?.length,
-      pCLength: proof?._pC?.length,
-      pubSignalsLength: proof?._pubSignals?.length
-    }
-  });
+  // console.log("Validation check:", {
+  //   hasOwner: !!owner,
+  //   hasContract: !!contractAddress,
+  //   hasChain: !!chain,
+  //   proofValidation: {
+  //     pALength: proof?._pA?.length,
+  //     pBLength: proof?._pB?.length,
+  //     pCLength: proof?._pC?.length,
+  //     pubSignalsLength: proof?._pubSignals?.length
+  //   }
+  // });
 
   const config = {
     address: contractAddress,
@@ -62,24 +62,23 @@ export default function useInitiateInheritance(
   });
 
   const writeContract = async () => {
-    if (!isReady) {
-      console.error("Not ready to write contract. State:", {
-        owner,
-        contractAddress,
-        chain,
-        proofState: {
-          pA: proof?._pA,
-          pB: proof?._pB,
-          pC: proof?._pC,
-          pubSignals: proof?._pubSignals
-        }
-      });
-      return;
-    }
+    // if (!isReady) {
+    //   console.error("Not ready to write contract. State:", {
+    //     owner,
+    //     contractAddress,
+    //     chain,
+    //     proofState: {
+    //       pA: proof?._pA,
+    //       pB: proof?._pB,
+    //       pC: proof?._pC,
+    //       pubSignals: proof?._pubSignals
+    //     }
+    //   });
+    //   return;
+    // }
 
     try {
-      console.log("Writing contract with config:", JSON.stringify(config, (_, v) =>
-        typeof v === 'bigint' ? v.toString() : v));
+      console.log("config.args",config.args)
       await writeFn.writeContract(config);
     } catch (error) {
       console.error("Contract write error:", error);
