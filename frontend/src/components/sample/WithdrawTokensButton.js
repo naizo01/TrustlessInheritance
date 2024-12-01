@@ -28,7 +28,6 @@ export default function WithdrawTokensButton() {
       }
 
       const proofData = await generateProof(input);
-      console.log("Generated proof data:", proofData);
       setProof(proofData);
     } catch (err) {
       console.error("Error generating proof:", err);

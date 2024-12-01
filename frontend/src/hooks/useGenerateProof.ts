@@ -50,16 +50,11 @@ export default function useGenerateProof(user: string): UseGenerateProofReturn {
         zkey
       );
 
-      console.log("Raw proof generated:", proof);
-      console.log("Public signals:", publicSignals);
-
       // Solidity用のコールデータ生成
       const solidityCallData = await snarkjs.groth16.exportSolidityCallData(
         proof,
         publicSignals
       );
-
-      console.log("Solidity call data:", solidityCallData);
 
       // コールデータをJSON形式に変換
       const jsonData = JSON.parse(`[${solidityCallData}]`);

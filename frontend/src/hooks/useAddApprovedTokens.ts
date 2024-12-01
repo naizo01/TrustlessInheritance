@@ -26,11 +26,8 @@ import {
     };
   
     const writeFn = useWriteContract();
-    console.log("Write function config:", config);
-    console.log("WriteFn state:", writeFn);
   
     const writeContract = () => {
-      console.log("WriteContract called, isReady:", isReady);
       if (isReady) {
         console.log("Executing writeContract with config:", config);
         try {

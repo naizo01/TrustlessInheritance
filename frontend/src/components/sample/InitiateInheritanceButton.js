@@ -20,7 +20,6 @@ export default function InitiateInheritanceButton() {
       }
 
       const proof = await generateProof(input);
-      console.log("Generated proof data:", proof);
       setProofData(proof);
 
     } catch (err) {
