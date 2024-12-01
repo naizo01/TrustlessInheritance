@@ -7,6 +7,7 @@ import {Storage} from "bundle/inheritance/storage/Storage.sol";
 import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceContract.sol";
 import {InheritanceFactory} from "bundle/inheritance/InheritanceFactory.sol";
 import {TestToken} from "bundle/test/TestToken.sol";
+import {MockPushCommV2} from "bundle/test/MockPushCommV2.sol";
 import {ProofData} from "./ProofData.sol";
 import {Groth16VerifierPassword} from "bundle/inheritance/zk/Groth16VerifierPassword.sol";
 
@@ -14,6 +15,7 @@ contract InheritanceScenarioTest is MCTest {
     using InheritanceDeployer for MCDevKit;
     address public dictionaryAddress;
     Groth16VerifierPassword zk;
+    MockPushCommV2 push;
     InheritanceFactory factory;
     IInheritanceContract inheritanceContract;
     TestToken testToken1;
@@ -23,7 +25,8 @@ contract InheritanceScenarioTest is MCTest {
 
     function setUp() public {
         zk = new Groth16VerifierPassword();
-        factory = new InheritanceFactory(address(zk));
+        push = new MockPushCommV2();
+        factory = new InheritanceFactory(address(zk), address(push), alice);
 
         dictionaryAddress = InheritanceDeployer.deployDictionaryInheritance(mc);
         factory.setDictionaryAddress(dictionaryAddress);

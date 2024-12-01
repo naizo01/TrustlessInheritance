@@ -54,6 +54,8 @@ contract InitiateInheritance {
             }
         }
 
+        require(IInheritanceFactory(state.factory).sendNotification(state.owner), "Push sendNotification failed");
+
         // Update state
         state.lockStartTime = block.timestamp;
         state.isLocked = true;
