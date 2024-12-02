@@ -66,7 +66,10 @@ contract InheritanceFactory is Groth16Verifier {
         uint256 _lockTime,
         Schema.ZKProof calldata proof
     ) external returns (address) {
-        zk.verifyProof(proof.pA, proof.pB, proof.pC, proof.pubSignals);
+        require(
+            zk.verifyProof(proof.pA, proof.pB, proof.pC, proof.pubSignals),
+            "Proof verification failed"
+        );
         uint _hash = proof.pubSignals[0];
 
         require(
@@ -149,7 +152,9 @@ contract InheritanceFactory is Groth16Verifier {
     }
 
     // IInheritanceContractのステータスを取得する関数
-    function getContractStatus(uint256 _hash) external view returns (bool, bool, bool, bool) {
+    function getContractStatus(
+        uint256 _hash
+    ) external view returns (bool, bool, bool, bool) {
         address proxyAddress = pubSignalToProxy[_hash];
         require(proxyAddress != address(0), "Proxy not found");
 
