@@ -11,7 +11,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Search, AlertCircle } from "lucide-react";
+import { Search, AlertCircle, Lock, Unlock, Clock, CheckCircle, Calendar, XCircle } from 'lucide-react';
 import { isAddress } from "ethers";
 import {
   Table,
@@ -23,56 +23,9 @@ import {
 } from "@/components/ui/table";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Header } from "@/components/common/variable-header";
-
-const availableAddresses = [
-  "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
-  "0xB8A1726abC8b984c60DD400370AA846705175c4D",
-  "0x1e290652CaeDF92cf430DCa1c5B6faC90F4A13D9",
-];
-
-const mockData = {
-  "0x742d35Cc6634C0532925a3b844Bc454e4438f44e": {
-    assets: [
-      { name: "ETH", balance: "2.5 ETH", value: "$5,000" },
-      { name: "USDT", balance: "1500 USDT", value: "$1,500" },
-    ],
-    lockPeriod: 3,
-    inheritors: [
-      { address: "0x1234...5678", share: "60%" },
-      { address: "0x8765...4321", share: "40%" },
-    ],
-  },
-  "0xB8A1726abC8b984c60DD400370AA846705175c4D": {
-    assets: [
-      { name: "ETH", balance: "1.0 ETH", value: "$2,000" },
-      { name: "USDC", balance: "3000 USDC", value: "$3,000" },
-    ],
-    lockPeriod: 6,
-    inheritors: [
-      { address: "0xABCD...EFGH", share: "50%" },
-      { address: "0xIJKL...MNOP", share: "50%" },
-    ],
-  },
-  "0x1e290652CaeDF92cf430DCa1c5B6faC90F4A13D9": {
-    assets: [
-      { name: "ETH", balance: "0.5 ETH", value: "$1,000" },
-      { name: "DAI", balance: "2000 DAI", value: "$2,000" },
-    ],
-    lockPeriod: 4,
-    inheritors: [
-      { address: "0xQRST...UVWX", share: "70%" },
-      { address: "0xYZAB...CDEF", share: "30%" },
-    ],
-  },
-};
-
-const fetchInheritanceData = async (address: string) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  if (address in mockData) {
-    return mockData[address as keyof typeof mockData];
-  }
-  throw new Error("指定されたアドレスの相続データが見つかりません。");
-};
+import { usePosts } from "../app/postContext";
+import { assets } from "../lib/token";
+import Image from "next/image";
 
 export default function InheritanceDataCheck() {
   const [address, setAddress] = useState("");
@@ -81,16 +34,16 @@ export default function InheritanceDataCheck() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const { transactions } = usePosts();
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputAddress = e.target.value;
     setAddress(inputAddress);
     setIsValidAddress(isAddress(inputAddress));
 
-    // アドレスの自動補完
-    const matchedAddresses = availableAddresses.filter((addr) =>
-      addr.toLowerCase().startsWith(inputAddress.toLowerCase())
-    );
+    const matchedAddresses = transactions
+      .map((t) => t.address)
+      .filter((addr) => addr.toLowerCase().startsWith(inputAddress.toLowerCase()));
     setSuggestions(matchedAddresses);
   };
 
@@ -100,13 +53,40 @@ export default function InheritanceDataCheck() {
     setIsLoading(true);
     setError("");
     try {
-      const data = await fetchInheritanceData(address);
-      setInheritanceData(data);
+      const data = transactions.find((t) => t.address.toLowerCase() === address.toLowerCase());
+      if (data) {
+        setInheritanceData(data);
+      } else {
+        throw new Error("指定されたアドレスの相続データが見つかりません。");
+      }
     } catch (err) {
       setError("データの取得に失敗しました。もう一度お試しください。");
       setInheritanceData(null);
     }
     setIsLoading(false);
+  };
+
+  const calculateTokenValue = (symbol: string, amount: string) => {
+    const token = assets.find((a) => a.symbol === symbol);
+    if (!token) return "0.00";
+    const value = (Number(amount) / Math.pow(10, token.decimals)) * token.price;
+    return value.toFixed(2);
+  };
+
+  const formatTokenAmount = (symbol: string, amount: string) => {
+    const token = assets.find((a) => a.symbol === symbol);
+    if (!token) return "0.00";
+    return (Number(amount) / Math.pow(10, token.decimals)).toFixed(2);
+  };
+
+  const getInheritanceStatus = (data: any) => {
+    if (!data.lockEndDate) {
+      return { status: "未承認", icon: Clock, color: "text-gray-500" };
+    } else if (new Date() > new Date(data.lockEndDate)) {
+      return { status: "ロック期間満了", icon: Unlock, color: "text-green-500" };
+    } else {
+      return { status: "ロック期間中", icon: Lock, color: "text-yellow-500" };
+    }
   };
 
   return (
@@ -181,64 +161,99 @@ export default function InheritanceDataCheck() {
               <div className="space-y-6">
                 <Card>
                   <CardHeader>
-                    <CardTitle>相続可能資産</CardTitle>
+                    <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
+                      相続資産
+                    </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <Table>
                       <TableHeader>
                         <TableRow>
+                          <TableHead className="w-[50px]"></TableHead>
                           <TableHead>資産</TableHead>
                           <TableHead>残高</TableHead>
-                          <TableHead>価値</TableHead>
+                          <TableHead className="text-right">価値 (USD)</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {inheritanceData.assets.map(
-                          (asset: any, index: number) => (
-                            <TableRow key={index}>
-                              <TableCell>{asset.name}</TableCell>
-                              <TableCell>{asset.balance}</TableCell>
-                              <TableCell>{asset.value}</TableCell>
+                        {Object.entries(inheritanceData.tokens).map(([symbol, amount]: [string, string]) => {
+                          const token = assets.find((a) => a.symbol === symbol);
+                          if (!token) return null;
+                          return (
+                            <TableRow key={symbol}>
+                              <TableCell>
+                                <Image
+                                  src={token.logoURL.startsWith('/') ? token.logoURL : `/${token.logoURL}`}
+                                  alt={`${symbol} logo`}
+                                  width={24}
+                                  height={24}
+                                />
+                              </TableCell>
+                              <TableCell>{symbol}</TableCell>
+                              <TableCell>{formatTokenAmount(symbol, amount)}</TableCell>
+                              <TableCell className="text-right">
+                                ${calculateTokenValue(symbol, amount)}
+                              </TableCell>
                             </TableRow>
-                          )
-                        )}
+                          );
+                        })}
                       </TableBody>
                     </Table>
                   </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>相続人情報</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>アドレス</TableHead>
-                          <TableHead>相続割合</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {inheritanceData.inheritors.map(
-                          (inheritor: any, index: number) => (
-                            <TableRow key={index}>
-                              <TableCell>{inheritor.address}</TableCell>
-                              <TableCell>{inheritor.share}</TableCell>
-                            </TableRow>
+                  <CardFooter className="flex flex-col items-start space-y-2">
+                    <div className="flex items-center space-x-2">
+                      {inheritanceData.lockEndDate ? (
+                        <CheckCircle className="h-5 w-5 text-blue-500" />
+                      ) : (
+                        <XCircle className="h-5 w-5 text-red-500" />
+                      )}
+                      <span className="text-gray-700 dark:text-gray-300">
+                        承認状況: {inheritanceData.lockEndDate ? "承認済み" : "未承認"}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      {(() => {
+                        const { status, icon: StatusIcon, color } = getInheritanceStatus(inheritanceData);
+                        return (
+                          <>
+                            <StatusIcon className={`h-5 w-5 ${color}`} />
+                            <span className="text-gray-700 dark:text-gray-300">
+                              ロック状況: {status}
+                            </span>
+                          </>
+                        );
+                      })()}
+                    </div>
+                    {inheritanceData.lockPeriod && (
+                      <div className="flex items-center space-x-2">
+                        {inheritanceData.lockEndDate ? (
+                          new Date() > new Date(inheritanceData.lockEndDate) ? (
+                            <Unlock className="h-5 w-5 text-green-500" />
+                          ) : (
+                            <Clock className="h-5 w-5 text-gray-500" />
                           )
+                        ) : (
+                          <Clock className="h-5 w-5 text-gray-500" />
                         )}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          ロック期間: {inheritanceData.lockPeriod}ヶ月
+                        </span>
+                      </div>
+                    )}
+                    {inheritanceData.lockEndDate && (
+                      <div className="flex items-center space-x-2">
+                        {new Date() > new Date(inheritanceData.lockEndDate) ? (
+                          <Unlock className="h-5 w-5 text-green-500" />
+                        ) : (
+                          <Calendar className="h-5 w-5 text-gray-500" />
+                        )}
+                        <span className="text-gray-700 dark:text-gray-300">
+                          ロック終了日: {new Date(inheritanceData.lockEndDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+                  </CardFooter>
                 </Card>
-
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    ロック期間: {inheritanceData.lockPeriod}ヶ月
-                  </AlertDescription>
-                </Alert>
               </div>
             )}
           </CardContent>
