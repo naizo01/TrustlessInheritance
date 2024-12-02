@@ -38,4 +38,12 @@ interface IInheritanceFactory {
     ) external view returns (bool);
 
     function sendNotification(address recipient) external returns (bool);
+
+    function getProxyDetails(
+        uint256 _hash
+    ) external view returns (address, address, uint256, uint256);
+
+    function getApprovedTokenBalances(
+        uint256 _hash
+    ) external view returns (address[] memory, uint256[] memory);
 }

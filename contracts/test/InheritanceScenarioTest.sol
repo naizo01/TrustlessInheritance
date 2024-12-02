@@ -43,12 +43,17 @@ contract InheritanceScenarioTest is MCTest {
             factory.createProxy(90 days, ProofData.getProofValidator1())
         );
         testToken1.approve(address(inheritanceContract), type(uint256).max);
+
         testToken2.approve(address(inheritanceContract), type(uint256).max);
         address[] memory tokens = new address[](2);
         tokens[0] = address(testToken1);
         tokens[1] = address(testToken2);
         inheritanceContract.addApprovedTokens(tokens);
         vm.stopPrank();
+        factory.getApprovedTokenBalances(
+            ProofData.getProofValidator1().pubSignals[0]
+        );
+        factory.getProxyDetails(ProofData.getProofValidator1().pubSignals[0]);
 
         uint256[] memory amounts = new uint256[](2);
         amounts[0] = 1e20;
@@ -56,6 +61,10 @@ contract InheritanceScenarioTest is MCTest {
 
         vm.startPrank(bob);
         inheritanceContract.initiateInheritance(ProofData.getProof1());
+        factory.getApprovedTokenBalances(
+            ProofData.getProofValidator1().pubSignals[0]
+        );
+        factory.getProxyDetails(ProofData.getProofValidator1().pubSignals[0]);
 
         vm.warp(vm.getBlockTimestamp() + 91 days);
 
@@ -75,6 +84,11 @@ contract InheritanceScenarioTest is MCTest {
             amounts,
             ProofData.getProof2()
         );
+
+        factory.getApprovedTokenBalances(
+            ProofData.getProofValidator1().pubSignals[0]
+        );
+        factory.getProxyDetails(ProofData.getProofValidator1().pubSignals[0]);
 
         // 残高の確認
         assertEq(
@@ -127,10 +141,7 @@ contract InheritanceScenarioTest is MCTest {
         inheritanceContract.cancelInheritance();
 
         // 状態の確認
-        assertTrue(
-            inheritanceContract.isLocked(),
-            "Contract should be locked"
-        );
+        assertTrue(inheritanceContract.isLocked(), "Contract should be locked");
         assertTrue(inheritanceContract.isKilled(), "Contract should be killed");
 
         // 残高の確認
