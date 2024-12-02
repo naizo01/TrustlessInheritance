@@ -8,7 +8,6 @@ import {IInheritanceFactory} from "bundle/inheritance/interfaces/IInheritanceFac
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {ZKPUtil} from "bundle/inheritance/zk/ZKPUtil.sol";
 
-
 contract WithdrawTokens {
     /**
      * @notice Withdraws tokens after the lock period using ZK proof
@@ -16,23 +15,39 @@ contract WithdrawTokens {
      * @param _amounts The amounts of each token to withdraw
      * @param proof The ZK proof for verification
      */
-    function withdrawTokens(address[] calldata _tokens, uint256[] calldata _amounts, Schema.ZKProof calldata proof) external {
-        require(_tokens.length == _amounts.length, "Tokens and amounts length mismatch");
-        
+    function withdrawTokens(
+        address[] calldata _tokens,
+        uint256[] calldata _amounts,
+        Schema.ZKProof calldata proof
+    ) external {
+        require(
+            _tokens.length == _amounts.length,
+            "Tokens and amounts length mismatch"
+        );
+
         Schema.InheritanceState storage state = Storage.InheritanceState();
         bytes32 proofHash = ZKPUtil.hashZKProof(proof);
 
-        require(state.isLocked && !state.isKilled, "Contract is not in locked state or is killed");
-        require(block.timestamp >= state.lockStartTime + state.lockDuration, "Lock period has not ended");
+        require(
+            state.isLocked && !state.isKilled,
+            "Contract is not in locked state or is killed"
+        );
+        require(
+            block.timestamp >= state.lockStartTime + state.lockDuration,
+            "Lock period has not ended"
+        );
         require(!state.usedProofs[proofHash], "Proof already used");
-        require(proof.pubSignals[0] == state.hash, "Invalid proof: hash mismatch");
+        require(
+            proof.pubSignals[0] == state.hash,
+            "Invalid proof: hash mismatch"
+        );
 
-        /*
-        approveされた額は0じゃないけど、このコントラクト内の残高は0のトークンをチェックする必要はあるか。
-        */
-        
         // Verify all tokens are approved
         for (uint256 i = 0; i < _tokens.length; i++) {
+            if (_tokens[i] == address(0)) {
+                continue; // address(0)の場合はスキップ
+            }
+
             bool isTokenHeld = false;
             for (uint256 j = 0; j < state.approvedTokens.length; j++) {
                 if (_tokens[i] == state.approvedTokens[j]) {
@@ -59,11 +74,22 @@ contract WithdrawTokens {
 
         // Transfer tokens
         for (uint256 i = 0; i < _tokens.length; i++) {
+            if (_tokens[i] == address(0)) {
+                continue; // address(0)の場合はスキップ
+            }
+
             IERC20 token = IERC20(_tokens[i]);
             uint256 balance = token.balanceOf(address(this));
             uint256 amount = _amounts[i] > balance ? balance : _amounts[i];
-            require(token.transfer(msg.sender, amount), "Token transfer failed");
+            require(
+                token.transfer(msg.sender, amount),
+                "Token transfer failed"
+            );
         }
-        emit IInheritanceContract.TokensWithdrawn(msg.sender, _tokens, _amounts);
+        emit IInheritanceContract.TokensWithdrawn(
+            msg.sender,
+            _tokens,
+            _amounts
+        );
     }
 }

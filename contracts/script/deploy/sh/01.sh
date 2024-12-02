@@ -8,7 +8,7 @@ else
 fi
 
 # forge scriptコマンドを実行
-forge script script/deploy/00_DeployInheritanceFactory.sol:DeployInheritanceFactory \
+forge script script/deploy/01_DeployInheritanceFactory.sol:DeployInheritanceFactory \
   --rpc-url $RPC_URL \
   --chain-id $CHAIN_ID \
   --private-key $PRIVATE_KEY \

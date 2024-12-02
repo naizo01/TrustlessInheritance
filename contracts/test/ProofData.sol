@@ -4,11 +4,6 @@ pragma solidity ^0.8.23;
 import {Schema} from "bundle/inheritance/storage/Schema.sol";
 
 library ProofData {
-    function getHash() internal pure returns (uint) {
-        return
-            0x2778f900758cc46e051040641348de3dacc6d2a31e2963f22cbbfb8f65464241;
-    }
-
     function getProof1() internal pure returns (Schema.ZKProof memory) {
         return
             Schema.ZKProof({

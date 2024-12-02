@@ -7,6 +7,7 @@ import {Storage} from "bundle/inheritance/storage/Storage.sol";
 import {IInheritanceContract} from "bundle/inheritance/interfaces/IInheritanceContract.sol";
 import {InheritanceFactory} from "bundle/inheritance/InheritanceFactory.sol";
 import {TestToken} from "bundle/test/TestToken.sol";
+import {MockPushCommV2} from "bundle/test/MockPushCommV2.sol";
 import {ProofData} from "./ProofData.sol";
 import {Groth16VerifierPassword} from "bundle/inheritance/zk/Groth16VerifierPassword.sol";
 
@@ -14,6 +15,7 @@ contract InheritanceScenarioTest is MCTest {
     using InheritanceDeployer for MCDevKit;
     address public dictionaryAddress;
     Groth16VerifierPassword zk;
+    MockPushCommV2 push;
     InheritanceFactory factory;
     IInheritanceContract inheritanceContract;
     TestToken testToken1;
@@ -23,7 +25,8 @@ contract InheritanceScenarioTest is MCTest {
 
     function setUp() public {
         zk = new Groth16VerifierPassword();
-        factory = new InheritanceFactory(address(zk));
+        push = new MockPushCommV2();
+        factory = new InheritanceFactory(address(zk), address(push), alice);
 
         dictionaryAddress = InheritanceDeployer.deployDictionaryInheritance(mc);
         factory.setDictionaryAddress(dictionaryAddress);
@@ -34,7 +37,7 @@ contract InheritanceScenarioTest is MCTest {
         vm.stopPrank();
     }
 
-    function test_success() public {
+    function test_success_withdrawTokens() public {
         vm.startPrank(alice);
         inheritanceContract = IInheritanceContract(
             factory.createProxy(90 days, ProofData.getProofValidator1())
@@ -54,10 +57,26 @@ contract InheritanceScenarioTest is MCTest {
         vm.startPrank(bob);
         inheritanceContract.initiateInheritance(ProofData.getProof1());
 
-        vm.warp(vm.getBlockTimestamp() + 90 days);
-        inheritanceContract.isLocked();
-        inheritanceContract.isKilled();
-        inheritanceContract.withdrawTokens(tokens, amounts, ProofData.getProof2());
+        vm.warp(vm.getBlockTimestamp() + 91 days);
+
+        // 状態の確認
+        assertTrue(
+            inheritanceContract.isLockExpired(),
+            "Lock should be expired"
+        );
+        assertTrue(inheritanceContract.isLocked(), "Contract should be locked");
+        assertFalse(
+            inheritanceContract.isKilled(),
+            "Contract should not be killed"
+        );
+
+        inheritanceContract.withdrawTokens(
+            tokens,
+            amounts,
+            ProofData.getProof2()
+        );
+
+        // 残高の確認
         assertEq(
             testToken1.balanceOf(bob),
             1e20,
@@ -68,7 +87,64 @@ contract InheritanceScenarioTest is MCTest {
             1e20,
             "testToken2 balance is not 1e20"
         );
+
+        // 引き出し完了の確認
+        assertTrue(
+            inheritanceContract.isWithdrawComplete(),
+            "Withdraw should be complete"
+        );
+
         vm.stopPrank();
     }
 
+    function test_success_cancelInheritance() public {
+        vm.startPrank(alice);
+        inheritanceContract = IInheritanceContract(
+            factory.createProxy(90 days, ProofData.getProofValidator1())
+        );
+        testToken1.approve(address(inheritanceContract), type(uint256).max);
+        testToken2.approve(address(inheritanceContract), type(uint256).max);
+        address[] memory tokens = new address[](2);
+        tokens[0] = address(testToken1);
+        tokens[1] = address(testToken2);
+        inheritanceContract.addApprovedTokens(tokens);
+        vm.stopPrank();
+
+        uint256[] memory amounts = new uint256[](2);
+        amounts[0] = 1e20;
+        amounts[1] = 1e20;
+
+        assertFalse(
+            inheritanceContract.isLocked(),
+            "Contract should not be locked"
+        );
+
+        vm.startPrank(bob);
+        inheritanceContract.initiateInheritance(ProofData.getProof1());
+        vm.stopPrank();
+
+        vm.startPrank(alice);
+        inheritanceContract.cancelInheritance();
+
+        // 状態の確認
+        assertTrue(
+            inheritanceContract.isLocked(),
+            "Contract should be locked"
+        );
+        assertTrue(inheritanceContract.isKilled(), "Contract should be killed");
+
+        // 残高の確認
+        assertEq(
+            testToken1.balanceOf(alice),
+            1e20,
+            "testToken1 balance is not 1e20"
+        );
+        assertEq(
+            testToken2.balanceOf(alice),
+            1e20,
+            "testToken2 balance is not 1e20"
+        );
+
+        vm.stopPrank();
+    }
 }

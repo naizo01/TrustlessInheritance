@@ -12,7 +12,7 @@ contract InheritanceFacade is IInheritanceContract {
 
     function addApprovedTokens(address[] calldata _tokens) external override {}
 
-    function cancelInheritance(address[] calldata _tokens) external override {}
+    function cancelInheritance() external override {}
 
     function initiateInheritance(
         Schema.ZKProof calldata proof
@@ -30,6 +30,10 @@ contract InheritanceFacade is IInheritanceContract {
     function isLocked() external view returns (bool){}
 
     function isKilled() external view returns (bool){}
+
+    function isLockExpired() external view returns (bool){}
+
+    function isWithdrawComplete() external view returns (bool){}
 
     function lockDuration() external view returns (uint256){}
 

@@ -6,10 +6,10 @@ import {MCDevKit} from "@mc-devkit/Flattened.sol";
 import {InheritanceFacade} from "bundle/inheritance/interfaces/InheritanceFacade.sol";
 // Functions
 import {Initialize} from "bundle/inheritance/functions/Initialize.sol";
-import {AddApprovedTokens} from "bundle/inheritance/functions/AddApprovedTokens.sol";
-import {CancelInheritance} from "bundle/inheritance/functions/CancelInheritance.sol";
-import {WithdrawTokens} from "bundle/inheritance/functions/WithdrawTokens.sol";
-import {InitiateInheritance} from "bundle/inheritance/functions/InitiateInheritance.sol";
+import {AddApprovedTokens} from "bundle/inheritance/functions/addApprovedTokens.sol";
+import {CancelInheritance} from "bundle/inheritance/functions/cancelInheritance.sol";
+import {WithdrawTokens} from "bundle/inheritance/functions/withdrawTokens.sol";
+import {InitiateInheritance} from "bundle/inheritance/functions/initiateInheritance.sol";
 import {InheritanceStateViewer} from "bundle/inheritance/functions/InheritanceStateViewer.sol";
 
 /**
@@ -38,6 +38,8 @@ library InheritanceDeployer {
         mc.use("Hash", viewer.hash.selector, address(viewer));
         mc.use("IsLocked", viewer.isLocked.selector, address(viewer));
         mc.use("IsKilled", viewer.isKilled.selector, address(viewer));
+        mc.use("isLockExpired", viewer.isLockExpired.selector, address(viewer));
+        mc.use("isWithdrawComplete", viewer.isWithdrawComplete.selector, address(viewer));
         mc.use("LockDuration", viewer.lockDuration.selector, address(viewer));
         mc.use("LockStartTime", viewer.lockStartTime.selector, address(viewer));
         mc.use("Nonce", viewer.nonce.selector, address(viewer));

@@ -24,17 +24,17 @@ export default function CancelInheritanceButton() {
   };
 
   return (
-    <div>
-      <h2>Cancel Inheritance</h2>
-      <div>
-        <label>
+    <div style={{ padding: '20px', borderRadius: '5px' }}>
+      <h2 style={{ color: 'black' }}>Cancel Inheritance</h2>
+      <div style={{ marginBottom: '20px' }}>
+        <label style={{ color: 'black' }}>
           Contract Address:
           <input
             type="text"
             value={contractAddress}
             onChange={(e) => setContractAddress(e.target.value)}
             placeholder="Enter contract address"
-            style={{ color: 'white' }}
+            style={{ color: 'black', backgroundColor: 'white', border: '1px solid black', borderRadius: '3px', padding: '5px', width: "500px" }}
           />
         </label>
       </div>
@@ -42,13 +42,14 @@ export default function CancelInheritanceButton() {
       <button 
         onClick={handleCancelInheritance} 
         disabled={!userAddress || waitFn.isLoading}
+        style={{ backgroundColor: 'white', color: 'black', border: '1px solid black', borderRadius: '5px', padding: '10px 20px', cursor: 'pointer' }}
       >
         {getButtonText()}
       </button>
 
-      {waitFn.isLoading && <p>Transaction is being processed...</p>}
-      {waitFn.isSuccess && <p>Transaction successful!</p>}
-      {waitFn.isError && <p>Transaction failed. Please try again.</p>}
+      {waitFn.isLoading && <p style={{ color: 'black' }}>Transaction is being processed...</p>}
+      {waitFn.isSuccess && <p style={{ color: 'black' }}>Transaction successful!</p>}
+      {waitFn.isError && <p style={{ color: 'black' }}>Transaction failed. Please try again.</p>}
     </div>
   );
 }

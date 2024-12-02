@@ -25,7 +25,7 @@ interface IInheritanceContract {
 
     function addApprovedTokens(address[] calldata _tokens) external;
 
-    function cancelInheritance(address[] calldata _tokens) external;
+    function cancelInheritance() external;
 
     function initiateInheritance(
         Schema.ZKProof calldata proof
@@ -44,6 +44,10 @@ interface IInheritanceContract {
     function isLocked() external view returns (bool);
 
     function isKilled() external view returns (bool);
+
+    function isLockExpired() external view returns (bool);
+
+    function isWithdrawComplete() external view returns (bool);
 
     function lockDuration() external view returns (uint256);
 
