@@ -11,12 +11,16 @@ contract DeployInheritanceFactory is MCScript {
             abi.encodePacked("ZK_ADDR_", vm.toString(chainId))
         );
         address zk = vm.envAddress(zkEnvVar);
-        address pushCommAddress = vm.envAddress("PUSH_COMM_ADDRESS");
+        string memory pushEnvVar = string(
+            abi.encodePacked("PUSH_COMM_ADDR_", vm.toString(chainId))
+        );
+        address pushCommAddress = vm.envAddress(pushEnvVar);
+
         address channelAddress = vm.envAddress("CHANNEL_ADDRESS");
 
         // InheritanceFactoryコントラクトのデプロイ
         InheritanceFactory factory = new InheritanceFactory(zk, pushCommAddress, channelAddress);
 
-        _saveAddrToEnv(address(factory), "INHERITANCE_DACTORY_ADDR_");
+        _saveAddrToEnv(address(factory), "INHERITANCE_FACTORY_ADDR_");
     }
 }

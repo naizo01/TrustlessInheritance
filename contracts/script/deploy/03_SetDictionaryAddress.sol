@@ -11,7 +11,7 @@ contract SetDictionaryAddress is MCScript {
 
         // 環境変数名を動的に生成
         string memory factoryEnvVar = string(
-            abi.encodePacked("INHERITANCE_DACTORY_ADDR_", vm.toString(chainId))
+            abi.encodePacked("INHERITANCE_FACTORY_ADDR_", vm.toString(chainId))
         );
         string memory dictionaryEnvVar = string(
             abi.encodePacked("INHERITANCE_DICTIONARY_ADDR_", vm.toString(chainId))
