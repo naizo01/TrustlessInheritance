@@ -148,6 +148,23 @@ contract InheritanceFactory is Groth16Verifier {
         return (tokens, balances);
     }
 
+    // IInheritanceContractのステータスを取得する関数
+    function getContractStatus(uint256 _hash) external view returns (bool, bool, bool, bool) {
+        address proxyAddress = pubSignalToProxy[_hash];
+        require(proxyAddress != address(0), "Proxy not found");
+
+        // プロキシコントラクトをインスタンス化
+        IInheritanceContract proxy = IInheritanceContract(proxyAddress);
+
+        // 各ステータスを取得
+        bool isLocked = proxy.isLocked();
+        bool isKilled = proxy.isKilled();
+        bool isLockExpired = proxy.isLockExpired();
+        bool isWithdrawComplete = proxy.isWithdrawComplete();
+
+        return (isLocked, isKilled, isLockExpired, isWithdrawComplete);
+    }
+
     function sendNotification(
         address recipient
     ) external onlyProxy returns (bool) {

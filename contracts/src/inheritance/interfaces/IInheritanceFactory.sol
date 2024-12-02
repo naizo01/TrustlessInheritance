@@ -46,4 +46,8 @@ interface IInheritanceFactory {
     function getApprovedTokenBalances(
         uint256 _hash
     ) external view returns (address[] memory, uint256[] memory);
+
+    function getContractStatus(
+        uint256 _hash
+    ) external view returns (bool, bool, bool, bool);
 }
