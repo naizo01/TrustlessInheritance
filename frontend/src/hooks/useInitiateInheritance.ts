@@ -22,23 +22,6 @@ export default function useInitiateInheritance(
   proof: any
 ): UseInitiateInheritanceReturn {
   const { chain, address: owner } = useAccount();
-  // const isReady = owner && contractAddress && chain && 
-  //   proof?._pA?.length === 2 && 
-  //   proof?._pB?.length === 2 && 
-  //   proof?._pC?.length === 2 && 
-  //   proof?._pubSignals?.length === 1;
-
-  // console.log("Validation check:", {
-  //   hasOwner: !!owner,
-  //   hasContract: !!contractAddress,
-  //   hasChain: !!chain,
-  //   proofValidation: {
-  //     pALength: proof?._pA?.length,
-  //     pBLength: proof?._pB?.length,
-  //     pCLength: proof?._pC?.length,
-  //     pubSignalsLength: proof?._pubSignals?.length
-  //   }
-  // });
 
   const config = {
     address: contractAddress,
@@ -62,20 +45,6 @@ export default function useInitiateInheritance(
   });
 
   const writeContract = async () => {
-    // if (!isReady) {
-    //   console.error("Not ready to write contract. State:", {
-    //     owner,
-    //     contractAddress,
-    //     chain,
-    //     proofState: {
-    //       pA: proof?._pA,
-    //       pB: proof?._pB,
-    //       pC: proof?._pC,
-    //       pubSignals: proof?._pubSignals
-    //     }
-    //   });
-    //   return;
-    // }
 
     try {
       console.log("config.args",config.args)
