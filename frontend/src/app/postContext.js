@@ -7,6 +7,7 @@ const PostContext = createContext(null);
 // for bob
 const dummyTransactions = [
   // 承認手続き前の取引
+  // tokensは、aliceがapprovedしたtoken
   {
     id: 1,
     address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
@@ -52,6 +53,7 @@ const dummyTransactions = [
 
 // これから相続手続きが行われる予定のwalletに記録されるblance
 // for alice
+// aliceのwallet内のposition全て
 const dummyPositions = [
   {
     address: "0xbc0C6ae768e9D2d5454055cd0997ff9f9C32dCAe", // my address 1
@@ -90,6 +92,7 @@ const dummyPositions = [
 
 // networkに記録される相続取引記録
 // for alice
+// aliceが過去にapprovedしたtoken
 const dummyNetworkRegistration = [
   {
     address: "0xD0248721c8b65932b6Cdc9fffaeD94287C9BB222", // my address 2
