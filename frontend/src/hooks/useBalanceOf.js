@@ -1,18 +1,20 @@
-import { useReadContract } from "wagmi";
+import { useReadContracts } from "wagmi";
 import { erc20Abi } from "viem";
 
-export default function useBalanceOf(address, tokenAddress) {
-  const config = {
-    address: tokenAddress,
+export default function useBalanceOf(address, assets) {
+  const contracts = assets.map((token) => ({
+    address: token.address,
     abi: erc20Abi,
-  };
-  const readFn = useReadContract({
-    ...config,
     functionName: "balanceOf",
     args: [address],
+  }));
+
+  const result = useReadContracts({
+    contracts,
     query: {
       enabled: !!address,
     },
   });
-  return readFn;
+
+  return result;
 }
