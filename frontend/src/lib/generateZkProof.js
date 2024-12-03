@@ -15,7 +15,7 @@ interface ProofData {
 * @param str 入力文字列
 * @returns 数値文字列
 */
-function stringToNumber(str: string): string {
+function stringToNumber(str) {
    let hex = '';
    for (let i = 0; i < str.length; i++) {
        hex += str.charCodeAt(i).toString(16);
@@ -39,14 +39,14 @@ export async function poseidonHash(input) {
 * @param input 入力値（数値文字列）
 * @returns ハッシュ値
 */
-export async function calculatePoseidonHash(input: string): Promise<string> {
+export async function calculatePoseidonHash(input) {
     const poseidon = await buildPoseidon();
     const hash = poseidon.F.toString(poseidon([input]));
     const solidityHash = BigInt(hash).toString(16);
     return "0x" + solidityHash;
  }
 
-export async function generateProof(secret: string): Promise<ProofData> {
+export async function generateProof(secret) {
   try {
       // 文字列を数値に変換
       const secretNumber = stringToNumber(secret);
@@ -80,7 +80,7 @@ export async function generateProof(secret: string): Promise<ProofData> {
   }
 }
 
-export async function generateAndEncodeProof(secret: string): Promise<string> {
+export async function generateAndEncodeProof(secret){
    const proofData = await generateProof(secret);
    
    const abiCoder = new AbiCoder();
@@ -93,13 +93,13 @@ export async function generateAndEncodeProof(secret: string): Promise<string> {
 }
 
 // ハッシュ値のみを取得する補助関数（コントラクトへの登録時などに使用）
-export async function getSecretHash(secret: string): Promise<string> {
+export async function getSecretHash(secret) {
    const secretNumber = stringToNumber(secret);
    return calculatePoseidonHash(secretNumber);
 }
 
 // デバッグ用の関数
-export async function testConversion(secret: string): Promise<void> {
+export async function testConversion(secret) {
    try {
        const secretNumber = stringToNumber(secret);
        const secretHash = await calculatePoseidonHash(secretNumber);
