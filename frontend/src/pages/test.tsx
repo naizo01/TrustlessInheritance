@@ -7,7 +7,7 @@ import AddApprovedTokensButton from '@/components/sample/AddApprovedTokensButton
 import CancelInheritanceButton from '@/components/sample/CancelInheritanceButton';
 import InitiateInheritanceButton from '@/components/sample/InitiateInheritanceButton';
 import WithdrawTokensButton from '@/components/sample/WithdrawTokensButton';
-import GenerateProofButton from '@/components/sample/GenerateProofButton';
+import ProxyInfo from '@/components/sample/ProxyInfo';
 import { ConnectKitButton } from "connectkit";
 
 export default function Home() {
@@ -32,6 +32,9 @@ export default function Home() {
       </div>
       <div style={{ border: "1px solid #ccc", padding: "10px" }}>
         <ProxyCreatedEventsList />
+      </div>
+      <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+        <ProxyInfo />
       </div>
       <div style={{ border: "1px solid #ccc", padding: "10px" }}>
         <AddApprovedTokensButton />

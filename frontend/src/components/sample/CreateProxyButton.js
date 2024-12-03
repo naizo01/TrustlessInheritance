@@ -11,8 +11,17 @@ const CreateProxyButton = () => {
   const { writeContract, waitFn } = useCreateProxy(lockTime, proofData);
 
   const handleGenerateProof = async () => {
-    const proof = await generateProof(inputValue);
-    setProofData(proof);
+    try {
+      const input = Number(inputValue);
+      if (isNaN(input)) {
+        throw new Error("Please enter a valid number");
+      }
+
+      const proofData = await generateProof(input);
+      setProofData(proofData);
+    } catch (err) {
+      console.error("Error generating proof:", err);
+    }
   };
 
   const handleCreateProxy = () => {
@@ -26,7 +35,7 @@ const CreateProxyButton = () => {
           private value:
           <input
             type="number"
-            value={inputValue}
+            // value={inputValue}
             onChange={(e) => {
               const value = Number(e.target.value);
               setInputValue(value);

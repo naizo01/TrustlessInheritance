@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import getProxyCreatedEvents from "@/hooks/getProxyCreatedEvents";
-import { getInheritanceState } from '@/hooks/getInheritanceState';
 
 const ProxyCreatedEventsList = () => {
   const [events, setEvents] = useState([]);
@@ -14,23 +13,6 @@ const ProxyCreatedEventsList = () => {
       console.error("イベントの取得に失敗しました:", error);
     }
   };
-
-  useEffect(() => {
-    const fetchStates = async () => {
-      const newStates = {};
-      for (const event of events) {
-        const proxyAddress = event.args[1];
-        const state = await getInheritanceState(proxyAddress);
-        console.log(state)
-        newStates[proxyAddress] = state;
-      }
-      setStates(newStates);
-    };
-
-    if (events.length > 0) {
-      fetchStates();
-    }
-  }, [events]);
 
   const styles = {
     container: {
@@ -87,32 +69,6 @@ const ProxyCreatedEventsList = () => {
               <td style={styles.td}>{event.args[2].toString()}</td>
             </tr>
           ))}
-        </tbody>
-      </table>
-      <table style={styles.table}>
-        <thead>
-          <tr>
-            <th style={styles.th}>proxy address</th>
-            <th style={styles.th}>isLocked</th>
-            <th style={styles.th}>isKilled</th>
-            <th style={styles.th}>isLockExpired</th>
-            <th style={styles.th}>isWithdrawComplete</th>
-          </tr>
-        </thead>
-        <tbody>
-          {events.map((event, index) => {
-            const proxyAddress = event.args[1];
-            const state = states[proxyAddress] || {};
-            return (
-              <tr key={index}>
-                <td style={styles.td}>{proxyAddress}</td>
-                <td style={styles.td}>{state.isLocked ? "Yes" : "No"}</td>
-                <td style={styles.td}>{state.isKilled ? "Yes" : "No"}</td>
-                <td style={styles.td}>{state.isLockExpired ? "Yes" : "No"}</td>
-                <td style={styles.td}>{state.isWithdrawComplete ? "Yes" : "No"}</td>
-              </tr>
-            );
-          })}
         </tbody>
       </table>
     </div>
