@@ -18,6 +18,12 @@ contract AddApprovedTokens {
             if (tokenAddress == address(0)) {
                 continue; // address(0)の場合はスキップ
             }
+
+            // 既にapprovedTokensに存在するか確認
+            for (uint256 j = 0; j < state.approvedTokens.length; j++) {
+                require(state.approvedTokens[j] != tokenAddress, "Token already approved");
+            }
+
             IERC20 token = IERC20(tokenAddress);
             uint256 allowance = token.allowance(msg.sender, address(this));
             require(allowance > 0, "Token allowance is zero");

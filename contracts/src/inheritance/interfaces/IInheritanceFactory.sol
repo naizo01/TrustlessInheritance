@@ -38,12 +38,6 @@ interface IInheritanceFactory {
         Schema.ZKProof calldata proof
     ) external returns (address);
 
-    function ownerToProxy(address owner) external view returns (address);
-
-    function dictionaryAddress() external view returns (address);
-
-    function admin() external view returns (address);
-
     function verifyProof(
         uint[2] memory _pA,
         uint[2][2] memory _pB,
@@ -60,4 +54,19 @@ interface IInheritanceFactory {
     function getProxyInfo(
         address _proxyAddress
     ) external view returns (ProxyInfo memory);
+
+    // ゲッターファンクション
+    function ownerToProxy(address ownerAddress) external view returns (address[] memory);
+
+    function isAllowed(address proxyAddress) external view returns (bool);
+
+    function pubSignalToProxy(uint256 pubSignal) external view returns (address);
+
+    function admin() external view returns (address);
+
+    function dictionaryAddress() external view returns (address);
+
+    function PUSH_COMM_ADDRESS() external view returns (address);
+
+    function CHANNEL_ADDRESS() external view returns (address);
 }

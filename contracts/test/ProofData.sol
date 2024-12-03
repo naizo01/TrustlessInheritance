@@ -66,22 +66,22 @@ library ProofData {
         return
             Schema.ZKProof({
                 pA: [
-                    0x00e8bff94ca04173d7563644afe4d369864533105d0ecad3f7945d0408b052ec,
-                    0x2ed85957d465e5ea1aaf36ff68715861550a173b18aa594240e49defbc25bc86
+                    0x147e7f24d5cfb557a82bd072f598b6b567706a00255a13508f061601678c53c4,
+                    0x12c33080193760b4c8aa5d6e9294e096b68d5330f4318f9f35e9f77ea98efe8f
                 ],
                 pB: [
                     [
-                        0x139a3b52c94e3ac9bea92d0de5b0e074dc52474af4676236ff9c52d8c087904c,
-                        0x23f202f8e5bad06561c17ec3ab25d3db7e1574d51eea48b2a1c72530801b9069
+                        0x15f47c475f4f060788cd370c0c31ba54ffb94ce9709b25e0adcf47da056a4f23,
+                        0x10a1fc8da1fab4024952ba536c902c84943d55e6fb0ed0be682c4979d4a90fbc
                     ],
                     [
-                        0x069d4dba4fcf27e171059ebbb125f53eaa8c4716f8b5fb605f3ed2a02c8b90ba,
-                        0x092f1ecbfd8c33d49e279b10fccceb4d597198fa70f7674aa1fe140f3128c5e2
+                        0x12c5128318985af099851d7af203c2be11b98df4ad4999bb8e2327450a0ba5ff,
+                        0x2cc9d6af1d5970c0704f18c3c85d125880e79ef443c790739243be02407679c1
                     ]
                 ],
                 pC: [
-                    0x01038d4edf8544a3633fb7d39b1b2716c1261506fa436d8601131e9954cd0f97,
-                    0x21066697298954f87e511d84ce606d47e0a129cbbcea7e2b083636dd3989506a
+                    0x059f517e9ea59a7ed5e90f5886e4311a7f223a1d3a5c1d3aeb5e9a66cc0a403f,
+                    0x0d59a40fa5c6d8a8f464a47f09231b0e34e453d545372fa93ec5750f8b507c80
                 ],
                 pubSignals: [
                     0x0fb849f7cf35865c838cef48782e803b2c38263e2f467799c87eff168eb4d897

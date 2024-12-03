@@ -28,15 +28,21 @@ contract InheritanceStateViewer {
     }
 
     function isLockExpired() external view returns (bool) {
-        uint256 lockEndTime = Storage.InheritanceState().lockStartTime +
-            Storage.InheritanceState().lockDuration;
+        Schema.InheritanceState storage state = Storage.InheritanceState();
+        uint256 lockEndTime = state.lockStartTime + state.lockDuration;
+        if (!state.isLocked) {
+            return false; // isLockedがfalseの場合
+        }
         return block.timestamp > lockEndTime;
     }
 
     function isWithdrawComplete() external view returns (bool) {
-        address[] memory tokens = Storage.InheritanceState().approvedTokens;
+        Schema.InheritanceState storage state = Storage.InheritanceState();
+        address[] memory tokens = state.approvedTokens;
+        if (!state.isLocked) {
+            return false; // isLockedがfalseの場合
+        }
         for (uint256 i = 0; i < tokens.length; i++) {
-
             IERC20 token = IERC20(tokens[i]);
             uint256 balance = token.balanceOf(address(this));
             if (balance > 0) {
