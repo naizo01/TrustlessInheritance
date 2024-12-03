@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 // context
 const PostContext = createContext(null);
@@ -126,9 +126,17 @@ const dummyNetworkRegistration = [
 // aliceのページ変遷をデモデータで試す場合は、my address 1～3を、自分のwalletのアドレスに置き換えてください。
 
 function PostProvider({ children }) {
-  const [wallet, setWallet] = useState(dummyPositions);
-  const [network, setNetwork] = useState(dummyNetworkRegistration);
-  const [transactions, setTransactions] = useState(dummyTransactions);
+  const [wallet, setWallet] = useState([]);
+  const [network, setNetwork] = useState([]);
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_USE_DUMMY_DATA === 'true') {
+      setWallet(dummyPositions);
+      setNetwork(dummyNetworkRegistration);
+      setTransactions(dummyTransactions);
+    }
+  }, []);
 
   return (
     <PostContext.Provider
