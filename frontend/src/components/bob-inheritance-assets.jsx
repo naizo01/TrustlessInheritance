@@ -25,6 +25,7 @@ import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 import { usePosts } from "@/app/postContext";
 import { assets as importedAssets } from "@/lib/token";
 import { Noto_Sans_Wancho } from "next/font/google";
+import { formatDurationFromUnixTime } from "@/lib/formatDuration";
 
 export default function Component() {
   const { state, dispatch } = useBobState();
@@ -56,7 +57,7 @@ export default function Component() {
       });
       dispatch({
         type: BOB_ACTIONS.SET_LOCK_PERIOD,
-        payload: transaction.lockPeriod,
+        lockPeriod: transaction.lockPeriod,
       });
 
       // update assets array
@@ -122,7 +123,7 @@ export default function Component() {
     dispatch({ type: BOB_ACTIONS.SET_ASSETS, payload: assetsInfo.assets });
     dispatch({
       type: BOB_ACTIONS.SET_LOCK_PERIOD,
-      payload: assetsInfo.lockPeriod,
+      lockPeriod: assetsInfo.lockPeriod,
     });
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
@@ -227,8 +228,8 @@ export default function Component() {
               >
                 <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                 <AlertDescription className="text-blue-800 dark:text-blue-200">
-                  選択した資産は相続プロセス開始後、{assetsInfo.lockPeriod}
-                  ヶ月間ロックされます。この期間中、被相続人は相続をキャンセルすることができます。
+                  選択した資産は相続プロセス開始後、{formatDurationFromUnixTime(assetsInfo.lockPeriod)}
+                  ロックされます。この期間中、被相続人は相続をキャンセルすることができます。
                 </AlertDescription>
               </Alert>
             </CardContent>
