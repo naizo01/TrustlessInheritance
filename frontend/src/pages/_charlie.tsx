@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/table";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Header } from "@/components/common/variable-header";
+import { formatDurationFromUnixTime } from "@/lib/formatDuration";
 
 const availableAddresses = [
   "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
@@ -236,7 +237,7 @@ export default function InheritanceDataCheck() {
                 <Alert>
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
-                    ロック期間: {inheritanceData.lockPeriod}ヶ月
+                    ロック期間: {formatDurationFromUnixTime(inheritanceData.lockPeriod)}
                   </AlertDescription>
                 </Alert>
               </div>

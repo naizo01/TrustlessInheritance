@@ -1,26 +1,5 @@
 [
   {
-    "type": "constructor",
-    "inputs": [
-      {
-        "name": "_zk",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "_pushCommAddress",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "_channelAddress",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "nonpayable"
-  },
-  {
     "type": "function",
     "name": "CHANNEL_ADDRESS",
     "inputs": [
@@ -153,6 +132,11 @@
             "internalType": "address"
           },
           {
+            "name": "hash",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
             "name": "lockDuration",
             "type": "uint256",
             "internalType": "uint256"
@@ -224,6 +208,11 @@
             "internalType": "address"
           },
           {
+            "name": "hash",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
             "name": "lockDuration",
             "type": "uint256",
             "internalType": "uint256"
@@ -273,7 +262,7 @@
     "name": "isAllowed",
     "inputs": [
       {
-        "name": "",
+        "name": "proxyAddress",
         "type": "address",
         "internalType": "address"
       }
@@ -292,21 +281,16 @@
     "name": "ownerToProxy",
     "inputs": [
       {
-        "name": "",
+        "name": "ownerAddress",
         "type": "address",
         "internalType": "address"
-      },
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
       }
     ],
     "outputs": [
       {
         "name": "",
-        "type": "address",
-        "internalType": "address"
+        "type": "address[]",
+        "internalType": "address[]"
       }
     ],
     "stateMutability": "view"
@@ -316,7 +300,7 @@
     "name": "pubSignalToProxy",
     "inputs": [
       {
-        "name": "",
+        "name": "pubSignal",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -326,21 +310,6 @@
         "name": "",
         "type": "address",
         "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "pushComm",
-    "inputs": [
-      
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "contract IPushCommV2"
       }
     ],
     "stateMutability": "view"
@@ -424,21 +393,6 @@
         "name": "",
         "type": "bool",
         "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "zk",
-    "inputs": [
-      
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "contract Groth16VerifierPassword"
       }
     ],
     "stateMutability": "view"

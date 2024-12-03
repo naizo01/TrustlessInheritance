@@ -34,35 +34,11 @@ export function Header({ scrolled, scrollToSection }: HeaderProps) {
         <nav className="hidden sm:block">
           <ul className="flex space-x-6 items-center">
             <li>
-              <button
-                onClick={() => scrollToSection("features")}
-                className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-              >
-                特徴
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => scrollToSection("how-to-use")}
-                className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-              >
-                使い方
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => scrollToSection("cautions")}
-                className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-              >
-                注意事項
-              </button>
-            </li>
-            <li>
               <Link
                 href="/alice"
                 className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
               >
-                被相続人用
+                相続する人
               </Link>
             </li>
             <li>
@@ -70,7 +46,7 @@ export function Header({ scrolled, scrollToSection }: HeaderProps) {
                 href="/bob"
                 className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
               >
-                相続人用
+                受け取る人
               </Link>
             </li>
             <li>
@@ -80,32 +56,8 @@ export function Header({ scrolled, scrollToSection }: HeaderProps) {
         </nav>
       </div>
       {isOpen && (
-        <nav className="sm:hidden bg-white dark:bg-gray-800 shadow-lg">
+        <nav className="sm:hidden bg-white shadow-lg">
           <ul className="flex flex-col space-y-2 p-4">
-            <li>
-              <button
-                onClick={() => scrollToSection("features")}
-                className="block w-full text-left py-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-              >
-                特徴
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => scrollToSection("how-to-use")}
-                className="block w-full text-left py-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-              >
-                使い方
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => scrollToSection("cautions")}
-                className="block w-full text-left py-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-              >
-                注意事項
-              </button>
-            </li>
             <li>
               <Link
                 href="/alice"

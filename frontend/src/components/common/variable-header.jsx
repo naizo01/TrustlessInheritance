@@ -22,24 +22,24 @@ export function Header({
   );
 
   const navItems = [
-    ...(showLandingPageButtons
-      ? [
-          { text: "特徴", onClick: () => scrollToSection("features") },
-          { text: "使い方", onClick: () => scrollToSection("how-to-use") },
-          { text: "注意事項", onClick: () => scrollToSection("cautions") },
-        ]
-      : []),
+    // ...(showLandingPageButtons
+    //   ? [
+    //       { text: "特徴", onClick: () => scrollToSection("features") },
+    //       { text: "使い方", onClick: () => scrollToSection("how-to-use") },
+    //       { text: "注意事項", onClick: () => scrollToSection("cautions") },
+    //     ]
+    //   : []),
     { text: "検索", href: "/charlie" },
-    { text: "被相続人用", href: "/alice" },
-    { text: "相続人用", href: "/bob" },
+    { text: "相続する人", href: "/alice" },
+    { text: "受け取る人", href: "/bob" },
   ];
 
   return (
     <header
       className={`fixed w-full z-50 transition-all duration-300 ${
         scrolled
-          ? "bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-md"
-          : "bg-transparent"
+          ? "bg-white dark:bg-gray-800 backdrop-blur-md shadow-md"
+          : "bg-white dark:bg-gray-800"
       }`}
     >
       <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
