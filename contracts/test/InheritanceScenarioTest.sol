@@ -50,10 +50,10 @@ contract InheritanceScenarioTest is MCTest {
         tokens[1] = address(testToken2);
         inheritanceContract.addApprovedTokens(tokens);
         vm.stopPrank();
-        factory.getApprovedTokenBalances(
+        factory.getProxyInfoByHash(
             ProofData.getProofValidator1().pubSignals[0]
         );
-        factory.getProxyDetails(ProofData.getProofValidator1().pubSignals[0]);
+        factory.getProxyInfo(address(inheritanceContract));
 
         uint256[] memory amounts = new uint256[](2);
         amounts[0] = 1e20;
@@ -61,10 +61,10 @@ contract InheritanceScenarioTest is MCTest {
 
         vm.startPrank(bob);
         inheritanceContract.initiateInheritance(ProofData.getProof1());
-        factory.getApprovedTokenBalances(
+        factory.getProxyInfoByHash(
             ProofData.getProofValidator1().pubSignals[0]
         );
-        factory.getProxyDetails(ProofData.getProofValidator1().pubSignals[0]);
+        factory.getProxyInfo(address(inheritanceContract));
 
         vm.warp(vm.getBlockTimestamp() + 91 days);
 
@@ -85,10 +85,10 @@ contract InheritanceScenarioTest is MCTest {
             ProofData.getProof2()
         );
 
-        factory.getApprovedTokenBalances(
+        factory.getProxyInfoByHash(
             ProofData.getProofValidator1().pubSignals[0]
         );
-        factory.getProxyDetails(ProofData.getProofValidator1().pubSignals[0]);
+        factory.getProxyInfo(address(inheritanceContract));
 
         // 残高の確認
         assertEq(

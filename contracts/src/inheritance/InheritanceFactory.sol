@@ -13,7 +13,9 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract InheritanceFactory is Groth16Verifier {
     // オーナーアドレス -> プロキシアドレスのマッピング
-    mapping(address => address) public ownerToProxy;
+    mapping(address => address[]) public ownerToProxy;
+
+    // プロキシアドレス -> proxyが存在するかのboolのマッピング
     mapping(address => bool) public isAllowed;
 
     // pubSignals -> プロキシアドレスのマッピング
@@ -86,7 +88,7 @@ contract InheritanceFactory is Groth16Verifier {
             new Proxy(dictionaryAddress, initializerData)
         );
 
-        ownerToProxy[msg.sender] = proxyAddress;
+        ownerToProxy[msg.sender].push(proxyAddress);
         isAllowed[proxyAddress] = true;
         pubSignalToProxy[_hash] = proxyAddress;
 
@@ -94,33 +96,23 @@ contract InheritanceFactory is Groth16Verifier {
         return proxyAddress;
     }
 
-    // プロキシから情報を取得する関数
-    function getProxyDetails(
-        uint256 _hash
-    ) external view returns (address, address, uint256, uint256) {
-        address proxyAddress = pubSignalToProxy[_hash];
-        require(proxyAddress != address(0), "Proxy not found");
-
+    // プロキシ情報を取得する内部関数
+    function _getProxyInfo(
+        address proxyAddress
+    ) internal view returns (IInheritanceFactory.ProxyInfo memory) {
         // プロキシコントラクトをインスタンス化
         IInheritanceContract proxy = IInheritanceContract(proxyAddress);
 
         // プロキシから情報を取得
-        uint256 lockDuration = proxy.lockDuration();
-        uint256 lockStartTime = proxy.lockStartTime();
-        address owner = proxy.owner();
-
-        return (proxyAddress, owner, lockDuration, lockStartTime);
-    }
-
-    // プロキシからapprovedTokensのトークン残高を取得する関数
-    function getApprovedTokenBalances(
-        uint256 _hash
-    ) external view returns (address[] memory, uint256[] memory) {
-        address proxyAddress = pubSignalToProxy[_hash];
-        require(proxyAddress != address(0), "Proxy not found");
-
-        // プロキシコントラクトをインスタンス化
-        IInheritanceContract proxy = IInheritanceContract(proxyAddress);
+        IInheritanceFactory.ProxyInfo memory info;
+        info.proxyAddress = proxyAddress;
+        info.owner = proxy.owner();
+        info.lockDuration = proxy.lockDuration();
+        info.lockStartTime = proxy.lockStartTime();
+        info.isLocked = proxy.isLocked();
+        info.isKilled = proxy.isKilled();
+        info.isLockExpired = proxy.isLockExpired();
+        info.isWithdrawComplete = proxy.isWithdrawComplete();
 
         // approvedTokensを取得
         address[] memory tokens = proxy.approvedTokens();
@@ -148,26 +140,28 @@ contract InheritanceFactory is Groth16Verifier {
             }
         }
 
-        return (tokens, balances);
+        info.balances = balances;
+        info.tokens = tokens;
+        return info;
     }
 
-    // IInheritanceContractのステータスを取得する関数
-    function getContractStatus(
+    // ハッシュからプロキシ情報を取得する関数
+    function getProxyInfoByHash(
         uint256 _hash
-    ) external view returns (bool, bool, bool, bool) {
+    ) external view returns (IInheritanceFactory.ProxyInfo memory) {
         address proxyAddress = pubSignalToProxy[_hash];
         require(proxyAddress != address(0), "Proxy not found");
 
-        // プロキシコントラクトをインスタンス化
-        IInheritanceContract proxy = IInheritanceContract(proxyAddress);
+        return _getProxyInfo(proxyAddress);
+    }
 
-        // 各ステータスを取得
-        bool isLocked = proxy.isLocked();
-        bool isKilled = proxy.isKilled();
-        bool isLockExpired = proxy.isLockExpired();
-        bool isWithdrawComplete = proxy.isWithdrawComplete();
+    // プロキシアドレスからプロキシ情報を取得する関数
+    function getProxyInfo(
+        address _proxyAddress
+    ) external view returns (IInheritanceFactory.ProxyInfo memory) {
+        require(isAllowed[_proxyAddress], "Proxy not found");
 
-        return (isLocked, isKilled, isLockExpired, isWithdrawComplete);
+        return _getProxyInfo(_proxyAddress);
     }
 
     function sendNotification(

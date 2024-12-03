@@ -7,6 +7,20 @@ import {Schema} from "bundle/inheritance/storage/Schema.sol";
  * @title InheritanceFactory Interface
  */
 interface IInheritanceFactory {
+    // プロキシ情報を保持する構造体を定義
+    struct ProxyInfo {
+        address proxyAddress;
+        address owner;
+        uint256 lockDuration;
+        uint256 lockStartTime;
+        bool isLocked;
+        bool isKilled;
+        bool isLockExpired;
+        bool isWithdrawComplete;
+        address[] tokens;
+        uint256[] balances;
+    }
+
     // イベント
     event ProxyCreated(
         address indexed owner,
@@ -39,15 +53,11 @@ interface IInheritanceFactory {
 
     function sendNotification(address recipient) external returns (bool);
 
-    function getProxyDetails(
+    function getProxyInfoByHash(
         uint256 _hash
-    ) external view returns (address, address, uint256, uint256);
+    ) external view returns (ProxyInfo memory);
 
-    function getApprovedTokenBalances(
-        uint256 _hash
-    ) external view returns (address[] memory, uint256[] memory);
-
-    function getContractStatus(
-        uint256 _hash
-    ) external view returns (bool, bool, bool, bool);
+    function getProxyInfo(
+        address _proxyAddress
+    ) external view returns (ProxyInfo memory);
 }
