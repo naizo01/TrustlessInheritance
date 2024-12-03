@@ -26,11 +26,11 @@ export async function getProxyInfo(proxyAddress) {
   }
 }
 
-export function convertToDummyTransaction(data) {
+export function convertToDummyTransaction(data, index = 1) {
   const lockStartTime = Number(data.lockStartTime);
   const lockDuration = Number(data.lockDuration);
   return {
-    id: 1, // ユニークなIDを生成する関数を使用
+    id: index, // ユニークなIDを生成する関数を使用
     proxyAddress: data.proxyAddress,
     ownerAddress: data.owner,
     tokens: convertTokens(data.tokens, data.balances),
@@ -50,7 +50,7 @@ function convertTokens(tokens, balances) {
   tokens.forEach((tokenAddress, index) => {
     const asset = assets.find(asset => asset.address.toLowerCase() === tokenAddress.toLowerCase());
     if (asset) {
-      tokenMap[asset.symbol] = balances[index];
+      tokenMap[asset.symbol] = String(balances[index]);
     }
   });
   return tokenMap;

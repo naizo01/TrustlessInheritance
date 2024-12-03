@@ -126,9 +126,9 @@ export default function Home() {
       if (proxyAddresses && proxyAddresses.length > 0) {
         const infos = [];
         await Promise.all(
-          proxyAddresses.map(async (address) => {
+          proxyAddresses.map(async (address, index) => {
             const info = await getProxyInfo(address);
-            const convetInfo = convertToDummyTransaction(info);
+            const convetInfo = convertToDummyTransaction(info, index+1);
             infos.push(convetInfo);
           })
         );
