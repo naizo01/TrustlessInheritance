@@ -57,11 +57,19 @@ interface IInheritanceFactory {
     ) external view returns (ProxyInfo memory);
 
     // ゲッターファンクション
-    function ownerToProxy(address ownerAddress) external view returns (address[] memory);
+    function ownerToProxy(
+        address ownerAddress
+    ) external view returns (address[] memory);
+
+    function getOwnerProxies(
+        address ownerAddress
+    ) external view returns (address[] memory);
 
     function isAllowed(address proxyAddress) external view returns (bool);
 
-    function pubSignalToProxy(uint256 pubSignal) external view returns (address);
+    function pubSignalToProxy(
+        uint256 pubSignal
+    ) external view returns (address);
 
     function admin() external view returns (address);
 

@@ -180,6 +180,12 @@ contract InheritanceFactory is Groth16Verifier {
         return pushComm.sendNotification(CHANNEL_ADDRESS, recipient, identity);
     }
 
+    function getOwnerProxies(
+        address ownerAddress
+    ) external view returns (address[] memory) {
+        return ownerToProxy[ownerAddress];
+    }
+
     modifier onlyProxy() {
         require(isAllowed[msg.sender], "Only proxy");
         _;
