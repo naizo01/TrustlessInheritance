@@ -17,7 +17,6 @@ import { Home, CheckCircle } from "lucide-react";
 import { Header } from "@/components/common/variable-header";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
 import { assets as importedAssets } from "@/lib/token";
-import { formatDurationFromUnixTime } from "@/lib/formatDuration";
 
 export default function InheritanceAssetConfirmation() {
   const { state, dispatch } = useAliceState();
@@ -148,7 +147,7 @@ export default function InheritanceAssetConfirmation() {
                     ロック期間:
                   </span>
                   <span className="font-medium mx-2">
-                    {formatDurationFromUnixTime(inheritanceData.lockPeriod)}
+                    {state.lockPeriod} ヶ月
                   </span>
                 </div>
               </div>

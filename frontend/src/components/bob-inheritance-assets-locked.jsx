@@ -21,7 +21,6 @@ import {
 import { Info, Check, Home, Loader2 } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRouter } from "next/navigation";
-import { formatDurationFromUnixTime } from "@/lib/formatDuration";
 
 import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
@@ -158,8 +157,8 @@ export default function InheritanceAssetsLockedPage() {
                 >
                   <Info className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                   <AlertDescription className="text-blue-800 dark:text-blue-200">
-                    選択した資産は相続プロセス開始後、{formatDurationFromUnixTime(inheritanceData.lockPeriod)}
-                    ロックされます。この期間中、被相続人は相続をキャンセルすることができます。正確なロック期間の満了時期は"ロック期間満了日"をご参照ください。
+                    選択した資産は相続プロセス開始後、{state.lockPeriod}
+                    ヶ月間ロックされます。この期間中、被相続人は相続をキャンセルすることができます。正確なロック期間の満了時期は"ロック期間満了日"をご参照ください。
                   </AlertDescription>
                 </Alert>
 

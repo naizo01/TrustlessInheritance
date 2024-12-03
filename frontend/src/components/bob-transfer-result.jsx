@@ -160,8 +160,8 @@ export default function TransferResultPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {assets.map((asset, index) => (
-                    <TableRow key={index}>
+                  {assets.map((asset) => (
+                    <TableRow key={asset.id}>
                       <TableCell>
                         <Checkbox checked={asset.selected} disabled />
                       </TableCell>

@@ -73,7 +73,7 @@ function aliceReducer(state, action) {
     case ALICE_ACTIONS.SET_GRANTED:
       return { ...state, granted: action.payload };
     case ALICE_ACTIONS.SET_LOCK_PERIOD:
-      return { ...state, lockPeriod: action.lockPeriod };
+      return { ...state, lockPeriod: +action.payload };
     case ALICE_ACTIONS.SET_REGISTERED:
       return { ...state, status: "registered" };
     case ALICE_ACTIONS.SET_SUBMITTED:
@@ -83,8 +83,8 @@ function aliceReducer(state, action) {
       return {
         ...state,
         lockEndDate: !action.payload
-        ? new Date(Date.now() + state.lockPeriod * 1000) // lockPeriodをUNIXタイムスタンプとして使用
-        : new Date(action.payload * 1000), 
+          ? new Date(Date.now() + state.lockPeriod * 30 * 24 * 60 * 60 * 1000)
+          : action.payload,
         // 30/360 basis need to check
       };
     case ALICE_ACTIONS.SET_SECRET:

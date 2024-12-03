@@ -23,7 +23,6 @@ import {
 } from "@/components/ui/table";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Header } from "@/components/common/variable-header";
-import { formatDurationFromUnixTime } from "@/lib/formatDuration";
 import { usePosts } from "../app/postContext";
 import { assets } from "../lib/token";
 import Image from "next/image";
@@ -237,7 +236,7 @@ export default function InheritanceDataCheck() {
                           <Clock className="h-5 w-5 text-gray-500" />
                         )}
                         <span className="text-gray-700 dark:text-gray-300">
-                          ロック期間: {formatDurationFromUnixTime(inheritanceData.lockPeriod)}
+                          ロック期間: {inheritanceData.lockPeriod}ヶ月
                         </span>
                       </div>
                     )}

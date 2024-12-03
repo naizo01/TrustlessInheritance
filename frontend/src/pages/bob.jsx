@@ -71,7 +71,7 @@ function bobReducer(state, action) {
     case BOB_ACTIONS.SET_ASSETS:
       return { ...state, assets: action.payload };
     case BOB_ACTIONS.SET_LOCK_PERIOD:
-      return { ...state, lockPeriod: action.lockPeriod };
+      return { ...state, lockPeriod: action.payload };
     case BOB_ACTIONS.SET_APPROVAL:
       return { ...state, status: "approved" };
     case BOB_ACTIONS.SET_MATURED:
@@ -80,8 +80,8 @@ function bobReducer(state, action) {
       return {
         ...state,
         lockEndDate: !action.payload
-        ? new Date(Date.now() + state.lockPeriod * 1000) // lockPeriodをUNIXタイムスタンプとして使用
-        : new Date(action.payload * 1000), 
+          ? new Date(Date.now() + state.lockPeriod * 30 * 24 * 60 * 60 * 1000)
+          : action.payload,
         // 30/360 basis need to check
       };
     case BOB_ACTIONS.SET_WITHDRAWAL:

@@ -26,13 +26,9 @@ import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
 import { usePosts } from "@/app/postContext";
-import { getProxyInfo, convertToDummyTransaction } from "@/hooks/getProxyInfo";
-import { getProxyInfoByHash } from "@/hooks/getProxyInfoByHash";
-import { poseidonHash } from "@/lib/hash";
 
 export default function AddressInputPage() {
   const { state, dispatch } = useBobState();
-  const { setTransactions } = usePosts();
 
   const [isValidAddress, setIsValidAddress] = useState(false);
   const [isInvalidAddress, setIsInvalidAddress] = useState(false);
@@ -60,21 +56,17 @@ export default function AddressInputPage() {
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
 
-  const handleSearch = async () => {
+  const handleSearch = () => {
     if (searchQuery.trim() === "") {
       setSearchResults([]);
       return;
     }
-    try {
-      const hash = await poseidonHash(searchQuery)
-      const info = await getProxyInfoByHash(hash);
-      const convertData = convertToDummyTransaction(info);
-      setSearchResults([convertData]);
-      setTransactions([convertData]);
-    } catch (error) {
-      console.error("Failed to fetch proxy info:", error);
-      alert("プロキシ情報の取得に失敗しました。");
-    }
+    const filteredResults = dummySearchResults.filter(
+      (result) =>
+        result.secret.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        result.address.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setSearchResults(filteredResults);
   };
 
   const handleSelectAddress = (selectedAddress) => {
@@ -131,14 +123,14 @@ export default function AddressInputPage() {
                     className="w-full flex items-center justify-center space-x-2 py-3"
                   >
                     <Search className="w-5 h-5" />
-                    <span>秘密情報で検索</span>
+                    <span>アドレスを検索</span>
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[600px] w-[90vw]">
                   <DialogHeader>
-                    <DialogTitle>秘密情報検索</DialogTitle>
+                    <DialogTitle>アドレス検索</DialogTitle>
                     <DialogDescription>
-                      被相続人のEthereumアドレスを秘密情報で検索します。
+                      被相続人のEthereumアドレスを検索します。
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
@@ -147,7 +139,7 @@ export default function AddressInputPage() {
                         id="search"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="秘密情報を入力..."
+                        placeholder="秘密情報やアドレスの一部を入力..."
                         className="flex-grow"
                       />
                       <Button

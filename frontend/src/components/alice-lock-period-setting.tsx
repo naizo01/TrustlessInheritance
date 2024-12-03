@@ -9,7 +9,6 @@ import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
 import { useState } from "react";
 import { Header } from "@/components/common/variable-header";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
-import { formatDurationFromUnixTime, convertUnixTimeToDuration } from "@/lib/formatDuration";
 
 // Define types for the state and actions
 type AliceState = {
@@ -18,7 +17,7 @@ type AliceState = {
 };
 
 type AliceAction =
-  | { type: typeof ALICE_ACTIONS.SET_LOCK_PERIOD; lockPeriod: number }
+  | { type: typeof ALICE_ACTIONS.SET_LOCK_PERIOD; payload: string }
   | { type: typeof ALICE_ACTIONS.MOVE_FORWARD };
 
 type AliceDispatch = React.Dispatch<AliceAction>;
@@ -28,20 +27,18 @@ export default function LockPeriodSetting() {
     state: AliceState;
     dispatch: AliceDispatch;
   }; // オブジェクトのプロパティを直接使用
-  const [lockPeriod, setPeriod] = useState<number>(0);
+  const [period, setPeriod] = useState<string>("");
   const [showConfirmation, setShowConfirmation] = useState(false);
   const handleQuickSelect = (months: number) => {
-    const secondsInAMonth = 30 * 24 * 60 * 60; // 1ヶ月を30日と仮定し、秒に変換
-    const unixTime = months * secondsInAMonth; // 月数を秒に変換
-    setPeriod(unixTime); // 期間をUNIXタイムスタンプとして設定
+    setPeriod(months.toString());
   };
   // const handleConfirm = (): void => {
   //   dispatch({ type: ALICE_ACTIONS.SET_LOCK_PERIOD, payload: Number(period) });
   //   dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   // };
-  console.log(lockPeriod)
+
   const handleConfirm = () => {
-    dispatch({ type: ALICE_ACTIONS.SET_LOCK_PERIOD, lockPeriod: Number(lockPeriod) });
+    dispatch({ type: ALICE_ACTIONS.SET_LOCK_PERIOD, payload: period });
     dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   };
 
@@ -79,10 +76,8 @@ export default function LockPeriodSetting() {
                 <div className="flex items-center gap-2">
                   <Input
                     type="number"
-                    value={convertUnixTimeToDuration(lockPeriod)}
-                    onChange={(e) => {
-                      handleQuickSelect(Number(e.target.value))
-                    }}
+                    value={period}
+                    onChange={(e) => setPeriod(e.target.value)}
                     placeholder="数値を入力"
                     className="text-center"
                     min="1"
@@ -139,7 +134,7 @@ export default function LockPeriodSetting() {
               <Button
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6"
                 onClick={() => setShowConfirmation(true)}
-                disabled={!lockPeriod}
+                disabled={!period}
               >
                 決定
               </Button>
@@ -152,7 +147,7 @@ export default function LockPeriodSetting() {
             <div className="text-center space-y-4">
               <p>ロック期間は</p>
               <p className="text-blue-600 dark:text-blue-400 text-lg font-bold">
-                {formatDurationFromUnixTime(Number(lockPeriod))}
+                {period} ヶ月
               </p>
               <p>です。よろしいですか？</p>
             </div>
