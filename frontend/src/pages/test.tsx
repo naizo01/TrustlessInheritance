@@ -13,11 +13,6 @@ import { ConnectKitButton } from "connectkit";
 export default function Home() {
   const [callData, setCallData] = useState(null);
 
-  const onCallDataGenerated = (newCallData) => {
-    setCallData(newCallData);
-    console.log("Generated callData:", newCallData); // デバッグ用
-  };
-
   return (
     <div>
       <ConnectKitButton />
