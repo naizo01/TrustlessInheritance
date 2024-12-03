@@ -30,13 +30,13 @@ import Image from "next/image";
 export default function InheritanceDataCheck() {
   const [address, setAddress] = useState("");
   const [isValidAddress, setIsValidAddress] = useState(false);
-  const [inheritanceData, setInheritanceData] = useState<any>(null);
+  const [inheritanceData, setInheritanceData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState([]);
   const { transactions } = usePosts();
 
-  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAddressChange = (e) => {
     const inputAddress = e.target.value;
     setAddress(inputAddress);
     setIsValidAddress(isAddress(inputAddress));
@@ -66,20 +66,20 @@ export default function InheritanceDataCheck() {
     setIsLoading(false);
   };
 
-  const calculateTokenValue = (symbol: string, amount: string) => {
+  const calculateTokenValue = (symbol, amount) => {
     const token = assets.find((a) => a.symbol === symbol);
     if (!token) return "0.00";
     const value = (Number(amount) / Math.pow(10, token.decimals)) * token.price;
     return value.toFixed(2);
   };
 
-  const formatTokenAmount = (symbol: string, amount: string) => {
+  const formatTokenAmount = (symbol, amount) => {
     const token = assets.find((a) => a.symbol === symbol);
     if (!token) return "0.00";
     return (Number(amount) / Math.pow(10, token.decimals)).toFixed(2);
   };
 
-  const getInheritanceStatus = (data: any) => {
+  const getInheritanceStatus = (data) => {
     if (!data.lockEndDate) {
       return { status: "未承認", icon: Clock, color: "text-gray-500" };
     } else if (new Date() > new Date(data.lockEndDate)) {
@@ -176,7 +176,7 @@ export default function InheritanceDataCheck() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {Object.entries(inheritanceData.tokens).map(([symbol, amount]: [string, string]) => {
+                        {Object.entries(inheritanceData.tokens).map(([symbol, amount]) => {
                           const token = assets.find((a) => a.symbol === symbol);
                           if (!token) return null;
                           return (
