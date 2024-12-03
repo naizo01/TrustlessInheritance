@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { ArrowLeft } from "lucide-react";
 import { Header } from "@/components/common/variable-header";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
+import useGenerateProof, { ProofData } from "@/hooks/useGenerateProof";
+
 
 // Define the type for the dispatch function
 type AliceDispatch = React.Dispatch<AliceAction>;
@@ -21,14 +23,32 @@ type AliceAction =
 export default function LockPeriodSetting() {
   const { dispatch } = useAliceState() as { dispatch: AliceDispatch }; // オブジェクトのプロパティを直接使用
   const [secretInfo, setSecretInfo] = useState<string>("");
+  const [proofData, setProofData] = useState<ProofData | null>(null);
+  const { generateProof } = useGenerateProof("alice");
 
   const handleNext = (): void => {
     dispatch({ type: ALICE_ACTIONS.SET_SECRET, payload: secretInfo });
     dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   };
 
+  const handleNextWithProof = async (): Promise<void> => {
+    try {
+      await handleGenerateProof();
+      // proofの生成が成功したら、元のhandleNextを実行
+      handleNext();
+    } catch (error) {
+      console.error('Proof generation failed:', error);
+      // エラーハンドリング
+    }
+  };
+
   const handlePrevious = (): void => {
     dispatch({ type: ALICE_ACTIONS.MOVE_BACKWARD });
+  };
+
+  const handleGenerateProof = async () => {
+    const proof = await generateProof(Number(secretInfo));
+    setProofData(proof);
   };
 
   // const handleSubmit = () => {
@@ -79,7 +99,7 @@ export default function LockPeriodSetting() {
                 </Button>
                 <Button
                   className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={handleNext}
+                  onClick={handleNextWithProof}
                   disabled={!secretInfo}
                 >
                   秘密情報の登録
