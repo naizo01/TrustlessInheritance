@@ -1,10 +1,13 @@
 "use client"; // Next.jsでクライアント側でのみ実行することを指定
 
 // 必要なReactフックとコンポーネントをインポートします
-import { useState, createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer, useEffect } from "react";
+import { useAccount } from "wagmi";
+import { assets } from "@/lib/token";
+import { usePosts } from "@/app/postContext";
+import useBalanceOf from "@/hooks/useBalanceOf";
 
 // 各ページコンポーネントをインポート
-import { InheritanceUi } from "@/components/inheritance-ui";
 //import BobLandingPage from "@/components/bob-landing-page";
 import LockPeriodSetting from "@/components/alice-lock-period-setting";
 import SecretInput from "@/components/alice-secret-input";
@@ -14,7 +17,6 @@ import SubLandingPage from "@/components/alice-landing-page";
 import InheritanceAssetConfirmation from "@/components/alice-inheritance-asset-confirmation";
 import InheritanceRegistrationReport from "@/components/alice-inheritance-registration-report";
 import InheritanceCancellationResult from "@/components/alice-inheritance-cancellation-result";
-import { PostProvider, usePosts } from "@/app/postContext";
 
 // Aliceのデータを管理するためのContextを作成します
 export const AliceContext = createContext(null);
@@ -98,6 +100,23 @@ function aliceReducer(state, action) {
 export default function Home() {
   // useReducerを使用して状態と更新関数を取得
   const [state, dispatch] = useReducer(aliceReducer, initialState);
+
+  const { address: userAddress } = useAccount();
+  const { data: balances } = useBalanceOf(userAddress, assets);
+  const { setWallet } = usePosts();
+
+  useEffect(() => {
+    if (balances) {
+      const newTokens = {};
+      assets.forEach((token, index) => {
+        const balance = balances ? balances[index] : null;
+        const balanceString = balance ? String(balance.result) : "0";
+        // if (balanceString !== "0") newTokens[token.symbol] = balanceString;
+        newTokens[token.symbol] = balanceString;
+      });
+      setWallet([{address: userAddress, tokens: newTokens}]);
+    }
+  }, [balances]);
 
   // 現在のステップに基づいて適切なページコンポーネントを返す関数
   function currentStep() {
