@@ -107,6 +107,7 @@ contract InheritanceFactory is Groth16Verifier {
         IInheritanceFactory.ProxyInfo memory info;
         info.proxyAddress = proxyAddress;
         info.owner = proxy.owner();
+        info.hash = proxy.hash();
         info.lockDuration = proxy.lockDuration();
         info.lockStartTime = proxy.lockStartTime();
         info.isLocked = proxy.isLocked();

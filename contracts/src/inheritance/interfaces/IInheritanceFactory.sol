@@ -11,6 +11,7 @@ interface IInheritanceFactory {
     struct ProxyInfo {
         address proxyAddress;
         address owner;
+        uint hash;
         uint256 lockDuration;
         uint256 lockStartTime;
         bool isLocked;
