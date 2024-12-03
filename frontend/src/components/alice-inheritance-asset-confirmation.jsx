@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -32,13 +33,16 @@ export default function InheritanceAssetConfirmation() {
     return sum;
   }, 0);
 
-  const handleNext = () => {
+  const handleNext = useCallback(async () => {
     // 相続の登録function call
     //
+    ///////////////////////////////////
+    ///// use useAddApprovedToken /////
+    ///////////////////////////////////
 
     // ページ変遷、stateのinitialize
     dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
-  };
+  }, [, dispatch]);
 
   const formatNumber = (num, decimal = 2) => {
     return num.toLocaleString(undefined, {

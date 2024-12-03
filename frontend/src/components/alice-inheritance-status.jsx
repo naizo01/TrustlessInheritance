@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -57,14 +57,14 @@ export default function InheritanceStatus() {
 
   // 相続取り消しは、相続申請がなくても可能
   // したがい、相続取り消しボタンは、常時表示
-  const handleCancel = () => {
+  const handleCancel = useCallback(async () => {
     // 相続取り消しのロジックをここに実装
     console.log("相続を取り消し");
 
     // 処理完了後
     setIsDialogOpen(false);
     dispatch({ type: ALICE_ACTIONS.MOVE_SPECIFIC, payload: 100 });
-  };
+  }, [, dispatch]);
 
   const formatNumber = (num, decimal = 2) => {
     return num.toLocaleString(undefined, {

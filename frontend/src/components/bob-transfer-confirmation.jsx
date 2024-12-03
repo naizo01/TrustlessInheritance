@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -39,6 +39,7 @@ import { isAddress } from "ethers";
 import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 import { assets as importedAssets } from "@/lib/token";
+import { useCall } from "wagmi";
 
 export default function TransferConfirmationPage() {
   const { state, dispatch } = useBobState();
@@ -88,15 +89,19 @@ export default function TransferConfirmationPage() {
     setIsConfirmDialogOpen(true);
   };
 
-  const executeTransfer = () => {
-    // Implement transfer logic here
+  const executeTransfer = useCallback(async () => {
+    ///////////////////////////////////////
+    /// Implement transfer logic here /////
+    ///////////////////////////////////////
+    // use useWithdrawTokens ???
+
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
     dispatch({
       type: BOB_ACTIONS.SET_RECIPIENT_ADDRESS,
       payload: destinationAccount,
     });
     console.log("Transfer executed");
-  };
+  }, [, dispatch]);
 
   const stopTransaction = () => {
     // Implement logic to stop the transaction

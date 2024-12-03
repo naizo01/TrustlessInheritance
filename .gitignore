@@ -2,6 +2,7 @@
 build/
 setup/
 mallory.jsx
+nancy.jsx
 
 
 .env

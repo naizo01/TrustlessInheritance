@@ -20,7 +20,7 @@ export const assets = [
   {
     name: "USD Coin",
     symbol: "USDC",
-    decimals: 18,
+    decimals: 18, //  18から6に訂正
     logoURL: "/logo/usdc.png",
     type: "ERC20",
     address: "0xef470258E0E529248f12548851CBDd46B21f9B6b",
@@ -38,7 +38,7 @@ export const assets = [
   {
     name: "Wrapped Bitcoin",
     symbol: "WBTC",
-    decimals: 18,
+    decimals: 18, //  18から8に訂正
     logoURL: "https://via.placeholder.com/50x50.png?text=%22WBTC%22",
     type: "ERC20",
     address: "0x092BE1bD0832fef2dC0cd39e94FddB4d958c3051",

@@ -37,6 +37,8 @@ const initialState = {
   assets: [], // asset holding
   granted: [], // asset granted
   secret: "", // secret
+  proxies: {}, // alice's proxies
+  selectedProxy: "", // proxy
 };
 
 // アクションタイプを定義します（状態を更新する際に使用）
@@ -52,6 +54,8 @@ export const ALICE_ACTIONS = {
   SET_GRANTED: "SET_GRANTED",
   SET_REGISTERED: "SET_REGISTERED",
   SET_SECRET: "SET_SECRET",
+  SET_PROXIES: "SET_PROXIES",
+  SET_SELECTED_PROXY: "SET_SELECTED_PROXY",
   RESET_STATE: "RESET_STATE",
 };
 
@@ -76,7 +80,6 @@ function aliceReducer(state, action) {
       return { ...state, status: "registered" };
     case ALICE_ACTIONS.SET_SUBMITTED:
       return { ...state, status: "submitted" };
-
     case ALICE_ACTIONS.SET_LOCK_END_DATE:
       return {
         ...state,
@@ -89,6 +92,10 @@ function aliceReducer(state, action) {
       return { ...state, secret: action.payload };
     case ALICE_ACTIONS.RESET_STATE:
       return { ...initialState };
+    case ALICE_ACTIONS.SET_PROXIES:
+      return { ...state, proxies: action.payload };
+    case ALICE_ACTIONS.SET_SELECTED_PROXY:
+      return { ...state, selectedProxy: action.payload };
     default:
       throw new Error("unknown action required");
   }

@@ -38,7 +38,9 @@ export default function Component() {
   const { transactions } = usePosts(); // import dummy data via usePosts
 
   useEffect(() => {
-    // simulating ABI call //
+    //////////////////////////////////////////////////
+    /// networkから指定されたaddressの相続財産を取得 ///
+    //////////////////////////////////////////////////
 
     // fetch transactions and create assets data
     if (transactions.length > 0) {

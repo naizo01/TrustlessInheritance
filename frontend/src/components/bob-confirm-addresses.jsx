@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,11 +30,11 @@ const ConfirmAddressesPage = () => {
     setIsLoading(false);
   }, [state.deceasedAddress, address, isConnected]);
 
-  const handleNextStep = () => {
+  const handleNextStep = useCallback(async () => {
     dispatch({ type: BOB_ACTIONS.SET_INHERITOR_ADDRESS, payload: address });
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
     console.log(`Proceeding to next step with inheritor address: ${address}`);
-  };
+  }, [, dispatch]);
 
   if (isLoading) {
     return (

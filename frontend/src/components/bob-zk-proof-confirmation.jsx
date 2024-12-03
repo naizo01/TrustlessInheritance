@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -30,12 +30,13 @@ export default function Component() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleConfirmApplication = () => {
+  const handleConfirmApplication = useCallback(async () => {
+    
     // Here you would typically make an API call to submit the application
     console.log("Application submitted");
     setIsDialogOpen(false);
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
-  };
+  }, [, dispatch]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">

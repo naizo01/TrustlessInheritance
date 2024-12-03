@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,6 +26,7 @@ import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 
 import { usePosts } from "@/app/postContext";
+import { useCall } from "wagmi";
 
 export default function AddressInputPage() {
   const { state, dispatch } = useBobState();
@@ -51,12 +52,20 @@ export default function AddressInputPage() {
     });
   };
 
-  const handleNextStep = () => {
+  const handleNextStep = useCallback(async () => {
+    ///////////////////////////////////////////////////////
+    /// networkから指定されたaddressのapprovedTokenを取得 ///
+    ///////////////////////////////////////////////////////
+    // 使うhookは？
+
     console.log("Proceeding with address:", state.deceasedAddress);
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
-  };
+  }, [, dispatch]);
 
-  const handleSearch = () => {
+  const handleSearch = useCallback(async () => {
+    // networkから検索対象のアドレス、秘密情報hashを取得
+    // 使うhookは？
+
     if (searchQuery.trim() === "") {
       setSearchResults([]);
       return;
@@ -67,7 +76,7 @@ export default function AddressInputPage() {
         result.address.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setSearchResults(filteredResults);
-  };
+  }, [, searchQuery, dispatch]);
 
   const handleSelectAddress = (selectedAddress) => {
     dispatch({
