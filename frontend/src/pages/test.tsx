@@ -8,6 +8,7 @@ import CancelInheritanceButton from '@/components/sample/CancelInheritanceButton
 import InitiateInheritanceButton from '@/components/sample/InitiateInheritanceButton';
 import WithdrawTokensButton from '@/components/sample/WithdrawTokensButton';
 import ProxyInfo from '@/components/sample/ProxyInfo';
+import OwnerToProxy from '@/components/sample/OwnerToProxy';
 import { ConnectKitButton } from "connectkit";
 
 export default function Home() {
@@ -18,6 +19,9 @@ export default function Home() {
       <ConnectKitButton />
       <div style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '20px' }}>
         <TokenBalances />
+      </div>
+      <div style={{ border: "1px solid #ccc", padding: "10px" }}>
+        <OwnerToProxy />
       </div>
       <div style={{ border: "1px solid #ccc", padding: "10px" }}>
         <ApproveToken />

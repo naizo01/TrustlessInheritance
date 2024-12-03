@@ -2,6 +2,7 @@ import { createPublicClient, http } from 'viem';
 import { baseSepolia } from 'viem/chains';
 import inheritanceFactoryAbi from "@/lib/abi/InheritanceFactory.json";
 import { InheritanceFactory } from "@/lib/address";
+import { assets } from "@/lib/token";
 
 export async function getProxyInfo(proxyAddress) {
   const apikey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
@@ -30,7 +31,8 @@ export function convertToDummyTransaction(data) {
   const lockDuration = Number(data.lockDuration);
   return {
     id: 1, // ユニークなIDを生成する関数を使用
-    address: data.proxyAddress,
+    proxyAddress: data.proxyAddress,
+    ownerAddress: data.owner,
     tokens: convertTokens(data.tokens, data.balances),
     lockEndDate: lockStartTime ? calculateLockEndDate(lockStartTime, lockDuration) : null,
     lockPeriod: Number(data.lockDuration),
@@ -42,16 +44,14 @@ export function convertToDummyTransaction(data) {
   };
 }
 
-// ユニークなIDを生成するためのヘルパー関数
-function generateUniqueId() {
-  return Math.floor(Math.random() * 1000000); // 簡単な例としてランダムなIDを生成
-}
-
 // tokensとbalancesを変換するためのヘルパー関数
 function convertTokens(tokens, balances) {
   const tokenMap = {};
-  tokens.forEach((token, index) => {
-    tokenMap[token] = balances[index];
+  tokens.forEach((tokenAddress, index) => {
+    const asset = assets.find(asset => asset.address.toLowerCase() === tokenAddress.toLowerCase());
+    if (asset) {
+      tokenMap[asset.symbol] = balances[index];
+    }
   });
   return tokenMap;
 }

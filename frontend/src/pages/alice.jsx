@@ -6,6 +6,8 @@ import { useAccount } from "wagmi";
 import { assets } from "@/lib/token";
 import { usePosts } from "@/app/postContext";
 import useBalanceOf from "@/hooks/useBalanceOf";
+import useOwnerToProxy from "@/hooks/useOwnerToProxy";
+import { getProxyInfo, convertToDummyTransaction } from "@/hooks/getProxyInfo";
 
 // 各ページコンポーネントをインポート
 //import BobLandingPage from "@/components/bob-landing-page";
@@ -103,7 +105,8 @@ export default function Home() {
 
   const { address: userAddress } = useAccount();
   const { data: balances } = useBalanceOf(userAddress, assets);
-  const { setWallet } = usePosts();
+  const { data: proxyAddresses } = useOwnerToProxy(userAddress);
+  const { setWallet, setNetwork } = usePosts();
 
   useEffect(() => {
     if (balances) {
@@ -117,6 +120,23 @@ export default function Home() {
       setWallet([{address: userAddress, tokens: newTokens}]);
     }
   }, [balances]);
+
+  useEffect(() => {
+    const fetchProxyInfos = async () => {
+      if (proxyAddresses && proxyAddresses.length > 0) {
+        const infos = [];
+        await Promise.all(
+          proxyAddresses.map(async (address) => {
+            const info = await getProxyInfo(address);
+            const convetInfo = convertToDummyTransaction(info);
+            infos.push(convetInfo);
+          })
+        );
+        setNetwork(infos);
+      }
+    };
+    fetchProxyInfos();
+  }, [proxyAddresses]);
 
   // 現在のステップに基づいて適切なページコンポーネントを返す関数
   function currentStep() {

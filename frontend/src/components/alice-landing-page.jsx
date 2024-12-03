@@ -44,7 +44,7 @@ function SubLandingPage() {
 
       // networkに登録がある場合は、networkの情報を取り込む
       const networkRegistration = network.find((pos) =>
-        pos.address.toLowerCase().includes(address.toLowerCase())
+        pos.ownerAddress.toLowerCase().includes(address.toLowerCase())
       );
       const position = networkRegistration || walletInfo;
 

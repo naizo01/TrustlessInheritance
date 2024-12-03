@@ -43,7 +43,7 @@ export default function InheritanceDataCheck() {
     setIsValidAddress(isAddress(inputAddress));
 
     const matchedAddresses = transactions
-      .map((t) => t.address)
+      .map((t) => t.ownerAddress)
       .filter((addr) => addr.toLowerCase().startsWith(inputAddress.toLowerCase()));
     setSuggestions(matchedAddresses);
   };
@@ -54,7 +54,7 @@ export default function InheritanceDataCheck() {
     setIsLoading(true);
     setError("");
     try {
-      const data = transactions.find((t) => t.address.toLowerCase() === address.toLowerCase());
+      const data = transactions.find((t) => t.ownerAddress.toLowerCase() === address.toLowerCase());
       if (data) {
         setInheritanceData(data);
       } else {

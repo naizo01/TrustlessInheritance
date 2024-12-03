@@ -44,7 +44,7 @@ export default function Component() {
     // fetch transactions and create assets data
     if (transactions.length > 0) {
       const transaction = transactions.find((tx) =>
-        tx.address.toLowerCase().includes(state.deceasedAddress.toLowerCase())
+        tx.ownerAddress.toLowerCase().includes(state.deceasedAddress.toLowerCase())
       );
       const data = {
         assets: [],

@@ -10,7 +10,7 @@ const dummyTransactions = [
   // tokensは、aliceがapprovedしたtoken
   {
     id: 1,
-    address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+    ownerAddress: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
     tokens: {
       ETH: "12000000000000000000",
       USDT: "1000000000",
@@ -24,7 +24,7 @@ const dummyTransactions = [
   // 承認手続きが行われ、ロック期間満了の取引
   {
     id: 2,
-    address: "0xB8A1726abC8b984c60DD400370AA846705175c4D",
+    ownerAddress: "0xB8A1726abC8b984c60DD400370AA846705175c4D",
     tokens: {
       ETH: "5000000000000000000",
       USDT: "1200000000",
@@ -38,7 +38,7 @@ const dummyTransactions = [
   // 承認手続きが行われ、ロック期間中の取引
   {
     id: 3,
-    address: "0x1e290652CaeDF92cf430DCa1c5B6faC90F4A13D9",
+    ownerAddress: "0x1e290652CaeDF92cf430DCa1c5B6faC90F4A13D9",
     tokens: {
       ETH: "18000000000000000000",
       USDT: "1250000000",
@@ -95,7 +95,7 @@ const dummyPositions = [
 // aliceが過去にapprovedしたtoken
 const dummyNetworkRegistration = [
   {
-    address: "0xD0248721c8b65932b6Cdc9fffaeD94287C9BB222", // my address 2
+    ownerAddress: "0xD0248721c8b65932b6Cdc9fffaeD94287C9BB222", // my address 2
     tokens: {
       ETH: "10000000000000000000", // usd33,475.30
       USDT: "1000000000000000000000",
@@ -107,7 +107,7 @@ const dummyNetworkRegistration = [
     lockEndDate: null,
   },
   {
-    address: "0x32CF6e0bDBec1DA0f4A047E5644f9EA6137D2b58", // my address 3
+    ownerAddress: "0x32CF6e0bDBec1DA0f4A047E5644f9EA6137D2b58", // my address 3
     tokens: {
       ETH: "2000000000000000000",
       USDT: "1000000000000000000000",

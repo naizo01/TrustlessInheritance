@@ -166,7 +166,7 @@ export default function AddressInputPage() {
                               key={result.id}
                               className="flex justify-between items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer"
                               onDoubleClick={() =>
-                                handleSelectAddress(result.address)
+                                handleSelectAddress(result.ownerAddress)
                               }
                             >
                               <div>
@@ -174,7 +174,7 @@ export default function AddressInputPage() {
                                 {result.secret}
                               </div> */}
                                 <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
-                                  {result.address}
+                                  {result.ownerAddress}
                                 </div>
                               </div>
                             </li>
