@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import ProjectProgressSlide from "@/components/slide/project-progress-slide"
 import WhyBlockchainSlide from "@/components/slide/why-blockchain-slide"
+import WhyZKPSlide from "@/components/slide/why-zkp-slide"
 import ComparisonSlide from "@/components/slide/comparison-slide"
 import TechnicalFeaturesSlide from "@/components/slide/technical-features-slide"
 import ContractDesignSlide from "@/components/slide/contract-design-slide"
@@ -25,15 +26,16 @@ export function Presentation() {
     <CurrentMethodsSlide key="current" />,
     <SolutionSlide key="solution" />,
     <ServiceFlowSlide key="service-flow" />,
-    <WhyBlockchainSlide key="why-blockchain" />,
-    <ComparisonSlide key="comparison" />,
     <TechnicalFeaturesSlide key="technical" />,
+    <ComparisonSlide key="comparison" />,
+    <WhyBlockchainSlide key="why-blockchain" />,
+    <WhyZKPSlide key="why-zkp" />,
     <ContractDesignSlide key="contract-design" />,
     <ProjectProgressSlide key="progress" />
   ]
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-4">
       <div className="max-w-[900px] mx-auto">
         {slides[currentSlide]}
 

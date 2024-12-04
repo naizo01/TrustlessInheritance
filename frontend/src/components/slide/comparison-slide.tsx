@@ -19,7 +19,7 @@ const ComparisonSlide = () => {
     },
     { item: "第三者依存", casa: false, delegacy: false, fourNext: true },
     { item: "資産安全性", casa: true, delegacy: true, fourNext: true },
-    { item: "透明性", casa: "partial", delegacy: false, fourNext: true },
+    { item: "透明性", casa: true, delegacy: false, fourNext: true },
   ];
 
   const renderCheckmark = (value: boolean | string) => {
@@ -32,14 +32,9 @@ const ComparisonSlide = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 mb-20 space-y-8 animate-fadeIn">
-      <h2 className="text-3xl font-bold text-center mb-8">サービス比較</h2>
+    <div className="w-full max-w-4xl mx-auto p-3 mb-20 space-y-4 animate-fadeIn">
+      <h2 className="text-3xl font-bold text-center mb-6">サービス比較</h2>
       <Card className="border-none p-6">
-        <h3 className="text-2xl font-semibold mb-4">
-          <div className="flex items-center justify-center space-x-2">
-            主要なCrypto資産相続サービスの比較
-          </div>
-        </h3>
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>

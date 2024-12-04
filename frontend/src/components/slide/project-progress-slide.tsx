@@ -40,6 +40,31 @@ const progressSections: ProgressSection[] = [
     ],
   },
   {
+    title: "ZKP",
+    items: [
+      {
+        label: "秘密情報検証回路",
+        completed: true,
+        details: "ゼロ知識証明の検証回路を設計",
+      },
+      {
+        label: "秘密情報バリデーション回路",
+        completed: true,
+        details: "入力データの検証回路を実装",
+      },
+      {
+        label: "proof生成",
+        completed: true,
+        details: "クライアント側でのproof生成ロジックを実装",
+      },
+      {
+        label: "テスト",
+        completed: true,
+        details: "ZKPシステムの総合テストを実施",
+      },
+    ],
+  },
+  {
     title: "コントラクト",
     items: [
       {
@@ -74,31 +99,7 @@ const progressSections: ProgressSection[] = [
       },
     ],
   },
-  {
-    title: "ZKP",
-    items: [
-      {
-        label: "秘密情報検証回路",
-        completed: true,
-        details: "ゼロ知識証明の検証回路を設計",
-      },
-      {
-        label: "秘密情報バリデーション回路",
-        completed: true,
-        details: "入力データの検証回路を実装",
-      },
-      {
-        label: "proof生成",
-        completed: true,
-        details: "クライアント側でのproof生成ロジックを実装",
-      },
-      {
-        label: "テスト",
-        completed: true,
-        details: "ZKPシステムの総合テストを実施",
-      },
-    ],
-  },
+
   {
     title: "フロントエンド",
     items: [
@@ -136,8 +137,6 @@ const progressSections: ProgressSection[] = [
   },
 ];
 
-// ... existing code ...
-
 const ProjectProgressSlide = () => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
@@ -151,20 +150,19 @@ const ProjectProgressSlide = () => {
   );
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 mb-20 space-y-8 animate-fadeIn">
-      <h2 className="text-3xl font-bold text-center mb-8">
+    <div className="w-full max-w-4xl mx-auto p-3 mb-20 space-y-4 animate-fadeIn">
+      <h2 className="text-3xl font-bold text-center mb-6">
         プロジェクト進捗状況
       </h2>
 
       <Card className="p-6 bg-white bg-blue-50">
-        <h3 className="text-xl font-bold  mb-4">全体進捗</h3>
+        <h3 className="text-xl font-bold  mb-4">
+          全体進捗：{totalProgress.toFixed(0)}%
+        </h3>
         <Progress value={totalProgress} className="h-2 mb-2" />
-        <p className="text-sm text-gray-600 dark:text-gray-400 font-bold ">
-          {totalProgress.toFixed(0)}% 完了
-        </p>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {progressSections.map((section, index) => (
           <motion.div key={index}>
             <Card className="p-6 bg-white bg-blue-50">
@@ -178,8 +176,6 @@ const ProjectProgressSlide = () => {
                       setHoveredItem(`${section.title}-${item.label}`)
                     }
                     onHoverEnd={() => setHoveredItem(null)}
-                    whileHover={{ scale: 1.02 }} // スケールを1.02に変更
-                    transition={{ duration: 0.2 }} // アニメーションの速度を調整
                   >
                     <CheckSquare
                       className={`w-5 h-5 mr-2 ${
