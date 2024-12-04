@@ -34,9 +34,11 @@ export function convertToDummyTransaction(data, index = 1) {
     proxyAddress: data.proxyAddress,
     ownerAddress: data.owner,
     tokens: convertTokens(data.tokens, data.balances),
+    tokenAddresses: convertTokenAddress(data.tokens),
+    loclSrartDate: lockStartTime,
     lockEndDate: lockStartTime ? calculateLockEndDate(lockStartTime, lockDuration) : null,
-    lockPeriod: Number(data.lockDuration),
-    secret: data.hash,
+    lockPeriod: lockDuration,
+    secret: String(data.hash),
     isLocked: data.isLocked,
     isKilled: data.isKilled,
     isLockExpired: data.isLockExpired,
@@ -56,9 +58,19 @@ function convertTokens(tokens, balances) {
   return tokenMap;
 }
 
+// tokensとbalancesを変換するためのヘルパー関数
+function convertTokenAddress(tokens) {
+  const tokenMap = {};
+  tokens.forEach((tokenAddress, index) => {
+    const asset = assets.find(asset => asset.address.toLowerCase() === tokenAddress.toLowerCase());
+    if (asset) {
+      tokenMap[asset.symbol] = tokenAddress;
+    }
+  });
+  return tokenMap;
+}
+
 // lockEndDateを計算するためのヘルパー関数
 function calculateLockEndDate(lockStartTime, lockDuration) {
-  const startDate = new Date(lockStartTime * 1000); // UNIXタイムスタンプをミリ秒に変換
-  startDate.setMonth(startDate.getMonth() + lockDuration);
-  return startDate;
+  return lockStartTime + lockDuration;
 }
