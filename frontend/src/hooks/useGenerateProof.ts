@@ -19,6 +19,7 @@ export default function useGenerateProof(user: string): UseGenerateProofReturn {
     try {
       const poseidon = await circomlibjs.buildPoseidon();
       const hash = poseidon.F.toString(poseidon([input]));
+      const solidityHash = "0x" + BigInt(hash).toString(16);
 
       console.log("Generating proof with input:", input, "hash:", hash);
 
@@ -45,7 +46,7 @@ export default function useGenerateProof(user: string): UseGenerateProofReturn {
       })();
 
       const { proof, publicSignals } = await snarkjs.groth16.fullProve(
-        { in: input, hash: hash },
+        { in: input, hash: solidityHash },
         wasm,
         zkey
       );
