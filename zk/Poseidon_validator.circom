@@ -38,7 +38,7 @@ template PoseidonValidator(n) {
     component isGreaterThan = GreaterThan(32);
     isGreaterThan.in[0] <== nonZeroCount;
     isGreaterThan.in[1] <== 8;
-    assert(isGreaterThan.out == 1);
+    isGreaterThan.out == 1;
 
     // 最初の非ゼロ要素を取得
     signal refValueArray[n];

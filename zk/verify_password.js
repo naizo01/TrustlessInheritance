@@ -4,7 +4,7 @@ const fs = require("fs");
 
 (async function () {
     // 数値入力の準備
-    let input = 123456789;
+    let input = 111111111111112;
 
     const poseidon = await circomlibjs.buildPoseidon();
     const hash = poseidon.F.toString(poseidon([input]));

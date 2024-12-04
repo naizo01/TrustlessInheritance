@@ -10,8 +10,8 @@ template PasswordValidator() {
     signal remainders[20];
     signal isZeros[20];
     signal digitCount;
-    signal allSameDigits;
-    signal validPassword;
+    signal lengthError;
+    signal sameDigitsError;
     
     quotients[0] <== in;
     
@@ -34,20 +34,23 @@ template PasswordValidator() {
     }
     digitCount <== count;
     
-    // 同じ数字が連続しているかチェック
+    // 桁数エラーチェック
+    lengthError <-- (digitCount < 8) * 1;
+    lengthError * (1 - lengthError) === 0;
+    lengthError === 0;
+
+    // 同じ数字チェック
     var isAllSame = 1;
     for (var i = 0; i < 18; i++) {
         if (isZeros[i] == 0) {
             isAllSame = isAllSame * (remainders[i] == remainders[i+1]);
         }
     }
-    allSameDigits <-- isAllSame;
-    
-    // 8桁より大きく、かつ全て同じ数字でない場合はtrue
-    validPassword <-- (digitCount > 8 && allSameDigits == 0) * 1;
-    validPassword * (1 - validPassword) === 0;
+    sameDigitsError <-- isAllSame;
+    sameDigitsError * (1 - sameDigitsError) === 0;
+    sameDigitsError === 0;
 
-    // パスワードが有効な場合のみハッシュ値を検証
+    // ハッシュ値検証
     component poseidon = Poseidon(1);
     poseidon.inputs[0] <== in;
     hash === poseidon.out;
