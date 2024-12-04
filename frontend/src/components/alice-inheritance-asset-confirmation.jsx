@@ -38,6 +38,7 @@ export default function InheritanceAssetConfirmation() {
     //
 
     // ページ変遷、stateのinitialize
+    dispatch({ type: ALICE_ACTIONS.SET_REGISTERED });
     dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   };
 

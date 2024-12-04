@@ -1,5 +1,5 @@
-import { createPublicClient, http } from 'viem';
-import { baseSepolia } from 'viem/chains';
+import { createPublicClient, http } from "viem";
+import { baseSepolia } from "viem/chains";
 import inheritanceFactoryAbi from "@/lib/abi/InheritanceFactory.json";
 import { InheritanceFactory } from "@/lib/address";
 import { assets } from "@/lib/token";
@@ -8,7 +8,7 @@ export async function getProxyInfo(proxyAddress) {
   const apikey = process.env.NEXT_PUBLIC_ALCHEMY_ID;
   const publicClient = createPublicClient({
     chain: baseSepolia,
-    transport: http(`https://base-sepolia.g.alchemy.com/v2/${apikey}`)
+    transport: http(`https://base-sepolia.g.alchemy.com/v2/${apikey}`),
   });
 
   try {
@@ -36,7 +36,9 @@ export function convertToDummyTransaction(data, index = 1) {
     tokens: convertTokens(data.tokens, data.balances),
     tokenAddresses: convertTokenAddress(data.tokens),
     loclSrartDate: lockStartTime ? lockStartTime * 1000 : null,
-    lockEndDate: lockStartTime ? calculateLockEndDate(lockStartTime, lockDuration) * 1000 : null,
+    lockEndDate: lockStartTime
+      ? calculateLockEndDate(lockStartTime, lockDuration) * 1000
+      : null,
     lockPeriod: lockDuration,
     secret: String(data.hash),
     isLocked: data.isLocked,
@@ -50,7 +52,9 @@ export function convertToDummyTransaction(data, index = 1) {
 function convertTokens(tokens, balances) {
   const tokenMap = {};
   tokens.forEach((tokenAddress, index) => {
-    const asset = assets.find(asset => asset.address.toLowerCase() === tokenAddress.toLowerCase());
+    const asset = assets.find(
+      (asset) => asset.address.toLowerCase() === tokenAddress.toLowerCase()
+    );
     if (asset) {
       tokenMap[asset.symbol] = String(balances[index]);
     }
@@ -62,7 +66,9 @@ function convertTokens(tokens, balances) {
 function convertTokenAddress(tokens) {
   const tokenMap = {};
   tokens.forEach((tokenAddress, index) => {
-    const asset = assets.find(asset => asset.address.toLowerCase() === tokenAddress.toLowerCase());
+    const asset = assets.find(
+      (asset) => asset.address.toLowerCase() === tokenAddress.toLowerCase()
+    );
     if (asset) {
       tokenMap[asset.symbol] = tokenAddress;
     }

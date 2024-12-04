@@ -12,6 +12,13 @@ import {
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import dynamic from "next/dynamic";
 import { isAddress } from "ethers";
 import { useAccount } from "wagmi";
@@ -24,91 +31,88 @@ function SubLandingPage() {
   const { state, dispatch } = useAliceState();
   const { address, isConnected } = useAccount();
   const [isNextEnabled, setIsNextEnabled] = useState(false);
-  const [assetsInfo, setAssetsInfo] = useState({
-    assets: [],
-    lockPeriod: 0,
-    lockEndDate: null,
-  });
   const [isLoading, setIsLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { wallet, network } = usePosts();
 
-  // ウォレット情報の取得、以降のページのTOKEN関連情報の成型
-  const fetchAssetsData = useCallback(async () => {
-    // context apiで、walletとnetworkをsimulate
-    // ダミーデータは、app/postContext.js内で規定
-    // walletのデータを取得
-    if (wallet.length > 0 && isAddress(address)) {
-      const walletInfo = wallet.find((pos) =>
-        pos.address.toLowerCase().includes(address.toLowerCase())
+  // 以降のページのTOKEN関連情報の成型
+  const trimData = (tokens) => {
+    const data = {
+      assets: [],
+      lockPeriod: tokens.lockPeriod || null,
+      lockEndDate: tokens.lockEndDate || null,
+    };
+
+    Object.entries(tokens.tokens).forEach(([symbol, balance], index) => {
+      const tokenMatched = importedAssets.find(
+        (token) => token.symbol === symbol
       );
-
-      // networkに登録がある場合は、networkの情報を取り込む
-      const networkRegistration = network.find((pos) =>
-        pos.ownerAddress.toLowerCase().includes(address.toLowerCase())
-      );
-      const position = networkRegistration || walletInfo;
-
-      // wallet又はnetworkから取得したposition objectから以降のページで使うTOKEN関連情報を成型
-      if (position) {
-        const data = {
-          assets: [],
-          lockPeriod: position.lockPeriod || null,
-          lockEndDate: position.lockEndDate || null,
-        };
-
-        Object.entries(position.tokens).forEach(([symbol, balance], index) => {
-          const tokenMatched = importedAssets.find(
-            (token) => token.symbol === symbol
-          );
-          if (tokenMatched) {
-            data.assets.push({
-              id: index + 1,
-              logURL: tokenMatched.logoURL,
-              name: tokenMatched.name,
-              symbol: symbol,
-              type: `${tokenMatched.type} トークン`,
-              balance: balance / 10 ** tokenMatched.decimals,
-              value:
-                (balance * tokenMatched.price) / 10 ** tokenMatched.decimals,
-              selected: false,
-            });
-          }
+      if (tokenMatched && balance > 0) {
+        data.assets.push({
+          id: index + 1,
+          logURL: tokenMatched.logoURL,
+          name: tokenMatched.name,
+          symbol: symbol,
+          type: `${tokenMatched.type} トークン`,
+          balance: balance / 10 ** tokenMatched.decimals,
+          value: (balance * tokenMatched.price) / 10 ** tokenMatched.decimals,
+          selected: false,
         });
-        // ウォレット情報の取得、以降のページのTOKEN関連情報の成型【ここまで】
-
-        // Global State/local stateのassets情報を更新
-        dispatch({ type: ALICE_ACTIONS.SET_ASSETS, payload: data });
-        setAssetsInfo(data);
-
-        ///// state.statusを更新（if needed） /////
-        ///// ページ変遷分岐を管理　　　　　　　/////
-        // lockPeriodが登録される場合： 同addressで既にnetworkに登録がある
-        data.lockPeriod && dispatch({ type: ALICE_ACTIONS.SET_REGISTERED });
-
-        // lockEndDateが登録される場合： 同addressの登録取引が相続申請の状態
-        data.lockEndDate && dispatch({ type: ALICE_ACTIONS.SET_SUBMITTED });
       }
-    }
-    setIsLoading(false);
-  }, [address, wallet, network, dispatch]);
+    });
+    return data;
+  };
 
   // walletが接続されたら、wallet情報を取得
   useEffect(() => {
     if (isConnected && isAddress(address)) {
       setIsNextEnabled(true);
       dispatch({ type: ALICE_ACTIONS.SET_DECEASED_ADDRESS, payload: address });
-      fetchAssetsData();
+      setIsLoading(false);
     } else {
       setIsNextEnabled(false);
       setIsLoading(false);
     }
-  }, [isConnected, address, dispatch, fetchAssetsData]);
+  }, [isConnected, address, dispatch]);
 
   function handleNextStep() {
-    dispatch({ type: ALICE_ACTIONS.SET_DECEASED_ADDRESS, payload: address });
-    dispatch({ type: ALICE_ACTIONS.SET_ASSETS, payload: assetsInfo });
-    dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
+    // proxyが存在する場合は選択のダイアログを表示
+    network.length > 0 ? setIsDialogOpen(true) : handleNewRegistration();
   }
+
+  // 新規登録を選択
+  const handleNewRegistration = () => {
+    dispatch({
+      type: ALICE_ACTIONS.SET_ASSETS,
+      payload: trimData(wallet[0]),
+    });
+    wrapUp();
+  };
+
+  // Proxyの閲覧・操作を選択
+  const handleProxySelect = (proxyAddress) => {
+    setIsDialogOpen(false);
+    const proxyMatched = network.find(
+      (proxy) => proxy.proxyAddress === proxyAddress
+    );
+    dispatch({
+      type: ALICE_ACTIONS.SET_ASSETS,
+      payload: trimData(proxyMatched),
+    });
+
+    wrapUp();
+
+    ///// ページ変遷分岐を管理 /////
+    dispatch({ type: ALICE_ACTIONS.SET_REGISTERED });
+    // isLockedで判断
+    proxyMatched.isLocked && dispatch({ type: ALICE_ACTIONS.SET_SUBMITTED });
+  };
+
+  // 共通処理
+  const wrapUp = () => {
+    dispatch({ type: ALICE_ACTIONS.SET_DECEASED_ADDRESS, payload: address });
+    dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
+  };
 
   const steps = [
     {
@@ -219,6 +223,36 @@ function SubLandingPage() {
           </Card>
         </motion.div>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>プロキシー又は新規登録の選択</DialogTitle>
+            <DialogDescription>
+              すでに登録があります。既存登録のプロキシーを選択するか、新規登録を行ってください。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 space-y-2">
+            {network.map((proxy, index) => (
+              <Button
+                key={index}
+                onClick={() => handleProxySelect(proxy.proxyAddress)}
+                className="w-full text-left justify-start"
+                variant="outline"
+              >
+                {proxy.proxyAddress}
+              </Button>
+            ))}
+            <Button
+              onClick={handleNewRegistration}
+              className="w-full text-left justify-start"
+              variant="default"
+            >
+              新規登録
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

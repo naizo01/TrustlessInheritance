@@ -85,8 +85,8 @@ function aliceReducer(state, action) {
       return {
         ...state,
         lockEndDate: !action.payload
-        ? new Date(Date.now() + state.lockPeriod * 1000) // lockPeriodをUNIXタイムスタンプとして使用
-        : new Date(action.payload * 1000), 
+          ? new Date(Date.now() + state.lockPeriod * 1000) // lockPeriodをUNIXタイムスタンプとして使用
+          : new Date(action.payload * 1000),
         // 30/360 basis need to check
       };
     case ALICE_ACTIONS.SET_SECRET:
@@ -117,9 +117,12 @@ export default function Home() {
         // if (balanceString !== "0") newTokens[token.symbol] = balanceString;
         newTokens[token.symbol] = balanceString;
       });
-      setWallet([{address: userAddress, tokens: newTokens}]);
+      setWallet([{ address: userAddress, tokens: newTokens }]);
     }
   }, [balances]);
+
+  // Proxyがない場合に、dummy dataが残らないようにする
+  if (process.env.NEXT_PUBLIC_USE_DUMMY_DATA === "true") setNetwork([]);
 
   useEffect(() => {
     const fetchProxyInfos = async () => {
@@ -128,7 +131,7 @@ export default function Home() {
         await Promise.all(
           proxyAddresses.map(async (address, index) => {
             const info = await getProxyInfo(address);
-            const convetInfo = convertToDummyTransaction(info, index+1);
+            const convetInfo = convertToDummyTransaction(info, index + 1);
             infos.push(convetInfo);
           })
         );

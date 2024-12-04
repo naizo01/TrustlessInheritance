@@ -65,7 +65,6 @@ export default function InheritanceAssetSelection() {
   const handleNext = () => {
     const selectedAssets = assets.filter((asset) => asset.selected);
     dispatch({ type: ALICE_ACTIONS.SET_GRANTED, payload: selectedAssets });
-    dispatch({ type: ALICE_ACTIONS.SET_REGISTERED });
     dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   };
 
