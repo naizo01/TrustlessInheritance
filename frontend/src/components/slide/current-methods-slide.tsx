@@ -36,7 +36,7 @@ const CurrentMethodsSlide = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto p-3 mb-20 space-y-4 animate-fadeIn">
-      <h2 className="text-3xl font-bold text-center mb-6">現在の一般的なCrypto資産相続方法</h2>
+      <h2 className="text-3xl font-bold text-center mb-6">現在の一般的な暗号資産相続方法</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {methods.map((method, index) => (

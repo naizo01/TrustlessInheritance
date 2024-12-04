@@ -12,10 +12,10 @@ const BackgroundSlide = () => (
           <h3 className="text-xl font-bold mb-4">暗号資産アドレス数の急速な成長</h3>
           <img
             src="/graph.png"
-            alt="Crypto addresses growth chart showing 220 million monthly active users"
+            alt="暗号資産 addresses growth chart showing 220 million monthly active users"
             className="w-full max-w-md h-auto rounded-lg mb-4"  // max-w-mdを追加して画像の最大幅を制限
           />
-          <p className="text-sm text-gray-600">出典：a16z crypto「State of Crypto Report 2024」</p>
+          <p className="text-sm text-gray-600">出典：a16z 暗号資産「State of 暗号資産 Report 2024」</p>
         </Card>
 
         <Card className="flex-1 border-none p-6 bg-blue-50 dark:bg-blue-900/20">
@@ -24,7 +24,7 @@ const BackgroundSlide = () => (
               <div>
                 <h3 className="text-xl font-bold mb-4">規制緩和による成長加速</h3>
                 <p className="text-gray-700 dark:text-gray-300 mt-3">
-                  トランプ政権による規制緩和などでcryptoへの投資はこの数年でさらに加速すると考えられ、<br />相続のニーズも増加すると考えられます。
+                  トランプ政権による規制緩和などで暗号資産への投資はこの数年でさらに加速すると考えられ、<br />相続のニーズも増加すると考えられます。
                 </p>
               </div>
             </div>
@@ -39,7 +39,7 @@ const BackgroundSlide = () => (
           </div>
           <p className="text-xl font-bold text-gray-700 dark:text-gray-200">
             株式、債券は証券会社によって相続がされますが、<br />
-            Cryptoがどうやって相続されるか皆さん知っていますか？
+            暗号資産がどうやって相続されるか皆さん知っていますか？
           </p>
         </div>
       </Card>
