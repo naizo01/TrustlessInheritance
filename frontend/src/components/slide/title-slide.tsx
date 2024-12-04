@@ -40,7 +40,7 @@ const TitleSlide = () => (
             <div className="text-gray-600 dark:text-gray-400">発表グループ</div>
             <div className="font-semibold">four Next (G4)</div>
             <div className="text-gray-600 dark:text-gray-400 mt-2">メンター</div>
-            <div className="font-semibold">芝野 恭平</div>
+            <div className="font-semibold">芝野 恭平さん</div>
           </div>
         </div>
       </Card>
