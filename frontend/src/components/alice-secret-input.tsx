@@ -9,6 +9,8 @@ import { ArrowLeft } from "lucide-react";
 import { Header } from "@/components/common/variable-header";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
 import useGenerateProof, { ProofData } from "@/hooks/useGenerateProof";
+import useCreateProxy from "@/hooks/useCreateProxy";
+
 
 
 // Define the type for the dispatch function
@@ -21,26 +23,19 @@ type AliceAction =
   | { type: typeof ALICE_ACTIONS.MOVE_BACKWARD };
 
 export default function LockPeriodSetting() {
-  const { dispatch } = useAliceState() as { dispatch: AliceDispatch }; // オブジェクトのプロパティを直接使用
+  const { state, dispatch } = useAliceState() as { state: any, dispatch: AliceDispatch }; // オブジェクトのプロパティを直接使用
   const [secretInfo, setSecretInfo] = useState<string>("");
   const [proofData, setProofData] = useState<ProofData | null>(null);
   const { generateProof } = useGenerateProof("alice");
+  const { writeContract, waitFn } = useCreateProxy(state.lockPeriod, proofData);
+
 
   const handleNext = (): void => {
     dispatch({ type: ALICE_ACTIONS.SET_SECRET, payload: secretInfo });
     dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   };
 
-  const handleNextWithProof = async (): Promise<void> => {
-    try {
-      await handleGenerateProof();
-      // proofの生成が成功したら、元のhandleNextを実行
-      handleNext();
-    } catch (error) {
-      console.error('Proof generation failed:', error);
-      // エラーハンドリング
-    }
-  };
+  
 
   const handlePrevious = (): void => {
     dispatch({ type: ALICE_ACTIONS.MOVE_BACKWARD });
@@ -49,6 +44,30 @@ export default function LockPeriodSetting() {
   const handleGenerateProof = async () => {
     const proof = await generateProof(Number(secretInfo));
     setProofData(proof);
+  };
+
+
+  const handleCreateProxy = () => {
+    writeContract();
+  };
+
+  const handleNextWithProof = async (): Promise<void> => {
+    try {
+      await handleGenerateProof();
+      const tx = await writeContract();
+      // トランザクションのステータスを確認
+      await new Promise(resolve => {
+        const checkStatus = setInterval(() => {
+          if (waitFn.isSuccess || waitFn.isError) {
+            clearInterval(checkStatus);
+            resolve(true);
+          }
+        }, 1000);
+      });
+      handleNext();
+    } catch (error) {
+      console.error('Operation failed:', error);
+    }
   };
 
   // const handleSubmit = () => {
