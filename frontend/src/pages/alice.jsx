@@ -145,6 +145,7 @@ export default function Home() {
         return <SubLandingPage />;
       case 1:
         if (state.status === "new") return <LockPeriodSetting />;
+        //if (state.status !== "new") return <LockPeriodSetting />;
         if (state.status !== "new") return <InheritanceStatus />;
       case 2:
         return <SecretInput />;

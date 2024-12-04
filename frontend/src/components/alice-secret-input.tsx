@@ -47,35 +47,22 @@ export default function LockPeriodSetting() {
   };
 
 
-  const handleCreateProxy = () => {
-    writeContract();
-  };
-
   const handleNextWithProof = async (): Promise<void> => {
     try {
       await handleGenerateProof();
-      const tx = await writeContract();
-      // トランザクションのステータスを確認
-      await new Promise(resolve => {
-        const checkStatus = setInterval(() => {
-          if (waitFn.isSuccess || waitFn.isError) {
-            clearInterval(checkStatus);
-            resolve(true);
-          }
-        }, 1000);
-      });
-      handleNext();
+      writeContract();
+      
+      // トランザクション完了を監視
+      if (waitFn.isSuccess) {
+        handleNext();
+      } else if (waitFn.isError) {
+        console.error('Transaction failed');
+      }
+  
     } catch (error) {
       console.error('Operation failed:', error);
     }
   };
-
-  // const handleSubmit = () => {
-  //   // 秘密情報登録のロジックをここに実装
-  //   console.log("秘密情報を登録:", secretInfo);
-  //   if (typeof onClick === "function") {
-  //   }
-  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -123,6 +110,27 @@ export default function LockPeriodSetting() {
                 >
                   秘密情報の登録
                 </Button>
+                {waitFn.isLoading && (
+                <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+                  処理中...
+                </div>
+              )}
+              
+              {waitFn.isSuccess && (
+                <Button 
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                  onClick={handleNextWithProof}
+                  disabled={!secretInfo}
+                >
+                  次へ
+                </Button>
+              )}
+              
+              {waitFn.isError && (
+                <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+                  エラー
+                </div>
+              )}
               </div>
             </CardContent>
           </Card>
