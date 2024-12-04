@@ -35,7 +35,7 @@ export function convertToDummyTransaction(data, index = 1) {
     ownerAddress: data.owner,
     tokens: convertTokens(data.tokens, data.balances),
     tokenAddresses: convertTokenAddress(data.tokens),
-    loclSrartDate: lockStartTime,
+    loclSrartDate: lockStartTime ? lockStartTime : null,
     lockEndDate: lockStartTime ? calculateLockEndDate(lockStartTime, lockDuration) : null,
     lockPeriod: lockDuration,
     secret: String(data.hash),
