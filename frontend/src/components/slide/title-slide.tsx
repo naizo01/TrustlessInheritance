@@ -7,7 +7,7 @@ const TitleSlide = () => (
   <div className="w-full max-w-2xl mx-auto p-6 mt-12 mb-10 space-y-8">
     <div className="text-center mb-12">
       <div className="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl p-8 shadow-lg">
-        <h1 className="text-4xl font-bold mb-4">暗号通貨相続アプリ</h1>
+        <h1 className="text-4xl font-bold mb-4">暗号資産相続アプリ</h1>
         <div className="text-2xl">four Next</div>
       </div>
     </div>
@@ -15,7 +15,7 @@ const TitleSlide = () => (
     <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-8 mb-12">
       <div className="flex items-center justify-center">
         <p className="text-2xl font-bold text-gray-700 dark:text-gray-200">
-          トラストレスな、暗号通貨の相続(資産移転)を実現
+          トラストレスな、暗号資産の相続(資産移転)を実現
         </p>
       </div>
     </div>
