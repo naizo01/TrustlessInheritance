@@ -81,6 +81,25 @@ const ComparisonSlide = () => {
               ))}
             </TableBody>
           </Table>
+
+          <div className="text-xs text-gray-500 mt-4">
+            出典:
+            <a
+              href="https://www.dglegacy.com/digital-asset/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              https://www.dglegacy.com/digital-asset/
+            </a>
+            {"                "}
+            <a
+              href="https://casa.io/inheritance"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              https://casa.io/inheritance
+            </a>
+          </div>
         </div>
       </Card>
       <Card className="border-none p-6 bg-blue-50 dark:bg-blue-900/20">
