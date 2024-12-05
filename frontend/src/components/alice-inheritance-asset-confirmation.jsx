@@ -1,5 +1,6 @@
 "use client";
 
+import { useCallback } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,13 +16,39 @@ import {
 } from "@/components/ui/table";
 import { Home, CheckCircle } from "lucide-react";
 import { Header } from "@/components/common/variable-header";
+import ApproveTokenButton from "@/components/common/ApproveTokenButton";
+import AddApprovedTokensButton from "@/components/common/AddApprovedTokensButton";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
 import { assets as importedAssets } from "@/lib/token";
 import { formatDurationFromUnixTime } from "@/lib/formatDuration";
+import useAddApprovedTokens from "@/hooks/useAddApprovedTokens";
+import useApprove from "@/hooks/useApprove";
+import { isAddress } from "viem";
 
 export default function InheritanceAssetConfirmation() {
   const { state, dispatch } = useAliceState();
-  //   const selectedAssets = state.assets.assets.filter((asset) => asset.selected);
+
+  // Add Approved Tokens
+  const addApprovedTokens = useCallback(async () => {
+    if (state.granted.length > 0) {
+      const { writeContract: addTokens, waitFn } = useAddApprovedTokens(
+        state.proxyAddress,
+        state.granted.map((token) => token.address)
+      );
+
+      try {
+        addTokens();
+      } catch (err) {
+        console.log(err.message);
+      }
+    }
+  }, [state.proxyAddress]);
+
+  const handleMoveNext = () => {
+    // ページ変遷、stateのinitialize
+    dispatch({ type: ALICE_ACTIONS.SET_REGISTERED });
+    dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
+  };
 
   const totalValue = state.granted.reduce((sum, asset) => {
     const tokenInfo = importedAssets.find(
@@ -33,27 +60,10 @@ export default function InheritanceAssetConfirmation() {
     return sum;
   }, 0);
 
-  const handleNext = () => {
-    // 相続の登録function call
-    //
-
-    // ページ変遷、stateのinitialize
-    dispatch({ type: ALICE_ACTIONS.SET_REGISTERED });
-    dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
-  };
-
   const formatNumber = (num, decimal = 2) => {
     return num.toLocaleString(undefined, {
       minimumFractionDigits: decimal,
       maximumFractionDigits: decimal,
-    });
-  };
-
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString("ja-JP", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
     });
   };
 
@@ -99,6 +109,7 @@ export default function InheritanceAssetConfirmation() {
                       <TableHead className="text-center">種別</TableHead>
                       <TableHead className="text-right">残高</TableHead>
                       <TableHead className="text-center">付与数量</TableHead>
+                      <TableHead className="text-center">承認</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -137,6 +148,12 @@ export default function InheritanceAssetConfirmation() {
                         <TableCell className="text-right">
                           {formatNumber(asset.granted, 3)}
                         </TableCell>
+                        <TableCell className="text-right">
+                          <ApproveTokenButton
+                            approveAddress={state.proxyAddress}
+                            selectedToken={asset}
+                          />
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -155,13 +172,17 @@ export default function InheritanceAssetConfirmation() {
               </div>
 
               <div className="flex flex-col gap-4">
+                <AddApprovedTokensButton
+                  contractAddress={state.proxyAddress}
+                  selectedTokens={state.granted}
+                />
                 <Button
                   variant="outline"
                   className="w-full py-4 text-gray-700 dark:text-gray-200"
-                  onClick={handleNext}
+                  onClick={handleMoveNext}
                 >
-                  <CheckCircle className="mr-2 h-6 w-6" />
-                  登録を実行
+                  <Home className="mr-2 h-6 w-6" />
+                  登録内容の確認
                 </Button>
               </div>
             </CardContent>

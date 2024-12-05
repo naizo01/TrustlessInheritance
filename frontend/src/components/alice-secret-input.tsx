@@ -6,12 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft } from "lucide-react";
+import { Hourglass } from "lucide-react";
 import { Header } from "@/components/common/variable-header";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
 import useGenerateProof, { ProofData } from "@/hooks/useGenerateProof";
 import useCreateProxy from "@/hooks/useCreateProxy";
-
-
 
 // Define the type for the dispatch function
 type AliceDispatch = React.Dispatch<AliceAction>;
@@ -19,48 +18,51 @@ type AliceDispatch = React.Dispatch<AliceAction>;
 // Define the type for Alice actions
 type AliceAction =
   | { type: typeof ALICE_ACTIONS.SET_SECRET; payload: string }
+  | { type: typeof ALICE_ACTIONS.SET_PROOF; payload: ProofData | null }
   | { type: typeof ALICE_ACTIONS.MOVE_FORWARD }
   | { type: typeof ALICE_ACTIONS.MOVE_BACKWARD };
 
 export default function LockPeriodSetting() {
-  const { state, dispatch } = useAliceState() as { state: any, dispatch: AliceDispatch }; // オブジェクトのプロパティを直接使用
+  const { state, dispatch } = useAliceState() as {
+    state: any;
+    dispatch: AliceDispatch;
+  }; // オブジェクトのプロパティを直接使用
   const [secretInfo, setSecretInfo] = useState<string>("");
   const [proofData, setProofData] = useState<ProofData | null>(null);
   const { generateProof } = useGenerateProof("alice");
   const { writeContract, waitFn } = useCreateProxy(state.lockPeriod, proofData);
-
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
 
   const handleNext = (): void => {
     dispatch({ type: ALICE_ACTIONS.SET_SECRET, payload: secretInfo });
+    dispatch({ type: ALICE_ACTIONS.SET_PROOF, payload: proofData });
     dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   };
-
-  
 
   const handlePrevious = (): void => {
     dispatch({ type: ALICE_ACTIONS.MOVE_BACKWARD });
   };
 
   const handleGenerateProof = async () => {
+    setIsLoading(true);
     const proof = await generateProof(Number(secretInfo));
     setProofData(proof);
+    setIsLoading(false);
   };
-
 
   const handleNextWithProof = async (): Promise<void> => {
     try {
       await handleGenerateProof();
       writeContract();
-      
+
       // トランザクション完了を監視
       if (waitFn.isSuccess) {
         handleNext();
       } else if (waitFn.isError) {
-        console.error('Transaction failed');
+        console.error("Transaction failed");
       }
-  
     } catch (error) {
-      console.error('Operation failed:', error);
+      console.error("Operation failed:", error);
     }
   };
 
@@ -109,28 +111,31 @@ export default function LockPeriodSetting() {
                   disabled={!secretInfo}
                 >
                   秘密情報の登録
+                  {isLoading && (
+                    <Hourglass className="mr-2 h-4 w-4 animate-spin" />
+                  )}
                 </Button>
                 {waitFn.isLoading && (
-                <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-                  処理中...
-                </div>
-              )}
-              
-              {waitFn.isSuccess && (
-                <Button 
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={handleNextWithProof}
-                  disabled={!secretInfo}
-                >
-                  次へ
-                </Button>
-              )}
-              
-              {waitFn.isError && (
-                <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-                  エラー
-                </div>
-              )}
+                  <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+                    <Hourglass className="mr-2 h-4 w-4 animate-spin" />
+                  </div>
+                )}
+
+                {waitFn.isSuccess && (
+                  <Button
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                    onClick={handleNextWithProof}
+                    disabled={!secretInfo}
+                  >
+                    次へ
+                  </Button>
+                )}
+
+                {waitFn.isError && (
+                  <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+                    エラー
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
