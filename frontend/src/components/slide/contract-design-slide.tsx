@@ -10,7 +10,7 @@ const ContractDesignSlide = () => {
       <h2 className="text-3xl font-bold text-center mb-6">コントラクト設計</h2>
 
       <div className="flex flex-col md:flex-row gap-8">
-        <div className="w-full md:w-1/2 space-y-6">
+        <div className="w-full md:w-1/2 space-y-6 mt-6">
           <Card className="border-none p-6 bg-purple-50 dark:bg-purple-900/20">
             <div className="flex items-center mb-4">
               <Factory className="w-8 h-8 text-purple-600 mr-3" />
@@ -47,7 +47,7 @@ const ContractDesignSlide = () => {
         </div>
       </div>
 
-      <Card className="border-none p-6 bg-green-50 dark:bg-green-900/20">
+      {/* <Card className="border-none p-6 bg-green-50 dark:bg-green-900/20">
         <h3 className="text-xl font-bold mb-4">関数コントラクト</h3>
         <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
           <li>
@@ -66,7 +66,7 @@ const ContractDesignSlide = () => {
             <strong>cancelInheritance:</strong> 相続管理コントラクトが保有するトークンを相続元に転送します。
           </li>
         </ul>
-      </Card>
+      </Card> */}
     </div>
   );
 };
