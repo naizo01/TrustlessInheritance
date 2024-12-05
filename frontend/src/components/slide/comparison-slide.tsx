@@ -20,6 +20,7 @@ const ComparisonSlide = () => {
     { item: "第三者依存", casa: false, delegacy: false, fourNext: true },
     { item: "資産安全性", casa: true, delegacy: true, fourNext: true },
     { item: "透明性", casa: true, delegacy: false, fourNext: true },
+    { item: "価格", casa: "年間4万円〜", delegacy: "年間2万円〜", fourNext: "ガス代のみ" },
   ];
 
   const renderCheckmark = (value: boolean | string) => {
@@ -66,16 +67,16 @@ const ComparisonSlide = () => {
                 <TableRow key={index}>
                   <TableCell className="font-medium text-center">
                     {row.item}
-                  </TableCell>{" "}
+                  </TableCell>
                   <TableCell className="text-center mx-auto">
                     {renderCheckmark(row.casa)}
-                  </TableCell>{" "}
+                  </TableCell>
                   <TableCell className="text-center">
                     {renderCheckmark(row.delegacy)}
-                  </TableCell>{" "}
+                  </TableCell>
                   <TableCell className="bg-blue-50 dark:bg-blue-900/50 font-semibold text-center">
                     {renderCheckmark(row.fourNext)}
-                  </TableCell>{" "}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
