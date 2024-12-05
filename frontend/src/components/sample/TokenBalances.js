@@ -21,8 +21,8 @@ export default function TokenBalances() {
                 scan
               </a>{" "}
               {token.name} ({token.symbol}):{" "}
-              {balance ? formatEther(balance.result) : "0"}{" "}
-            </li>
+              {balance && balance.result ? formatEther(balance.result) : "0"}{" "}
+              </li>
           );
         })}
       </ul>
