@@ -24,18 +24,30 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
+import useInitiateInheritance from "@/hooks/useInitiateInheritance";
 
 export default function Component() {
   const { state, dispatch } = useBobState();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const {writeContract, waitFn} = useInitiateInheritance(state.deceasedAddress, state.proof)
 
-  const handleConfirmApplication = () => {
-    // Here you would typically make an API call to submit the application
-    console.log("Application submitted");
-    setIsDialogOpen(false);
+  const handleNext = () => {
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
+
+  const handleConfirmApplication = async () => {
+    try {
+      writeContract();
+      if (waitFn.isSuccess) {
+        handleNext();
+      } else if (waitFn.isError) {
+        console.error('Transaction failed');
+      }
+    } catch (error) {
+      console.error('Operation failed:', error);
+    }
+   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col">
@@ -69,6 +81,26 @@ export default function Component() {
                 <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:scale-105">
                   このプルーフを使用して申請をする
                   <ArrowRight className="ml-2 h-5 w-5" />
+                  {waitFn.isLoading && (
+                    <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+                      処理中...
+                    </div>
+                  )}
+                
+                  {waitFn.isSuccess && (
+                    <Button 
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                      onClick={handleNext}
+                    >
+                      次へ
+                    </Button>
+                  )}
+                  
+                  {waitFn.isError && (
+                    <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+                      エラー
+                    </div>
+                  )}
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>

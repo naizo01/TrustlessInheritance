@@ -111,26 +111,26 @@ export default function LockPeriodSetting() {
                   秘密情報の登録
                 </Button>
                 {waitFn.isLoading && (
-                <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-                  処理中...
-                </div>
-              )}
+                  <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+                    処理中...
+                  </div>
+                )}
               
-              {waitFn.isSuccess && (
-                <Button 
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={handleNextWithProof}
-                  disabled={!secretInfo}
-                >
-                  次へ
-                </Button>
-              )}
-              
-              {waitFn.isError && (
-                <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-                  エラー
-                </div>
-              )}
+                {waitFn.isSuccess && (
+                  <Button 
+                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                    onClick={handleNextWithProof}
+                    disabled={!secretInfo}
+                  >
+                    次へ
+                  </Button>
+                )}
+                
+                {waitFn.isError && (
+                  <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
+                    エラー
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
