@@ -15,7 +15,7 @@ const BackgroundSlide = () => (
             alt="暗号資産 addresses growth chart showing 220 million monthly active users"
             className="w-full max-w-md h-auto rounded-lg mb-4"  // max-w-mdを追加して画像の最大幅を制限
           />
-          <p className="text-sm text-gray-600">出典：a16z crypto「State of crypto Report 2024」</p>
+          <p className="text-xs text-gray-600">出典：a16z crypto「State of crypto Report 2024」https://a16zcrypto.com/posts/article/state-of-crypto-report-2024/</p>
         </Card>
 
         <Card className="flex-1 border-none p-6 bg-blue-50 dark:bg-blue-900/20">
