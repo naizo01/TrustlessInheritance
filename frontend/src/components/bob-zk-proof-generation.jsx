@@ -15,6 +15,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
+import useGenerateProof, { ProofData } from "@/hooks/useGenerateProof";
+
 
 export default function Component() {
   const { state, dispatch } = useBobState();
@@ -26,6 +28,7 @@ export default function Component() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
+  const { generateProof } = useGenerateProof("bob");
 
   const handleFileSelect = (event) => {
     const file = event.target.files?.[0];
@@ -71,10 +74,13 @@ export default function Component() {
     setError(null);
     try {
       // Implement ZK Proof generation logic here
+      const proof = await generateProof(Number(secretInfo));
       // Simulate ZK Proof generation with a delay
-      await new Promise((resolve) => setTimeout(resolve, 3000)); //3sec
-
-      dispatch({ type: BOB_ACTIONS.SET_PROOF, payload: "generated zk proof" });
+      //await new Promise((resolve) => setTimeout(resolve, 3000)); //3sec
+      if (!proof) {
+        throw new Error("Failed to generate proof");
+      }
+      dispatch({ type: BOB_ACTIONS.SET_PROOF, payload: proof });
       dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
     } catch (err) {
       console.error("Error generating ZK Proof:", err);
