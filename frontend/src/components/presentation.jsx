@@ -31,6 +31,7 @@ export function Presentation() {
     <ServiceFlowSlide key="service-flow" imagePath="/slide/flow_4.png" />,
     <ServiceFlowSlide key="service-flow" imagePath="/slide/flow_5.png" />,
     <ServiceFlowSlide key="service-flow" imagePath="/slide/flow_6.png" />,
+    <ServiceFlowSlide key="service-flow" imagePath="/slide/flow_7.png" />,
     <TechnicalFeaturesSlide key="technical" />,
     <ComparisonSlide key="comparison" />,
     <WhyBlockchainSlide key="why-blockchain" />,
