@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { X, AlertTriangle, Hourglass, Ban, Wallet } from "lucide-react";
 import {
@@ -30,10 +30,6 @@ export default function CancelInheritanceButton({ contractAddress }) {
       setIsProcessing(true);
       try {
         const tx = await writeContract();
-        if (tx) {
-          await waitFn.wait();
-          dispatch({ type: ALICE_ACTIONS.MOVE_SPECIFIC, payload: 100 });
-        }
       } catch (err) {
         console.log(err);
       } finally {
@@ -44,11 +40,21 @@ export default function CancelInheritanceButton({ contractAddress }) {
     }
   };
 
+  useEffect(() => {
+    if (waitFn.isSuccess) {
+      const wrapUp = async () => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        dispatch({ type: ALICE_ACTIONS.MOVE_SPECIFIC, payload: 100 });
+      };
+      wrapUp();
+    }
+  }, [isProcessing, waitFn]);
+
   const getButtonText = () => {
     if (!userAddress) return "Walletを接続ください";
     if (isProcessing || waitFn.isLoading) return "処理中...";
     if (waitFn.isSuccess) return "キャンセル完了";
-    if (waitFn.isError) return "再キャンセルを実行ください";
+    if (waitFn.isError) return "キャンセルを再実行ください";
     return "相続取り消し";
   };
 
