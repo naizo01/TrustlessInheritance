@@ -42,13 +42,13 @@ const initialState = {
   step: 0,
   status: "new", // new, registered, submitted
   deceasedAddress: "", // use useAddress; it's more reliable
-  lockEndDate: null, // including this date
+  lockEndDate: null, // excluding this date
   lockPeriod: null, // num of months
   assets: [], // asset holding
   granted: [], // asset granted
   secret: "", // secret
   proof: {}, // proof
-  proxyAddress: "",
+  proxyAddress: "", // proxy's address
 };
 
 // アクションタイプを定義します（状態を更新する際に使用）
