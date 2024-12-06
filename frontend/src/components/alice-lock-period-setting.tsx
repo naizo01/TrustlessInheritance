@@ -39,7 +39,7 @@ export default function LockPeriodSetting() {
   //   dispatch({ type: ALICE_ACTIONS.SET_LOCK_PERIOD, payload: Number(period) });
   //   dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
   // };
-  console.log(lockPeriod)
+
   const handleConfirm = () => {
     dispatch({ type: ALICE_ACTIONS.SET_LOCK_PERIOD, lockPeriod: Number(lockPeriod) });
     dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });

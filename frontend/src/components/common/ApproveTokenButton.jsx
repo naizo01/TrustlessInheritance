@@ -12,8 +12,7 @@ export default function ApproveTokenButton({ approveAddress, selectedToken }) {
   const maxUint256 = BigInt(
     "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
   );
-  console.log(approveAddress)
-  console.log(selectedToken)
+
   const { writeContract, waitFn, readFn } = useApprove(
     approveAddress || "0x5E4D21133Ff33327db9edfE879edf3Acc45e7330",
     selectedToken.address,
