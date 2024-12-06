@@ -38,18 +38,18 @@ import { assets as importedAssets } from "@/lib/token";
 export default function TransferResultPage() {
   const { state, dispatch } = useBobState();
 
-  const [transferStatus, setTransferStatus] = useState("pending"); // 'pending', 'success', or 'failure'
+  const [transferStatus, setTransferStatus] = useState("success"); // 'pending', 'success', or 'failure'
   const [assets, setAssets] = useState(state.withdrawals);
   const [totalValue, setTotalValue] = useState(0);
 
-  useEffect(() => {
-    // Simulate transfer process
-    const timer = setTimeout(() => {
-      setTransferStatus(Math.random() > 0.2 ? "success" : "failure");
-    }, 5000);
+  // useEffect(() => {
+  //   // Simulate transfer process
+  //   const timer = setTimeout(() => {
+  //     setTransferStatus(Math.random() > 0.2 ? "success" : "failure");
+  //   }, 5000);
 
-    return () => clearTimeout(timer);
-  }, []);
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   useEffect(() => {
     const calculateTotal = () => {

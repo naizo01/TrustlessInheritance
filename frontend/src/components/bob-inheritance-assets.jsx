@@ -75,6 +75,7 @@ export default function Component() {
             balance: balance / 10 ** tokenMatched.decimals,
             value: (balance * tokenMatched.price) / 10 ** tokenMatched.decimals,
             selected: false,
+            contractAddress: tokenMatched.address,
           });
         }
       });

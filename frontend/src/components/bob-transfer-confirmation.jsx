@@ -39,6 +39,7 @@ import { isAddress } from "ethers";
 import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 import { assets as importedAssets } from "@/lib/token";
+import useWithdrawTokens from "@/hooks/useWithdrawTokens";
 
 export default function TransferConfirmationPage() {
   const { state, dispatch } = useBobState();
@@ -51,7 +52,19 @@ export default function TransferConfirmationPage() {
   const [isValidAccount, setIsValidAccount] = useState(true);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const selectedTokens = state.withdrawals.map(selectedToken => selectedToken.contractAddress);
+  // value を整数に変換してから BigInt に変換
+  const amounts = state.withdrawals.map(selectedToken => BigInt(Math.floor(selectedToken.transfer * (10 ** 18))));
 
+  const {writeContract, waitFn} = useWithdrawTokens(
+    state.proxyAddress,
+    selectedTokens,
+    amounts,
+    state.proof
+  );
+  console.log("proxyAddress",state.proxyAddress);
+  console.log("withdrawals",state.withdrawals);
+  console.log("proof",state.proof);
   useEffect(() => {
     const calculateTotal = () => {
       const newTotal = assets.reduce((sum, asset) => {
@@ -88,14 +101,27 @@ export default function TransferConfirmationPage() {
     setIsConfirmDialogOpen(true);
   };
 
+  const handleNext = () => {
+    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
+  };
+
   const executeTransfer = () => {
     // Implement transfer logic here
-    dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
-    dispatch({
-      type: BOB_ACTIONS.SET_RECIPIENT_ADDRESS,
-      payload: destinationAccount,
-    });
-    console.log("Transfer executed");
+    try {
+      writeContract();
+      if (waitFn.isSuccess) {
+        dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
+        dispatch({
+          type: BOB_ACTIONS.SET_RECIPIENT_ADDRESS,
+          payload: destinationAccount,
+        });
+        console.log("Transfer executed");
+      } else if (waitFn.isError) {
+        console.error('Transaction failed');
+      }
+    } catch (error) {
+      console.error('Operation failed:', error);
+    }
   };
 
   const stopTransaction = () => {
@@ -247,35 +273,61 @@ export default function TransferConfirmationPage() {
             >
               取引を中止する
             </Button>
-            <AlertDialog
-              open={isConfirmDialogOpen}
-              onOpenChange={setIsConfirmDialogOpen}
-            >
-              <AlertDialogTrigger asChild>
-                <Button
-                  className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={handleTransfer}
-                  disabled={!isValidAccount || totalValue === 0}
-                >
-                  送金を実行する
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>送金の確認</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    送金を実行します。よろしいですか？
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>キャンセル</AlertDialogCancel>
-                  <AlertDialogAction onClick={executeTransfer}>
-                    実行
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            
+            {!waitFn.isLoading && !waitFn.isSuccess && !waitFn.isError ? (
+              <AlertDialog
+                open={isConfirmDialogOpen}
+                onOpenChange={setIsConfirmDialogOpen}
+              >
+                <AlertDialogTrigger asChild>
+                  <Button
+                    className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleTransfer}
+                    disabled={!isValidAccount || totalValue === 0}
+                  >
+                    送金を実行する
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>送金の確認</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      送金を実行します。よろしいですか？
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>キャンセル</AlertDialogCancel>
+                    <AlertDialogAction onClick={executeTransfer}>
+                      実行
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            ) : waitFn.isLoading ? (
+              <Button
+                className="w-full sm:w-auto bg-gray-400 text-white font-bold py-3 px-6 rounded-full text-lg"
+                disabled
+              >
+                処理中...
+              </Button>
+            ) : waitFn.isSuccess ? (
+              <Button
+                className="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full text-lg"
+                onClick={handleNext}
+              >
+                次へ進む
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            ) : waitFn.isError ? (
+              <Button
+                className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full text-lg"
+                onClick={handleTransfer}
+              >
+                再試行する
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            ) : null}
           </CardFooter>
         </Card>
       </main>
