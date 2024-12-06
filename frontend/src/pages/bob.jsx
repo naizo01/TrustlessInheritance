@@ -38,6 +38,7 @@ const initialState = {
   assets: [], // asset granted
   withdrawals: [], // assets to transfer
   proof: "", // proof
+  proxyAddress: "", // proxy address
 };
 
 // Action Types
@@ -55,6 +56,7 @@ export const BOB_ACTIONS = {
   SET_MATURED: "SET_MATURED",
   SET_PROOF: "SET_PROOF",
   RESET_STATE: "RESET_STATE",
+  SET_PROXY_ADDRESS: "SET_PROXY_ADDRESS",
 };
 
 // Reducer
@@ -92,6 +94,8 @@ function bobReducer(state, action) {
       return { ...state, proof: action.payload };
     case BOB_ACTIONS.RESET_STATE:
       return { ...initialState };
+      case BOB_ACTIONS.SET_PROXY_ADDRESS:
+        return { ...state, proxyAddress: action.payload };
     default:
       throw new Error("unknown action required");
   }

@@ -76,11 +76,14 @@ export default function AddressInputPage() {
       alert("プロキシ情報の取得に失敗しました。");
     }
   };
-
   const handleSelectAddress = (selectedAddress) => {
     dispatch({
       type: BOB_ACTIONS.SET_DECEASED_ADDRESS,
       payload: selectedAddress,
+    });
+    dispatch({
+      type: BOB_ACTIONS.SET_PROXY_ADDRESS,
+      payload: searchResults[0]?.proxyAddress,
     });
     setIsSearchOpen(false);
   };

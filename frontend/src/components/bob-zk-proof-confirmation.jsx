@@ -34,7 +34,7 @@ export default function Component() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const {wallet, transactions} = usePosts();
   const {writeContract, waitFn} = useInitiateInheritance(state.deceasedAddress, state.proof) //ここで第一引数にproxyCode渡したい
-
+  console.log("proxyAddress",state.proxyAddress)
   const handleNext = () => {
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
