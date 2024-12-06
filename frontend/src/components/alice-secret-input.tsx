@@ -130,11 +130,6 @@ export default function LockPeriodSetting() {
                     次へ
                   </Button>
                 )}
-<<<<<<< HEAD
-                
-=======
-
->>>>>>> front_ryu42_2
                 {waitFn.isError && (
                   <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
                     エラー
