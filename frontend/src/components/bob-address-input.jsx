@@ -42,31 +42,16 @@ export default function AddressInputPage() {
   const [searchResults, setSearchResults] = useState([]);
 
   const { transactions: dummySearchResults } = usePosts();
-
   useEffect(() => {
     const valid = isAddress(state.deceasedAddress);
     setIsValidAddress(valid);
     setIsInvalidAddress(state.deceasedAddress !== "" && !valid);
   }, [state.deceasedAddress]);
 
-  useEffect(() => {
-    const handler = setTimeout(async () => {
-      if (searchQuery.trim() !== "") {
-        try {
-          const hash = await poseidonHash(searchQuery);
-          setHashValue(hash);
-        } catch (error) {
-          console.error("Failed to calculate hash:", error);
-        }
-      } else {
-        setHashValue("");
-      }
-    }, 1000); // 1秒の遅延
-
-    return () => {
-      clearTimeout(handler); // クリーンアップ
-    };
-  }, [searchQuery]);
+  const handleHash = async () => {
+    const hash = await poseidonHash(searchQuery);
+    setHashValue(hash);
+  };
 
   const handleAddressChange = (e) => {
     dispatch({
@@ -79,15 +64,10 @@ export default function AddressInputPage() {
     console.log("Proceeding with address:", state.deceasedAddress);
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
   };
-
   const handleSearch = async () => {
-    if (searchQuery.trim() === "") {
-      setSearchResults([]);
-      return;
-    }
     try {
-      const hash = await poseidonHash(searchQuery);
-      const info = await getProxyInfoByHash(hash);
+      if (!hashValue) return;
+      const info = await getProxyInfoByHash(hashValue);
       const convertData = convertToDummyTransaction(info);
       setSearchResults([convertData]);
       setTransactions([convertData]);
@@ -163,9 +143,14 @@ export default function AddressInputPage() {
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     <div className="flex flex-col gap-2">
-                      <label htmlFor="secret" className="text-sm font-medium text-gray-700">
+                      <label
+                        htmlFor="secret"
+                        className="text-sm font-medium text-gray-700"
+                      >
                         秘密情報
                       </label>
+                      <div className="flex items-center gap-4">
+
                       <Input
                         type="password"
                         id="secret"
@@ -174,9 +159,19 @@ export default function AddressInputPage() {
                         placeholder="秘密情報を入力..."
                         className="w-2/4"
                       />
+                      <Button
+                        onClick={handleHash}
+                        className="whitespace-nowrap"
+                      >
+                        ハッシュ化
+                      </Button>
+                    </div>
                     </div>
                     <div className="flex flex-col gap-2">
-                      <label htmlFor="hash" className="text-sm font-medium text-gray-700">
+                      <label
+                        htmlFor="hash"
+                        className="text-sm font-medium text-gray-700"
+                      >
                         ハッシュ値
                       </label>
                       <div className="flex items-center gap-4">
