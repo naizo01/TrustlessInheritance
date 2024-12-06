@@ -1,7 +1,13 @@
 "use client"; // Next.jsでクライアント側でのみ実行することを指定
 
 // 必要なReactフックとコンポーネントをインポートします
-import { createContext, useContext, useReducer, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useCallback,
+} from "react";
 import { useAccount } from "wagmi";
 import { assets } from "@/lib/token";
 import { usePosts } from "@/app/postContext";
@@ -41,6 +47,8 @@ const initialState = {
   assets: [], // asset holding
   granted: [], // asset granted
   secret: "", // secret
+  proof: {}, // proof
+  proxyAddress: "",
 };
 
 // アクションタイプを定義します（状態を更新する際に使用）
@@ -56,6 +64,8 @@ export const ALICE_ACTIONS = {
   SET_GRANTED: "SET_GRANTED",
   SET_REGISTERED: "SET_REGISTERED",
   SET_SECRET: "SET_SECRET",
+  SET_PROOF: "SET_PROOF",
+  SET_PROXY_ADDRESS: "SET_PROXY_ADDRESS",
   RESET_STATE: "RESET_STATE",
 };
 
@@ -80,7 +90,10 @@ function aliceReducer(state, action) {
       return { ...state, status: "registered" };
     case ALICE_ACTIONS.SET_SUBMITTED:
       return { ...state, status: "submitted" };
-
+    case ALICE_ACTIONS.SET_PROOF:
+      return { ...state, proof: action.payload };
+    case ALICE_ACTIONS.SET_PROXY_ADDRESS:
+      return { ...state, proxyAddress: action.payload };
     case ALICE_ACTIONS.SET_LOCK_END_DATE:
       return {
         ...state,
@@ -136,10 +149,15 @@ export default function Home() {
           })
         );
         setNetwork(infos);
+        dispatch({
+          type: ALICE_ACTIONS.SET_PROXY_ADDRESS,
+          payload: infos.at(-1).proxyAddresses,
+        });
       }
     };
     fetchProxyInfos();
   }, [proxyAddresses]);
+
 
   // 現在のステップに基づいて適切なページコンポーネントを返す関数
   function currentStep() {

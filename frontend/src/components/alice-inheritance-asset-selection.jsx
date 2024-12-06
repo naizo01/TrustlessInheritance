@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -18,10 +18,23 @@ import { ArrowLeft } from "lucide-react";
 import { Header } from "@/components/common/variable-header";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
 import { assets as importedAssets } from "@/lib/token";
+import useOwnerToProxy from "@/hooks/useOwnerToProxy";
+import { useAccount } from "wagmi";
+import { usePosts } from "@/app/postContext";
 
 export default function InheritanceAssetSelection() {
   const { state, dispatch } = useAliceState();
   const [assets, setAssets] = useState(state.assets.assets);
+  const { address: userAddress } = useAccount();
+  const { data: proxyAddress, isLoading, error } = useOwnerToProxy(userAddress);
+  const { network } = usePosts();
+
+  useEffect(() => {
+    dispatch({
+      type: ALICE_ACTIONS.SET_PROXY_ADDRESS,
+      payload: network.at(-1).proxyAddress,
+    });
+  }, [, network, isLoading]);
 
   const totalValue = assets
     .filter((asset) => asset.selected)

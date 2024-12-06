@@ -39,8 +39,8 @@ function SubLandingPage() {
   const trimData = (tokens) => {
     const data = {
       assets: [],
-      lockPeriod: tokens.lockPeriod || null,
-      lockEndDate: tokens.lockEndDate || null,
+      lockPeriod: tokens?.lockPeriod || null,
+      lockEndDate: tokens?.lockEndDate || null,
     };
 
     Object.entries(tokens.tokens).forEach(([symbol, balance], index) => {
@@ -52,6 +52,7 @@ function SubLandingPage() {
           id: index + 1,
           logURL: tokenMatched.logoURL,
           name: tokenMatched.name,
+          address: tokenMatched.address,
           symbol: symbol,
           type: `${tokenMatched.type} トークン`,
           balance: balance / 10 ** tokenMatched.decimals,
@@ -63,17 +64,17 @@ function SubLandingPage() {
     return data;
   };
 
-  // walletが接続されたら、wallet情報を取得
+  // walletが接続されたら、wallet情報を取得（コードはalice.jsxに実装）
   useEffect(() => {
     if (isConnected && isAddress(address)) {
-      setIsNextEnabled(true);
       dispatch({ type: ALICE_ACTIONS.SET_DECEASED_ADDRESS, payload: address });
       setIsLoading(false);
+      setIsNextEnabled(true);
     } else {
       setIsNextEnabled(false);
       setIsLoading(false);
     }
-  }, [isConnected, address, dispatch]);
+  }, [isConnected, address, dispatch, network]);
 
   function handleNextStep() {
     // proxyが存在する場合は選択のダイアログを表示
