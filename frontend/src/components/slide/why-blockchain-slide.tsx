@@ -1,6 +1,6 @@
 'use client'
 
-import { Shield, Lock, Zap, Coins } from 'lucide-react'
+import { Shield, Lock, Zap, Coins, Link } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 
 interface FeatureItem {
@@ -14,7 +14,8 @@ const WhyBlockchainSlide = () => {
     { icon: <Shield className="w-6 h-6" />, title: "信頼性", desc: "スマートコントラクトによる自動実行で中央集権的な管理者不要" },
     { icon: <Lock className="w-6 h-6" />, title: "透明性", desc: "コードが公開され誰でも検証可能" },
     { icon: <Zap className="w-6 h-6" />, title: "可用性", desc: "24/365稼働でシステム停止リスクが極めて低い" },
-    { icon: <Coins className="w-6 h-6" />, title: "コスト", desc: "中央管理者不要で運用コストを削減" }
+    { icon: <Coins className="w-6 h-6" />, title: "コスト", desc: "中央管理者不要で運用コストを削減" },
+    { icon: <Link className="w-6 h-6" />, title: "暗号資産との親和性", desc: "暗号資産の相続に関する処理をブロックチェーン上で直接実行可能" }
   ]
 
   const FeatureList = ({ features, bgColor }: { features: FeatureItem[], bgColor: string }) => (

@@ -1,3 +1,4 @@
+import { useState } from "react";
 const snarkjs = require("snarkjs");
 const circomlibjs = require("circomlibjs");
 
@@ -14,8 +15,16 @@ export type UseGenerateProofReturn = {
   error: Error | null;
 };
 
-export default function useGenerateProof(user: string): UseGenerateProofReturn {
+export default function useGenerateProof(
+  user: string,
+  onError?: (error: Error) => void
+): UseGenerateProofReturn {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<Error | null>(null);
+
   const generateProof = async (input: number): Promise<ProofData> => {
+    setIsLoading(true);
+    setError(null);
     try {
       const poseidon = await circomlibjs.buildPoseidon();
       const hash = poseidon.F.toString(poseidon([input]));
@@ -51,13 +60,11 @@ export default function useGenerateProof(user: string): UseGenerateProofReturn {
         zkey
       );
 
-      // Solidity用のコールデータ生成
       const solidityCallData = await snarkjs.groth16.exportSolidityCallData(
         proof,
         publicSignals
       );
 
-      // コールデータをJSON形式に変換
       const jsonData = JSON.parse(`[${solidityCallData}]`);
       
       const proofData = {
@@ -73,13 +80,17 @@ export default function useGenerateProof(user: string): UseGenerateProofReturn {
 
     } catch (err) {
       console.error('Error in generateProof:', err);
-      throw err;
+      const error = err instanceof Error ? err : new Error('Unknown error');
+      onError?.(error);
+      throw error;
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return {
     generateProof,
-    isLoading: false,
-    error: null
+    isLoading,
+    error
   };
 }

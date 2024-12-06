@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
     useAccount,
     useWriteContract,
@@ -22,7 +23,9 @@ import {
     contractAddress: `0x${string}`,
     tokens: `0x${string}`[],
     amounts: bigint[],
-    proof: any
+    proof: any,
+    onError?: (error: any) => void,
+    onSuccessConfirm?: (data: any) => void,
   ): UseWithdrawTokensReturn {
     const { chain, address: owner } = useAccount();
     const isReady = owner && contractAddress && chain && tokens.length === amounts.length;
@@ -42,9 +45,7 @@ import {
   
     const writeFn = useWriteContract({
       mutation: {
-        onError: (error) => {
-          console.error("Error writing contract:", error);
-        },
+        onError: onError,
       },
     });  
     const writeContract = () => {
@@ -56,6 +57,14 @@ import {
       chainId: chain?.id,
       hash: writeFn?.data,
     });
+
+    useEffect(() => {
+      if (waitFn.isSuccess) {
+        onSuccessConfirm?.(waitFn.data);
+      } else if (waitFn.isError) {
+        onError?.(waitFn.error);
+      }
+    }, [waitFn.isSuccess, waitFn.isError]);
   
     return { waitFn, writeContract };
   }

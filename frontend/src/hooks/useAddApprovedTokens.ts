@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
     useAccount,
     useWriteContract,
@@ -12,7 +13,9 @@ import {
   
   export default function useAddApprovedTokens(
     contractAddress: `0x${string}`,
-    tokens: `0x${string}`[]
+    tokens: `0x${string}`[],
+    onError?: (error: any) => void,
+    onSuccessConfirm?: (data: any) => void,
   ): UseAddApprovedTokensReturn {
     const { chain, address: owner } = useAccount();
     const isReady = owner && contractAddress && chain;
@@ -25,8 +28,11 @@ import {
       chain: chain,
     };
   
-    const writeFn = useWriteContract();
-  
+    const writeFn = useWriteContract({
+      mutation: {
+        onError: onError,
+      },
+    });  
     const writeContract = () => {
       if (isReady) {
         console.log("Executing writeContract with config:", config);
@@ -42,6 +48,14 @@ import {
       chainId: chain?.id,
       hash: writeFn?.data,
     });
+
+    useEffect(() => {
+      if (waitFn.isSuccess) {
+        onSuccessConfirm?.(waitFn.data);
+      } else if (waitFn.isError) {
+        onError?.(waitFn.error);
+      }
+    }, [waitFn.isSuccess, waitFn.isError]);
   
     return { waitFn, writeContract };
   }

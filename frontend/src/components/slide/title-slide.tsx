@@ -7,8 +7,8 @@ const TitleSlide = () => (
   <div className="w-full max-w-2xl mx-auto p-6 mt-12 mb-10 space-y-8">
     <div className="text-center mb-12">
       <div className="inline-block bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl p-8 shadow-lg">
-        <h1 className="text-4xl font-bold mb-4">暗号資産相続アプリ</h1>
-        <div className="text-2xl">four Next</div>
+        <h1 className="text-3xl font-bold mb-4">トラストレス相続アプリケーション</h1>
+        <div className="text-3xl">"four Next"</div>
       </div>
     </div>
 

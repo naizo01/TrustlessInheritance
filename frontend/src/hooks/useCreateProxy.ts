@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   useAccount,
   useWriteContract,
@@ -13,7 +14,9 @@ export type UseCreateProxyReturn = {
 
 export default function useCreateProxy(
   lockTime: bigint,
-  proof: any
+  proof: any,
+  onError?: (error: any) => void,
+  onSuccessConfirm?: (data: any) => void,
 ): UseCreateProxyReturn {
   const { chain, address: owner } = useAccount();
   const factoryAddress = InheritanceFactory;
@@ -34,13 +37,12 @@ export default function useCreateProxy(
 
   const writeFn = useWriteContract({
     mutation: {
-      onError: (error) => {
-        console.error("Error writing contract:", error);
-      },
+      onError: onError,
     },
   });
   const writeContract = () => {
     if (isReady) writeFn.writeContract(config);
+    console.log("writeFn",writeFn)
   };
 
   const waitFn = useWaitForTransactionReceipt({
@@ -48,5 +50,13 @@ export default function useCreateProxy(
     hash: writeFn?.data,
   });
 
-  return { waitFn, writeContract };
+  useEffect(() => {
+    if (waitFn.isSuccess) {
+      onSuccessConfirm?.(waitFn.data);
+    } else if (waitFn.isError) {
+      onError?.(waitFn.error);
+    }
+  }, [waitFn.isSuccess, waitFn.isError]);
+
+  return { waitFn, writeContract};
 }

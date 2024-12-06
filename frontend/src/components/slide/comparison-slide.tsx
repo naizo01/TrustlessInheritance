@@ -20,7 +20,7 @@ const ComparisonSlide = () => {
     { item: "第三者依存", casa: false, delegacy: false, fourNext: true },
     { item: "資産安全性", casa: true, delegacy: true, fourNext: true },
     { item: "透明性", casa: true, delegacy: false, fourNext: true },
-    { item: "価格", casa: "年間4万円〜", delegacy: "年間2万円〜", fourNext: "ガス代のみ" },
+    // { item: "価格", casa: "年間4万円〜", delegacy: "年間2万円〜", fourNext: "ガス代のみ" },
   ];
 
   const renderCheckmark = (value: boolean | string) => {
@@ -35,7 +35,7 @@ const ComparisonSlide = () => {
   return (
     <div className="w-full max-w-4xl mx-auto p-3 mb-20 space-y-4 animate-fadeIn">
       <h2 className="text-3xl font-bold text-center mb-6">サービス比較</h2>
-      <Card className="border-none p-6">
+      <Card className="border-none p-4">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
@@ -81,6 +81,26 @@ const ComparisonSlide = () => {
               ))}
             </TableBody>
           </Table>
+
+          <div className="text-xs text-gray-500 mt-2">
+            出典
+            <a
+                          className="ml-5"
+              href="https://casa.io/inheritance"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              https://casa.io/inheritance
+            </a>
+            <a
+              className="ml-5"
+              href="https://www.dglegacy.com/digital-asset/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              https://www.dglegacy.com/digital-asset/
+            </a>
+          </div>
         </div>
       </Card>
       <Card className="border-none p-6 bg-blue-50 dark:bg-blue-900/20">

@@ -126,7 +126,7 @@ export default function Home() {
       const newTokens = {};
       assets.forEach((token, index) => {
         const balance = balances ? balances[index] : null;
-        const balanceString = balance ? String(balance.result) : "0";
+        const balanceString = balance?.result ? String(balance.result) : "0";
         // if (balanceString !== "0") newTokens[token.symbol] = balanceString;
         newTokens[token.symbol] = balanceString;
       });

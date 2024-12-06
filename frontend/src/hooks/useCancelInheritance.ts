@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
     useAccount,
     useWriteContract,
@@ -11,7 +12,9 @@ import {
   };
   
   export default function useCancelInheritance(
-    contractAddress: `0x${string}`
+    contractAddress: `0x${string}`,
+    onError?: (error: any) => void,
+    onSuccessConfirm?: (data: any) => void,
   ): UseCancelInheritanceReturn {
     const { chain, address: owner } = useAccount();
     const isReady = owner && contractAddress && chain;
@@ -26,9 +29,7 @@ import {
   
     const writeFn = useWriteContract({
       mutation: {
-        onError: (error) => {
-          console.error("Error writing contract:", error);
-        },
+        onError: onError,
       },
     });
   
@@ -40,6 +41,14 @@ import {
       chainId: chain?.id,
       hash: writeFn?.data,
     });
-  
+
+    useEffect(() => {
+      if (waitFn.isSuccess) {
+        onSuccessConfirm?.(waitFn.data);
+      } else if (waitFn.isError) {
+        onError?.(waitFn.error);
+      }
+    }, [waitFn.isSuccess, waitFn.isError]);
+
     return { waitFn, writeContract };
   }
