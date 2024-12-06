@@ -75,7 +75,7 @@ export default function InheritanceStatus() {
         appBadgeText="相続資産の許可"
         appBadgeClassName=""
       />
-      <div className="container mx-auto px-4 py-24">
+      <div className="container mx-auto px-4 py-24 max-w-4xl">
         <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">
           <CardContent className="p-6 space-y-6">
             {state.status === "registered" && (
