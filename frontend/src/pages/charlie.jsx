@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,6 +27,9 @@ import { formatDurationFromUnixTime } from "@/lib/formatDuration";
 import { usePosts } from "../app/postContext";
 import { assets } from "../lib/token";
 import Image from "next/image";
+import { useAccount } from "wagmi";
+import useOwnerToProxy from "@/hooks/useOwnerToProxy";
+import { getProxyInfo, convertToDummyTransaction } from "@/hooks/getProxyInfo";
 
 export default function InheritanceDataCheck() {
   const [address, setAddress] = useState("");
@@ -35,7 +38,27 @@ export default function InheritanceDataCheck() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const { transactions } = usePosts();
+  const { transactions, setTransactions } = usePosts();
+
+  const { address: userAddress } = useAccount();
+  const { data: proxyAddresses } = useOwnerToProxy(userAddress);
+
+  useEffect(() => {
+    const fetchProxyInfos = async () => {
+      if (proxyAddresses && proxyAddresses.length > 0) {
+        const infos = [];
+        await Promise.all(
+          proxyAddresses.map(async (address, index) => {
+            const info = await getProxyInfo(address);
+            const convetInfo = convertToDummyTransaction(info, index + 1);
+            infos.push(convetInfo);
+          })
+        );
+        setTransactions(infos);
+      }
+    };
+    fetchProxyInfos();
+  }, [proxyAddresses]);
 
   const handleAddressChange = (e) => {
     const inputAddress = e.target.value;
@@ -82,7 +105,7 @@ export default function InheritanceDataCheck() {
 
   const getInheritanceStatus = (data) => {
     if (!data.lockEndDate) {
-      return { status: "未承認", icon: Clock, color: "text-gray-500" };
+      return { status: null };
     } else if (new Date() > new Date(data.lockEndDate)) {
       return { status: "ロック期間満了", icon: Unlock, color: "text-green-500" };
     } else {
@@ -109,7 +132,7 @@ export default function InheritanceDataCheck() {
               アドレスを入力して相続情報を確認
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="">
             <div className="flex space-x-2 relative">
               <Input
                 type="text"
@@ -134,7 +157,7 @@ export default function InheritanceDataCheck() {
             </div>
 
             {suggestions.length > 0 && (
-              <div className="absolute z-10 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg mt-1">
+              <div className="absolute z-10 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg">
                 {suggestions.map((suggestion, index) => (
                   <div
                     key={index}
@@ -159,7 +182,7 @@ export default function InheritanceDataCheck() {
             )}
 
             {inheritanceData && (
-              <div className="space-y-6">
+              <div className="space-y-6 mt-5">
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -209,12 +232,13 @@ export default function InheritanceDataCheck() {
                         <XCircle className="h-5 w-5 text-red-500" />
                       )}
                       <span className="text-gray-700 dark:text-gray-300">
-                        承認状況: {inheritanceData.lockEndDate ? "承認済み" : "未承認"}
+                        相続申請状況: {inheritanceData.lockEndDate ? "申請済み" : "未申請"}
                       </span>
                     </div>
                     <div className="flex items-center space-x-2">
                       {(() => {
                         const { status, icon: StatusIcon, color } = getInheritanceStatus(inheritanceData);
+                        if(!status) return ;
                         return (
                           <>
                             <StatusIcon className={`h-5 w-5 ${color}`} />

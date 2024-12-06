@@ -38,15 +38,35 @@ export default function AddressInputPage() {
   const [isInvalidAddress, setIsInvalidAddress] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [hashValue, setHashValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
-  const { transactions: dummySearchResults } = usePosts(); // import dummySearchResult via usePosts
+  const { transactions: dummySearchResults } = usePosts();
 
   useEffect(() => {
     const valid = isAddress(state.deceasedAddress);
     setIsValidAddress(valid);
     setIsInvalidAddress(state.deceasedAddress !== "" && !valid);
   }, [state.deceasedAddress]);
+
+  useEffect(() => {
+    const handler = setTimeout(async () => {
+      if (searchQuery.trim() !== "") {
+        try {
+          const hash = await poseidonHash(searchQuery);
+          setHashValue(hash);
+        } catch (error) {
+          console.error("Failed to calculate hash:", error);
+        }
+      } else {
+        setHashValue("");
+      }
+    }, 1000); // 1秒の遅延
+
+    return () => {
+      clearTimeout(handler); // クリーンアップ
+    };
+  }, [searchQuery]);
 
   const handleAddressChange = (e) => {
     dispatch({
@@ -66,7 +86,7 @@ export default function AddressInputPage() {
       return;
     }
     try {
-      const hash = await poseidonHash(searchQuery)
+      const hash = await poseidonHash(searchQuery);
       const info = await getProxyInfoByHash(hash);
       const convertData = convertToDummyTransaction(info);
       setSearchResults([convertData]);
@@ -136,26 +156,44 @@ export default function AddressInputPage() {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[600px] w-[90vw]">
                   <DialogHeader>
-                    <DialogTitle>秘密情報検索</DialogTitle>
+                    <DialogTitle>検索</DialogTitle>
                     <DialogDescription>
-                      被相続人のEthereumアドレスを秘密情報で検索します。
+                      被相続人のEthereumアドレスを秘密情報のハッシュ値で検索します。
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="secret" className="text-sm font-medium text-gray-700">
+                        秘密情報
+                      </label>
                       <Input
-                        id="search"
+                        type="password"
+                        id="secret"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="秘密情報を入力..."
-                        className="flex-grow"
+                        className="w-2/4"
                       />
-                      <Button
-                        onClick={handleSearch}
-                        className="whitespace-nowrap"
-                      >
-                        検索
-                      </Button>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label htmlFor="hash" className="text-sm font-medium text-gray-700">
+                        ハッシュ値
+                      </label>
+                      <div className="flex items-center gap-4">
+                        <Input
+                          id="hash"
+                          value={hashValue} // リアルタイムで計算されたハッシュ値を表示
+                          readOnly
+                          placeholder="ハッシュ値"
+                          className="flex-grow"
+                        />
+                        <Button
+                          onClick={handleSearch}
+                          className="whitespace-nowrap"
+                        >
+                          検索
+                        </Button>
+                      </div>
                     </div>
                     {searchResults.length > 0 ? (
                       <div className="mt-4">
@@ -170,9 +208,6 @@ export default function AddressInputPage() {
                               }
                             >
                               <div>
-                                {/* <div className="font-semibold">
-                                {result.secret}
-                              </div> */}
                                 <div className="text-sm text-gray-500 dark:text-gray-400 truncate">
                                   {result.ownerAddress}
                                 </div>
