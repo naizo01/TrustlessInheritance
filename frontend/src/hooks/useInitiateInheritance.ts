@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   useAccount,
   useWriteContract,
@@ -19,7 +20,9 @@ export type UseInitiateInheritanceReturn = {
 
 export default function useInitiateInheritance(
   contractAddress: `0x${string}`,
-  proof: any
+  proof: any,
+  onError?: (error: any) => void,
+  onSuccessConfirm?: (data: any) => void,
 ): UseInitiateInheritanceReturn {
   const { chain, address: owner } = useAccount();
 
@@ -38,9 +41,7 @@ export default function useInitiateInheritance(
 
   const writeFn = useWriteContract({
     mutation: {
-      onError: (error) => {
-        console.error("Error writing contract:", error);
-      },
+      onError: onError,
     },
   });
 
@@ -59,6 +60,14 @@ export default function useInitiateInheritance(
     chainId: chain?.id,
     hash: writeFn?.data,
   });
+
+  useEffect(() => {
+    if (waitFn.isSuccess) {
+      onSuccessConfirm?.(waitFn.data);
+    } else if (waitFn.isError) {
+      onError?.(waitFn.error);
+    }
+  }, [waitFn.isSuccess, waitFn.isError]);
 
   return { waitFn, writeContract };
 }
