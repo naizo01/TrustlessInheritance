@@ -42,7 +42,6 @@ export default function useCreateProxy(
   });
   const writeContract = () => {
     if (isReady) writeFn.writeContract(config);
-    console.log("writeFn",writeFn)
   };
 
   const waitFn = useWaitForTransactionReceipt({
