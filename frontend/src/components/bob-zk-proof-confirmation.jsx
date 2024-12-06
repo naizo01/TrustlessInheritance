@@ -25,12 +25,15 @@ import {
 import { Header } from "@/components/common/variable-header";
 import { useBobState, BOB_ACTIONS } from "@/pages/bob";
 import useInitiateInheritance from "@/hooks/useInitiateInheritance";
+import { usePosts } from "@/app/postContext";
+
 
 export default function Component() {
   const { state, dispatch } = useBobState();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const {writeContract, waitFn} = useInitiateInheritance(state.deceasedAddress, state.proof)
+  const {wallet, transactions} = usePosts();
+  const {writeContract, waitFn} = useInitiateInheritance(state.deceasedAddress, state.proof) //ここで第一引数にproxyCode渡したい
 
   const handleNext = () => {
     dispatch({ type: BOB_ACTIONS.MOVE_FORWARD });
