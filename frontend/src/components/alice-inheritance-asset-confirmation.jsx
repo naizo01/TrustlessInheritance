@@ -28,22 +28,6 @@ import { isAddress } from "viem";
 export default function InheritanceAssetConfirmation() {
   const { state, dispatch } = useAliceState();
 
-  // Add Approved Tokens
-  const addApprovedTokens = useCallback(async () => {
-    if (state.granted.length > 0) {
-      const { writeContract: addTokens, waitFn } = useAddApprovedTokens(
-        state.proxyAddress,
-        state.granted.map((token) => token.address)
-      );
-
-      try {
-        addTokens();
-      } catch (err) {
-        console.log(err.message);
-      }
-    }
-  }, [state.proxyAddress]);
-
   const handleMoveNext = () => {
     // ページ変遷、stateのinitialize
     dispatch({ type: ALICE_ACTIONS.SET_REGISTERED });
@@ -175,15 +159,16 @@ export default function InheritanceAssetConfirmation() {
                 <AddApprovedTokensButton
                   contractAddress={state.proxyAddress}
                   selectedTokens={state.granted}
+                  handleNext={handleMoveNext}
                 />
-                <Button
+                {/* <Button
                   variant="outline"
                   className="w-full py-4 text-gray-700 dark:text-gray-200"
                   onClick={handleMoveNext}
                 >
                   <Home className="mr-2 h-6 w-6" />
                   登録内容の確認
-                </Button>
+                </Button> */}
               </div>
             </CardContent>
           </Card>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,9 +29,8 @@ export default function LockPeriodSetting() {
   }; // オブジェクトのプロパティを直接使用
   const [secretInfo, setSecretInfo] = useState<string>("");
   const [proofData, setProofData] = useState<ProofData | null>(null);
-  const { generateProof } = useGenerateProof("alice");
-  const { writeContract, waitFn } = useCreateProxy(state.lockPeriod, proofData);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleNext = (): void => {
     dispatch({ type: ALICE_ACTIONS.SET_SECRET, payload: secretInfo });
@@ -44,27 +43,52 @@ export default function LockPeriodSetting() {
   };
 
   const handleGenerateProof = async () => {
-    setIsLoading(true);
     const proof = await generateProof(Number(secretInfo));
     setProofData(proof);
-    setIsLoading(false);
   };
 
   const handleNextWithProof = async (): Promise<void> => {
     try {
+      if (isLoading) return;
+      setIsLoading(true);
+      setErrorMessage("");
       await handleGenerateProof();
       writeContract();
 
-      // トランザクション完了を監視
-      if (waitFn.isSuccess) {
-        handleNext();
-      } else if (waitFn.isError) {
-        console.error("Transaction failed");
-      }
     } catch (error) {
       console.error("Operation failed:", error);
     }
   };
+  const handleError = (error: any) => {
+    console.error("Error occurred:", error);
+    setErrorMessage(error.message || "不明なエラーが発生しました");
+    setIsLoading(false);
+  };
+  const handleZKError = (error: any) => {
+    console.error("Error occurred:", error);
+    setErrorMessage("この秘密情報は利用できません。");
+    setIsLoading(false);
+  };
+
+  const handleSuccess = (data: any) => {
+    console.log("Transaction successful:", data);
+    console.log("proxy", data.logs[0].address);
+    dispatch({
+      type: ALICE_ACTIONS.SET_PROXY_ADDRESS,
+      payload: data.logs[0].address,
+    });
+    setIsLoading(false);
+    handleNext();
+  };
+
+  const { generateProof } = useGenerateProof("alice",handleZKError);
+
+  const { writeContract, waitFn } = useCreateProxy(
+    state.lockPeriod,
+    proofData,
+    handleError,
+    handleSuccess
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
@@ -108,34 +132,21 @@ export default function LockPeriodSetting() {
                 <Button
                   className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
                   onClick={handleNextWithProof}
-                  disabled={!secretInfo}
+                  // disabled={!secretInfo || isLoading}
                 >
-                  秘密情報の登録
-                  {isLoading && (
+                  {isLoading ? (
                     <Hourglass className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    "秘密情報の登録"
                   )}
                 </Button>
-                {waitFn.isLoading && (
-                  <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-                    <Hourglass className="mr-2 h-4 w-4 animate-spin" />
-                  </div>
-                )}
-
-                {waitFn.isSuccess && (
-                  <Button
-                    className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                    onClick={handleNextWithProof}
-                    disabled={!secretInfo}
-                  >
-                    次へ
-                  </Button>
-                )}
-                {waitFn.isError && (
-                  <div className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
-                    エラー
-                  </div>
-                )}
               </div>
+
+              {errorMessage && (
+                <div className="mt-4 p-2 bg-red-100 text-red-700 rounded max-w-full break-words">
+                  {errorMessage}
+                </div>
+              )}
             </CardContent>
           </Card>
         </motion.div>

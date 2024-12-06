@@ -14,6 +14,7 @@ import TitleSlide from "@/components/slide/title-slide"
 import BackgroundSlide from "@/components/slide/background-slide"
 import CurrentMethodsSlide from "@/components/slide/current-methods-slide"
 import ServiceFlowSlide from "@/components/slide/service-flow-slide"
+import FutureProspectsSlide from "@/components/slide/future-prospects-slide"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 
@@ -35,9 +36,10 @@ export function Presentation() {
     <TechnicalFeaturesSlide key="technical" />,
     <ComparisonSlide key="comparison" />,
     <WhyBlockchainSlide key="why-blockchain" />,
-    <WhyZKPSlide key="why-zkp" />,
+    // <WhyZKPSlide key="why-zkp" />,
     <ContractDesignSlide key="contract-design" />,
-    <ProjectProgressSlide key="progress" />
+    <ProjectProgressSlide key="progress" />,
+    <FutureProspectsSlide key="future-prospects" />,
   ]
 
   return (
