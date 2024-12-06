@@ -101,6 +101,8 @@ function SubLandingPage() {
       payload: trimData(proxyMatched),
     });
 
+    dispatch({ type: ALICE_ACTIONS.SET_PROXY_ADDRESS, payload: proxyAddress });
+
     wrapUp();
 
     ///// ページ変遷分岐を管理 /////

@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import { X, Home, AlertTriangle } from "lucide-react";
 import { Header } from "@/components/common/variable-header";
+import CancelInheritanceButton from "@/components/common/CancelInheritanceButton";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
 import { assets as importedAssets } from "@/lib/token";
 
@@ -49,21 +50,6 @@ export default function InheritanceStatus() {
   const handleMoveToHome = () => {
     dispatch({ type: ALICE_ACTIONS.MOVE_SPECIFIC, payload: 0 });
     dispatch({ type: ALICE_ACTIONS.RESET_STATE });
-  };
-
-  const handleCancelConfirmation = () => {
-    setIsDialogOpen(true);
-  };
-
-  // 相続取り消しは、相続申請がなくても可能
-  // したがい、相続取り消しボタンは、常時表示
-  const handleCancel = () => {
-    // 相続取り消しのロジックをここに実装
-    console.log("相続を取り消し");
-
-    // 処理完了後
-    setIsDialogOpen(false);
-    dispatch({ type: ALICE_ACTIONS.MOVE_SPECIFIC, payload: 100 });
   };
 
   const formatNumber = (num, decimal = 2) => {
@@ -175,51 +161,19 @@ export default function InheritanceStatus() {
               </Table>
             </div>
             <div className="flex flex-col gap-4">
-              <Button
-                variant="destructive"
-                className="w-full"
-                onClick={handleCancelConfirmation}
-              >
-                <X className="mr-2 h-5 w-5" />
-                相続取り消し
-              </Button>
+              <CancelInheritanceButton contractAddress={state.proxyAddress} />
               <Button
                 variant="outline"
                 className="w-full py-4 text-gray-700 dark:text-gray-200"
                 onClick={handleMoveToHome}
               >
-                <Home className="mr-2 h-6 w-6" />
+                <Home className="mr-2 h-6 w-6 text-sm" />
                 メインに戻る
               </Button>
             </div>
           </CardContent>
         </Card>
       </div>
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-red-500" />
-              相続取り消しの確認
-            </DialogTitle>
-            <DialogDescription>
-              相続を取り消すと、登録された資産の相続が無効になります。この操作は取り消せません。本当に相続を取り消しますか？
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="sm:justify-start">
-            <Button type="button" variant="destructive" onClick={handleCancel}>
-              はい、取り消します
-            </Button>
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => setIsDialogOpen(false)}
-            >
-              いいえ、取り消しをキャンセルします
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
