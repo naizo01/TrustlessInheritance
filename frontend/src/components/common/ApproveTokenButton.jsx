@@ -6,6 +6,7 @@ import useApprove from "@/hooks/useApprove";
 
 export default function ApproveTokenButton({ approveAddress, selectedToken }) {
   const { address: userAddress } = useAccount();
+  const [error, setError] = useState(null);
 
   // uint256の最大値
   const maxUint256 = BigInt(
@@ -20,7 +21,10 @@ export default function ApproveTokenButton({ approveAddress, selectedToken }) {
 
   const handleApprove = () => {
     if (approveAddress) {
-      writeContract();
+      try {
+        setError(null);
+        writeContract();
+      } catch (err) {}
     } else {
       alert("Please enter a valid address to approve.");
     }
@@ -36,21 +40,18 @@ export default function ApproveTokenButton({ approveAddress, selectedToken }) {
 
   return (
     <button
-      className={
+      className={`
+      w-full h-10 px-4 rounded-md font-medium transition-colors duration-200 ease-in-out
+      ${
         waitFn.isSuccess
-          ? "bg-green-500 text-white hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700"
-          : "bg-white text-gray-700 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+          ? "bg-green-500 text-white hover:bg-green-600"
+          : "bg-white text-gray-700 hover:bg-gray-100"
       }
+      ${!userAddress || waitFn.isLoading ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+      border border-gray-300
+    `}
       onClick={handleApprove}
       disabled={!userAddress || waitFn.isLoading}
-      style={{
-        backgroundColor: "white",
-        color: "black",
-        border: "1px solid black",
-        borderRadius: "5px",
-        padding: "10px 20px",
-        cursor: "pointer",
-      }}
     >
       {getButtonText()}
     </button>

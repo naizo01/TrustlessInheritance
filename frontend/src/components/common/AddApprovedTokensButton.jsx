@@ -27,17 +27,9 @@ export default function AddApprovedTokensButton({
 
   return (
     <button
-      className="w-full py-4 text-gray-700 dark:text-gray-200"
+      className="w-full py-4 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200"
       onClick={handleAddApprovedTokens}
       disabled={!userAddress || waitFn.isLoading}
-      style={{
-        backgroundColor: "white",
-        color: "black",
-        border: "1px solid black",
-        borderRadius: "5px",
-        padding: "10px 20px",
-        cursor: "pointer",
-      }}
     >
       {getButtonText()}
     </button>
