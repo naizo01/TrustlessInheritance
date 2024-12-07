@@ -44,7 +44,7 @@ export default function LockPeriodSetting() {
 
   const handleGenerateProof = async () => {
     const proof = await generateProof(Number(secretInfo));
-    setProofData(proof);
+    setProofData(proof)
   };
 
   const handleNextWithProof = async (): Promise<void> => {
@@ -53,12 +53,17 @@ export default function LockPeriodSetting() {
       setIsLoading(true);
       setErrorMessage("");
       await handleGenerateProof();
-      writeContract();
-
     } catch (error) {
       console.error("Operation failed:", error);
     }
   };
+
+  useEffect(() => {
+    if (proofData) {
+      writeContract();
+    }
+  }, [proofData]);
+
   const handleError = (error: any) => {
     console.error("Error occurred:", error);
     setErrorMessage(error.message || "不明なエラーが発生しました");
