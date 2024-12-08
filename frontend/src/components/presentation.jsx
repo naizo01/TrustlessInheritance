@@ -14,6 +14,7 @@ import TitleSlide from "@/components/slide/title-slide"
 import BackgroundSlide from "@/components/slide/background-slide"
 import CurrentMethodsSlide from "@/components/slide/current-methods-slide"
 import ServiceFlowSlide from "@/components/slide/service-flow-slide"
+import VideoSlide from "@/components/slide/video-slide"
 import FutureProspectsSlide from "@/components/slide/future-prospects-slide"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -33,6 +34,7 @@ export function Presentation() {
     <ServiceFlowSlide key="service-flow" imagePath="/slide/flow_5.png" />,
     <ServiceFlowSlide key="service-flow" imagePath="/slide/flow_6.png" />,
     <ServiceFlowSlide key="service-flow" imagePath="/slide/flow_7.png" />,
+    <VideoSlide key="video" />,
     <TechnicalFeaturesSlide key="technical" />,
     <ComparisonSlide key="comparison" />,
     <WhyBlockchainSlide key="why-blockchain" />,
