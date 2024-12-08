@@ -16,6 +16,7 @@ import CurrentMethodsSlide from "@/components/slide/current-methods-slide"
 import ServiceFlowSlide from "@/components/slide/service-flow-slide"
 import VideoSlide from "@/components/slide/video-slide"
 import FutureProspectsSlide from "@/components/slide/future-prospects-slide"
+import QRCodeSlide from "@/components/slide/qr-code-slide"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 
@@ -42,6 +43,7 @@ export function Presentation() {
     <ContractDesignSlide key="contract-design" />,
     <ProjectProgressSlide key="progress" />,
     <FutureProspectsSlide key="future-prospects" />,
+    <QRCodeSlide key="app" />,
   ]
 
   return (
