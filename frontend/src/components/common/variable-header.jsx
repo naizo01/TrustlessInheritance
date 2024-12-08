@@ -29,9 +29,10 @@ export function Header({
     //       { text: "注意事項", onClick: () => scrollToSection("cautions") },
     //     ]
     //   : []),
-    { text: "検索", href: "/charlie" },
     { text: "相続する人", href: "/alice" },
     { text: "受け取る人", href: "/bob" },
+    { text: "検索", href: "/charlie" },
+    { text: "資料", href: "/presentation" },
   ];
 
   return (
