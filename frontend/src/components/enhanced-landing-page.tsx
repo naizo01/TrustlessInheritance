@@ -29,10 +29,11 @@ import {
   Eye,
   Sliders,
   Layers,
+  Clock,
 } from "lucide-react";
-// import { Header } from "@/components/common/Header";
 import { Header } from "@/components/common/variable-header";
 import Image from 'next/image';
+import { Footer } from "@/components/common/footer";
 
 export function EnhancedLandingPage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,10 +63,9 @@ export function EnhancedLandingPage() {
         showLandingPageButtons={true}
         appBadgeText=""
         appBadgeClassName=""
-      />{" "}
-      {/* Headerコンポーネントを使用 */}
+      />
       <main className="pt-16">
-      <section className="relative h-screen w-full overflow-hidden">
+        <section className="relative h-screen w-full overflow-hidden">
           <Image
             src="/images/main_visual.png"
             alt="MainVisual"
@@ -79,13 +79,13 @@ export function EnhancedLandingPage() {
           <div className="relative z-10 h-full container mx-auto flex flex-col justify-start items-start pt-20">
             <div className="max-w-3xl px-4 sm:px-6 lg:px-8 space-y-6 mb-12">
               <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-white tracking-wide">
-                four Next
+                four next
               </h1>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl text-white font-medium leading-relaxed">
-                大切な暗号資産を、確実に未来へ
+              トラストレス相続アプリケーション
               </h2>
               <p className="text-sm sm:text-base lg:text-lg text-white/90 font-light leading-relaxed max-w-2xl">
-                ～最新のブロックチェーン技術で実現する、次世代型資産継承ソリューション～
+                ZK証明でプライバシーを守りながら安全確実に暗号資産の相続
               </p>
             </div>
             <div className="w-full flex justify-center mt-auto mb-64">
@@ -93,38 +93,37 @@ export function EnhancedLandingPage() {
                 size="lg"
                 className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
               >
-                今すぐ始める
+                相続を設定する
               </Button>
             </div>
           </div>
         </section>
 
-
         <section id="features" className="py-20 bg-white dark:bg-gray-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
-              アプリケーションの特徴
+              特徴
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
                 {
-                  title: "強固なセキュリティ",
-                  description: "ブロックチェーン技術による堅牢なセキュリティ",
+                  title: "第三者依存なし",
+                  description: "スマートコントラクトによる自動実行で、仲介者不要",
                   icon: Shield,
                 },
                 {
-                  title: "プライバシー保護",
-                  description: "ZK証明方式による匿名性の確保",
+                  title: "完全なプライバシー",
+                  description: "ZK証明により相続情報を保護",
                   icon: Eye,
                 },
                 {
-                  title: "柔軟な設定",
-                  description: "カスタマイズ可能なロック期間",
-                  icon: Sliders,
+                  title: "資産の安全性",
+                  description: "生前の資産は確実に保護",
+                  icon: Lock,
                 },
                 {
-                  title: "幅広い資産対応",
-                  description: "複数の暗号資産を一括管理",
+                  title: "透明性の確保",
+                  description: "全ての処理が検証可能",
                   icon: Layers,
                 },
               ].map((feature, index) => (
@@ -157,47 +156,37 @@ export function EnhancedLandingPage() {
         <section id="how-to-use" className="py-20 bg-gray-100 dark:bg-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
-              使い方
+              相続の流れ
             </h2>
             <div className="relative">
               <div className="absolute left-8 top-4 bottom-4 w-0.5 bg-blue-600 dark:bg-blue-400"></div>
               <ol className="space-y-10">
                 {[
                   {
-                    icon: Wallet,
-                    title: "ウォレット接続",
-                    description: "ご自身の暗号資産ウォレットを接続します。",
-                  },
-                  {
                     icon: Lock,
-                    title: "ロック期間設定",
-                    description: "相続開始後のロック期間を設定します。",
-                  },
-                  {
-                    icon: UserPlus,
-                    title: "相続人情報登録",
-                    description: "相続人の情報を登録します。",
-                  },
-                  {
-                    icon: FileText,
-                    title: "秘密情報登録",
-                    description: "相続人との間で共有した秘密情報を登録します。",
+                    title: "相続設定",
+                    description: "秘密情報とロック期間を設定します",
                   },
                   {
                     icon: Coins,
-                    title: "資産選択",
-                    description: "相続を許可する暗号資産を選択します。",
+                    title: "承認トークン設定",
+                    description: "相続管理コントラクトに転送権限を与えるトークンを設定します",
                   },
                   {
-                    icon: ClipboardCheck,
-                    title: "相続申請受付",
-                    description: "相続人からの相続申請を受け付けます。",
+                    icon: UserPlus,
+                    title: "相続申請",
+                    description: "相続先が秘密情報を提示し、ZK証明で検証します",
+                  },
+                  {
+                    icon: Clock,
+                    title: "ロック期間",
+                    description: "設定された期間、資産がロックされます",
                   },
                   {
                     icon: Unlock,
-                    title: "ロック解除と相続完了",
-                    description: "ロック期間経過後、相続手続きが完了します。",
-                  },
+                    title: "相続実行",
+                    description: "ロック期間後、資産が自動的に移転されます",
+                  }
                 ].map((step, index) => (
                   <li key={index} className="relative pl-20">
                     <div className="absolute left-0 top-0 bg-blue-600 dark:bg-blue-400 rounded-full w-16 h-16 flex items-center justify-center">
@@ -222,7 +211,7 @@ export function EnhancedLandingPage() {
         <section id="cautions" className="py-20 bg-white dark:bg-gray-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
-              注意事項
+              重要な注意事項
             </h2>
             <Card className="bg-gray-50 dark:bg-gray-800 border-none shadow-lg">
               <CardContent className="pt-6">
@@ -235,12 +224,12 @@ export function EnhancedLandingPage() {
                           aria-hidden="true"
                         />
                         <span className="text-gray-900 dark:text-white font-semibold">
-                          不正な相続申請への対応
+                          相続設定時の注意
                         </span>
                       </div>
                     </AccordionTrigger>
                     <AccordionContent className="text-gray-700 dark:text-gray-300">
-                      不正な相続申請が行われた場合、ロック期間中に必ず取り消してください。ロック期間中は資産所有者が取り消し操作を行うことができます。
+                      秘密情報は8文字以上で、単一文字列以外の文字列を使用してください。この情報は相続先とのみ共有し、決して第三者に開示しないでください。
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-2">
@@ -251,12 +240,12 @@ export function EnhancedLandingPage() {
                           aria-hidden="true"
                         />
                         <span className="text-gray-900 dark:text-white font-semibold">
-                          秘密情報の取り扱い
+                          ロック期間について
                         </span>
                       </div>
                     </AccordionTrigger>
                     <AccordionContent className="text-gray-700 dark:text-gray-300">
-                      ZK証明方式で用いる秘密情報は、あなたと相続人の間で共有する特別な情報です。絶対に第三者に漏らさないようにご注意ください。
+                      ロック期間中は相続の取り消しが可能です。不正な相続申請があった場合は、必ずこの期間中に取り消し操作を行ってください。
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
@@ -268,78 +257,21 @@ export function EnhancedLandingPage() {
         <section className="py-20 bg-gray-100 dark:bg-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-6">
-              かけがえのない資産を、確実に未来につなぐ
+              安全な暗号資産の相続を実現
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
-              次世代の資産継承　あなたの大切な方へ、想いをつなぐ第一歩を
+              第三者に依存せず、プライバシーを守りながら確実な資産継承を
             </p>
             <Button
               size="lg"
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
             >
-              無料で始める
+              相続を設定する
             </Button>
           </div>
         </section>
       </main>
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="text-lg font-semibold mb-4">暗号資産相続アプリ</h3>
-              <p className="text-gray-400">
-                安全で簡単な暗号資産の相続をサポートします。
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">リンク</h3>
-              <ul className="space-y-2">
-                <li>
-                  <button
-                    onClick={() => scrollToSection("features")}
-                    className="text-gray-400 hover:text-white  transition-colors"
-                  >
-                    特徴
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection("how-to-use")}
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    使い方
-                  </button>
-                </li>
-                <li>
-                  <button
-                    onClick={() => scrollToSection("cautions")}
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    注意事項
-                  </button>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">お問い合わせ</h3>
-              <p className="text-gray-400">
-                ご質問やサポートが必要な場合は、お気軽にお問い合わせください。
-              </p>
-              <a
-                href="mailto:support@example.com"
-                className="text-blue-400 hover:text-blue-300 transition-colors"
-              >
-                support@example.com
-              </a>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-            <p className="text-gray-400">
-              © 2024 暗号資産相続アプリケーション. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer scrollToSection={scrollToSection}/>
     </div>
   );
 }
