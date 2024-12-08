@@ -92,6 +92,7 @@ export function EnhancedLandingPage() {
               <Button
                 size="lg"
                 className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
+                onClick={() => window.location.href = "/alice"} // /alice ページに遷移
               >
                 相続を設定する
               </Button>
@@ -265,6 +266,7 @@ export function EnhancedLandingPage() {
             <Button
               size="lg"
               className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105"
+              onClick={() => window.location.href = "/alice"}
             >
               相続を設定する
             </Button>
