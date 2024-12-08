@@ -36,7 +36,7 @@ const TechnicalFeaturesSlide = () => {
       title: "UCSプロキシパターン",
       details: [
         "ERC7546を採用(クローンとアップグレードが両立可能)",
-        "ユーザーごとに独立したプロキシを生成",
+        "MC(MetaContract)を利用し、ユーザーごとのproxyを生成",
         "ユーザーごと分離された残高管理",
       ],
       bgColor: "bg-green-50 dark:bg-green-900/20",
