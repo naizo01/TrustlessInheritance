@@ -14,25 +14,30 @@ const FutureProspectsSlide = () => {
       icon: <Rocket className="w-6 h-6" />, 
       title: "オープンソースリリース", 
       desc: "まずはOSSとしてサービスを公開し、透明性の高い開発とコミュニティ形成を進めます" 
+    },
+    { 
+      icon: <Rocket className="w-6 h-6" />, 
+      title: "プロモーション", 
+      desc: "アプリケーションの手数料を活用して、プロモーションを行います。" 
     }
   ];
 
   const stepTwo: ProspectItem[] = [
     { 
+      icon: <ChartBar className="w-6 h-6" />, 
+      title: "ガバナンストークン発行", 
+      desc: "ガバナンストークンを発行し、アプリケーションの分散型運営を実現します。" 
+    },
+    { 
       icon: <Lock className="w-6 h-6" />, 
       title: "トークンロックと投票権", 
-      desc: "ガバナンストークンのロック期間に応じて投票権を付与し、長期的なコミットメントを促進します" 
+      desc: "トークンのロック期間に応じて投票権を付与し、長期的な関与を促進します。" 
     },
     { 
       icon: <Coins className="w-6 h-6" />, 
       title: "プロトコル手数料の分配", 
-      desc: "ロック期間に比例して手数料を分配することで、持続可能な運営体制を確立します" 
+      desc: "ロック期間に比例して手数料を分配し、持続可能な運営体制を確立します。" 
     },
-    { 
-      icon: <ChartBar className="w-6 h-6" />, 
-      title: "トークン発行計画", 
-      desc: "線形なガバナンストークンの追加発行により、健全なエコシステムの成長を実現します" 
-    }
   ];
 
   const ProspectList = ({ items, bgColor }: { items: ProspectItem[], bgColor: string }) => (
