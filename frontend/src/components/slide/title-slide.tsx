@@ -28,6 +28,8 @@ const TitleSlide = () => (
         <div>
           <div className="font-semibold">東京大学ブロックチェーン公開講座</div>
           <div className="text-gray-600 dark:text-gray-400">2024年12月10日</div>
+          <div className="text-gray-600 dark:text-gray-400 mt-2">メンター</div>
+          <div className="font-semibold">芝野 恭平さん</div>
         </div>
       </Card>
 
@@ -39,8 +41,15 @@ const TitleSlide = () => (
           <div>
             <div className="text-gray-600 dark:text-gray-400">発表グループ</div>
             <div className="font-semibold">four Next (G4)</div>
-            <div className="text-gray-600 dark:text-gray-400 mt-2">メンター</div>
-            <div className="font-semibold">芝野 恭平さん</div>
+            <div className="text-gray-600 dark:text-gray-400 mt-2">メンバー</div>
+            <ul className="list-disc list-inside text-gray-600 dark:text-gray-400">
+              <li className="font-semibold">ryuu42</li>
+              <li className="font-semibold">naizo</li>
+              <li className="font-semibold">ryunoshin/rhori</li>
+              <li className="font-semibold">hie</li>
+              <li className="font-semibold">pepetoma</li>
+              <li className="font-semibold">Hatatoshi</li>
+            </ul>
           </div>
         </div>
       </Card>
