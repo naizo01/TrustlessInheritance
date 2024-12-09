@@ -8,13 +8,13 @@ const CurrentMethodsSlide = () => {
     {
       icon: <Key className="w-10 h-10 text-blue-500" />,
       title: "秘密鍵の直接共有",
-      risks: ["生前に資産が移動されるリスク", "秘密鍵を紛失するリスク"],
+      risks: ["生前に資産が移動されるリスク"],
       bgColor: "bg-blue-50 dark:bg-blue-900/20"
     },
     {
       icon: <FileText className="w-10 h-10 text-green-500" />,
       title: "遺言書での対応",
-      risks: ["法務局などの第三者機関を信用する必要がある"],
+      risks: ["法務局、弁護士などの第三者機関を信用する必要がある"],
       bgColor: "bg-green-50 dark:bg-green-900/20"
     },
     {
@@ -69,7 +69,7 @@ const CurrentMethodsSlide = () => {
             <AlertTriangle className="w-10 h-10 mr-4" />
             <p className="text-2xl font-bold">
               現状、安全に暗号資産を相続するためには、<br />
-              「第三者への信頼」が必要です。
+              「他者への信頼」が必要です。
             </p>
           </div>
         </Card>

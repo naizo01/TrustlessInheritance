@@ -35,7 +35,7 @@ const ComparisonSlide = () => {
   return (
     <div className="w-full max-w-4xl mx-auto p-3 mb-20 space-y-4 animate-fadeIn">
       <h2 className="text-3xl font-bold text-center mb-6">サービス比較</h2>
-      <Card className="border-none p-4">
+      <Card className="border-none p-6">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
@@ -81,47 +81,27 @@ const ComparisonSlide = () => {
               ))}
             </TableBody>
           </Table>
-
-          <div className="text-xs text-gray-500 mt-2">
-            出典
-            <a
-                          className="ml-5"
-              href="https://casa.io/inheritance"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              https://casa.io/inheritance
-            </a>
-            <a
-              className="ml-5"
-              href="https://www.dglegacy.com/digital-asset/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              https://www.dglegacy.com/digital-asset/
-            </a>
-          </div>
         </div>
       </Card>
-      <Card className="border-none p-6 bg-blue-50 dark:bg-blue-900/20">
-        <h3 className="text-xl font-semibold mb-4">four nextの優位性:</h3>
+      <Card className="border-none px-6 py-2 bg-blue-50 dark:bg-blue-900/20">
+        <h3 className="text-xl font-semibold mb-2">four nextの優位性:</h3>
         <ol className="list-decimal list-inside space-y-4">
           <li>
             <span className="font-semibold">完全な自己管理</span>
-            <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
+            <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
               <li>第三者機関に依存しない</li>
               <li>ユーザー自身による完全なコントロール</li>
             </ul>
           </li>
           <li>
             <span className="font-semibold">使い慣れたツール</span>
-            <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
+            <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
               <li>既存のMetamaskなどのEOAウォレットをそのまま活用可能</li>
             </ul>
           </li>
           <li>
             <span className="font-semibold">透明性の確保</span>
-            <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
+            <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
               <li>スマートコントラクトによる明確なプロセス</li>
               <li>全ての処理が検証可能</li>
             </ul>
