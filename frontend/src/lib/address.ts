@@ -1,1 +1,1 @@
-export const InheritanceFactory = "0x3044Df2E444F136D3d970c2278eBf505731D992d";
+export const InheritanceFactory = "0x97A225fD609262C00311A20410838c79F18c2592";
