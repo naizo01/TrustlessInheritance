@@ -47,7 +47,7 @@ export function Header({
         <div className="flex items-center">
           <Link
             href="/"
-            className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white"
+            className="text-md sm:text-xl font-bold text-gray-900 dark:text-white"
           >
             暗号資産相続アプリ
           </Link>
