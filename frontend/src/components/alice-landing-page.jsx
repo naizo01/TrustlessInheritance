@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Lock,
   UserCheck,
@@ -35,7 +35,6 @@ function SubLandingPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { wallet, network } = usePosts();
 
-  // 以降のページのTOKEN関連情報の成型
   const trimData = (tokens) => {
     const data = {
       assets: [],
@@ -64,7 +63,6 @@ function SubLandingPage() {
     return data;
   };
 
-  // walletが接続されたら、wallet情報を取得（コードはalice.jsxに実装）
   useEffect(() => {
     if (isConnected && isAddress(address)) {
       dispatch({ type: ALICE_ACTIONS.SET_DECEASED_ADDRESS, payload: address });
@@ -77,11 +75,9 @@ function SubLandingPage() {
   }, [isConnected, address, dispatch, network]);
 
   function handleNextStep() {
-    // proxyが存在する場合は選択のダイアログを表示
     network.length > 0 ? setIsDialogOpen(true) : handleNewRegistration();
   }
 
-  // 新規登録を選択
   const handleNewRegistration = () => {
     dispatch({
       type: ALICE_ACTIONS.SET_ASSETS,
@@ -90,7 +86,6 @@ function SubLandingPage() {
     wrapUp();
   };
 
-  // Proxyの閲覧・操作を選択
   const handleProxySelect = (proxyAddress) => {
     setIsDialogOpen(false);
     const proxyMatched = network.find(
@@ -105,13 +100,10 @@ function SubLandingPage() {
 
     wrapUp();
 
-    ///// ページ変遷分岐を管理 /////
     dispatch({ type: ALICE_ACTIONS.SET_REGISTERED });
-    // isLockedで判断
     proxyMatched.isLocked && dispatch({ type: ALICE_ACTIONS.SET_SUBMITTED });
   };
 
-  // 共通処理
   const wrapUp = () => {
     dispatch({ type: ALICE_ACTIONS.SET_DECEASED_ADDRESS, payload: address });
     dispatch({ type: ALICE_ACTIONS.MOVE_FORWARD });
@@ -162,21 +154,21 @@ function SubLandingPage() {
         </div>
       )}
       <div
-        className={`container mx-auto px-24 py-12 ${isLoading ? "blur-sm" : ""}`}
+        className={`container mx-auto px-4 sm:px-6 lg:px-24 py-12 ${isLoading ? "blur-sm" : ""}`}
       >
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-3xl mx-auto pt-12"
+          className="max-w-3xl mx-auto pt-12 mt-3"
         >
           <Card className="bg-white/80 backdrop-blur-sm shadow-xl border-0">
-            <CardContent className="p-8">
+            <CardContent className="p-4 sm:p-8">
               <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-4">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
                   被相続人の手続き
                 </h1>
-                <p className="text-lg text-gray-600">
+                <p className="text-base sm:text-lg text-gray-600">
                   ZKプルーフを使用した安全な相続プロセス
                 </p>
               </div>
