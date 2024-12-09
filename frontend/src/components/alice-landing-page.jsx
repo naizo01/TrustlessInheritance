@@ -203,14 +203,14 @@ function SubLandingPage() {
                   </motion.div>
                 ))}
               </div>
+              <div className="mt-8 flex flex-col items-center space-y-4">
               <Button
-                className="w-full bg-gray-400 hover:bg-gray-500 text-white py-3 text-md font-medium mt-2"
+                className="bg-gray-400 hover:bg-gray-500  text-white px-8 py-6 rounded-full text-md font-semibold transition-all duration-200 ease-in-out transform hover:scale-105"
                 onClick={writeContract}
                 // disabled={!waitFn.isIdle}
               >
                 テストトークンをmintする
               </Button>
-              <div className="mt-8 flex flex-col items-center space-y-4">
                 {!isConnected && (
                   <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 text-center bg-blue-50 dark:bg-blue-900 p-4 rounded-lg shadow-inner max-w-md">
                     画面上部の
