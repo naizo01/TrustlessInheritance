@@ -26,6 +26,7 @@ import { Header } from "@/components/common/variable-header";
 import { useAliceState, ALICE_ACTIONS } from "@/pages/alice";
 import { usePosts } from "@/app/postContext";
 import { assets as importedAssets } from "@/lib/token";
+import useMint from "@/hooks/useMint";
 
 function SubLandingPage() {
   const { state, dispatch } = useAliceState();
@@ -33,7 +34,7 @@ function SubLandingPage() {
   const [isNextEnabled, setIsNextEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { wallet, network } = usePosts();
+  const { wallet, network, incrementRefresh } = usePosts();
 
   const trimData = (tokens) => {
     const data = {
@@ -140,6 +141,14 @@ function SubLandingPage() {
     },
   ];
 
+
+  const { writeContract, waitFn } = useMint(
+    importedAssets[1].address,
+    100000000000000000000,
+    (error) => console.error("Mint Error:", error),
+    (data) => incrementRefresh()
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex flex-col relative">
       <Header
@@ -194,7 +203,13 @@ function SubLandingPage() {
                   </motion.div>
                 ))}
               </div>
-
+              <Button
+                className="w-full bg-gray-400 hover:bg-gray-500 text-white py-3 text-md font-medium mt-2"
+                onClick={writeContract}
+                // disabled={!waitFn.isIdle}
+              >
+                テストトークンをmintする
+              </Button>
               <div className="mt-8 flex flex-col items-center space-y-4">
                 {!isConnected && (
                   <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 text-center bg-blue-50 dark:bg-blue-900 p-4 rounded-lg shadow-inner max-w-md">

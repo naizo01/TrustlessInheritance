@@ -129,6 +129,7 @@ function PostProvider({ children }) {
   const [wallet, setWallet] = useState([]);
   const [network, setNetwork] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_USE_DUMMY_DATA === 'true') {
@@ -137,7 +138,9 @@ function PostProvider({ children }) {
       setTransactions(dummyTransactions);
     }
   }, []);
-
+  const incrementRefresh = () => {
+    setRefresh(!refresh);
+  };
   return (
     <PostContext.Provider
       value={{
@@ -147,6 +150,8 @@ function PostProvider({ children }) {
         setNetwork,
         transactions,
         setTransactions,
+        refresh,
+        incrementRefresh,
       }}
     >
       {children}
