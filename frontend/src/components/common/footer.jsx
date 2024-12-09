@@ -73,6 +73,12 @@ export function Footer({
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-gray-800 text-center">
+          <a
+            href="https://github.com/naizo01/TrustlessInheritance"
+            className="text-gray-400 hover:text-white transition-colors block mb-2"
+          >
+            GitHub
+          </a>
           <p className="text-gray-400">
             © 2024 four next. All rights reserved.
           </p>
