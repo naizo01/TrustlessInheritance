@@ -10,9 +10,7 @@ import {
   CardTitle,
   CardFooter,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Search, AlertCircle, Lock, Unlock, Clock, CheckCircle, Calendar, XCircle } from 'lucide-react';
-import { isAddress } from "ethers";
+import { AlertCircle, Lock, Unlock, Clock, CheckCircle, Calendar, XCircle } from 'lucide-react';
 import {
   Table,
   TableBody,
@@ -32,12 +30,8 @@ import useOwnerToProxy from "@/hooks/useOwnerToProxy";
 import { getProxyInfo, convertToDummyTransaction } from "@/hooks/getProxyInfo";
 
 export default function InheritanceDataCheck() {
-  const [address, setAddress] = useState("");
-  const [isValidAddress, setIsValidAddress] = useState(false);
-  const [inheritanceData, setInheritanceData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [suggestions, setSuggestions] = useState([]);
   const { transactions, setTransactions } = usePosts();
 
   const { address: userAddress } = useAccount();
@@ -60,35 +54,16 @@ export default function InheritanceDataCheck() {
     fetchProxyInfos();
   }, [proxyAddresses]);
 
-  const handleAddressChange = (e) => {
-    const inputAddress = e.target.value;
-    setAddress(inputAddress);
-    setIsValidAddress(isAddress(inputAddress));
-
-    const matchedAddresses = transactions
-      .map((t) => t.ownerAddress)
-      .filter((addr) => addr.toLowerCase().startsWith(inputAddress.toLowerCase()));
-    setSuggestions(matchedAddresses);
-  };
-
-  const handleSearch = async () => {
-    if (!isValidAddress) return;
-
-    setIsLoading(true);
-    setError("");
-    try {
-      const data = transactions.find((t) => t.ownerAddress.toLowerCase() === address.toLowerCase());
-      if (data) {
-        setInheritanceData(data);
+  useEffect(() => {
+    if (userAddress && transactions.length > 0) {
+      const userTransactions = transactions.filter((t) => t.ownerAddress.toLowerCase() === userAddress.toLowerCase());
+      if (userTransactions.length > 0) {
+        setError("");
       } else {
-        throw new Error("指定されたアドレスの相続データが見つかりません。");
+        setError("あなたのアドレスに関連する相続データが見つかりません。");
       }
-    } catch (err) {
-      setError("データの取得に失敗しました。もう一度お試しください。");
-      setInheritanceData(null);
     }
-    setIsLoading(false);
-  };
+  }, [userAddress, transactions]);
 
   const calculateTokenValue = (symbol, amount) => {
     const token = assets.find((a) => a.symbol === symbol);
@@ -126,54 +101,13 @@ export default function InheritanceDataCheck() {
         <Card className="w-full max-w-2xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-xl border-0">
           <CardHeader className="text-center">
             <CardTitle className="text-3xl font-bold text-gray-900 dark:text-white">
-              相続データ確認
+              あなたの相続データ
             </CardTitle>
             <CardDescription className="text-lg text-gray-600 dark:text-gray-300">
-              アドレスを入力して相続情報を確認
+              あなたの相続情報を確認
             </CardDescription>
           </CardHeader>
           <CardContent className="">
-            <div className="flex space-x-2 relative">
-              <Input
-                type="text"
-                placeholder="0x..."
-                value={address}
-                onChange={handleAddressChange}
-                className="flex-grow"
-              />
-              <Button
-                onClick={handleSearch}
-                disabled={!isValidAddress || isLoading}
-                className="bg-blue-600 hover:bg-blue-700"
-              >
-                {isLoading ? (
-                  "読み込み中..."
-                ) : (
-                  <>
-                    <Search className="mr-2 h-4 w-4" /> 検索
-                  </>
-                )}
-              </Button>
-            </div>
-
-            {suggestions.length > 0 && (
-              <div className="absolute z-10 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg">
-                {suggestions.map((suggestion, index) => (
-                  <div
-                    key={index}
-                    className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
-                    onClick={() => {
-                      setAddress(suggestion);
-                      setIsValidAddress(true);
-                      setSuggestions([]);
-                    }}
-                  >
-                    {suggestion}
-                  </div>
-                ))}
-              </div>
-            )}
-
             {error && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
@@ -181,8 +115,8 @@ export default function InheritanceDataCheck() {
               </Alert>
             )}
 
-            {inheritanceData && (
-              <div className="space-y-6 mt-5">
+            {transactions.filter((t) => t.ownerAddress.toLowerCase() === userAddress.toLowerCase()).map((inheritanceData, index) => (
+              <div key={index} className="space-y-6 mt-5">
                 <Card>
                   <CardHeader>
                     <CardTitle className="text-xl font-semibold text-gray-900 dark:text-white">
@@ -280,7 +214,7 @@ export default function InheritanceDataCheck() {
                   </CardFooter>
                 </Card>
               </div>
-            )}
+            ))}
           </CardContent>
         </Card>
       </main>
